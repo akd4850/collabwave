@@ -19,12 +19,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	}
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-	    registry.addResourceHandler("/resources/**")
-         .addResourceLocations("classpath:/static/");
+    	registry.addResourceHandler("/resources/**")
+        .addResourceLocations("classpath:/static/");
 	    registry.addResourceHandler("/upload/**")
-         .addResourceLocations("file:///upload/");
+        .addResourceLocations("file:///upload/");
 	    registry.addResourceHandler("/blog/**")
-         .addResourceLocations("file:///blog/");
+        .addResourceLocations("file:///blog/");
+    	registry.addResourceHandler("/static/**")
+    		.addResourceLocations("classpath:/static/");
 	}
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

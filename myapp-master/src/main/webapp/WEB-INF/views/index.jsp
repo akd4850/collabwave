@@ -6,7 +6,5 @@
 <c:set var="dt" value="<%=System.currentTimeMillis()%>"/>
 
 <jsp:include page="./layout/header.jsp"/>
-
-<h1>Welcome to myapp</h1>
-  
-<%@ include file="./layout/footer.jsp" %>
+<jsp:include page="./contents/dashboard.jsp"/>
+<jsp:include page="./layout/footer.jsp"/>

@@ -82,4 +82,20 @@
 	<!-- Light Bootstrap Dashboard DEMO methods, don't include it in your project! -->
 	<script src="${contextPath}/resources/js/demo.js"></script>
 
+  <script src="${contextPath}/resources/js/erp-calendar.js"></script>
+
+  <script src="${contextPath}/resources/js/erp-modal.js"></script>
+
+  <script>
+    $().ready(function() {
+      if('${submenu}' === 'main.jsp') {
+        demo.initCharts();
+      }
+      
+      if('${submenu}' === 'publicGoods.jsp') {
+        erpCalendar.initGoodsCalendar();
+      }
+    });
+  </script>
+
 </html>

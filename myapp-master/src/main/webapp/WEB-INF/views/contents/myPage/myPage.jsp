@@ -5,6 +5,6 @@
 <c:set var="contextPath" value="<%=request.getContextPath()%>"/>
 <c:set var="dt" value="<%=System.currentTimeMillis()%>"/>
 
-<jsp:include page="./layout/header.jsp"/>
-<jsp:include page="./contents/main/main.jsp"/>
-<jsp:include page="./layout/footer.jsp"/>
+<jsp:include page="../../layout/header.jsp"/>
+<jsp:include page="./${submenu}"/>
+<jsp:include page="../../layout/footer.jsp"/>

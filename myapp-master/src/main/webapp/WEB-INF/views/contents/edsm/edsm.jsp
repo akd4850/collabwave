@@ -5,29 +5,15 @@
 <c:set var="contextPath" value="<%=request.getContextPath()%>"/>
 <c:set var="dt" value="<%=System.currentTimeMillis()%>"/>
 
+<!-- electronic document system management (EDSM) -->
 <div class="main-content">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3">
-                <div class="card">
-                    <div class="header">
-                        header
-                    </div>
-                    <div class="content">
-                        content
-                    </div>
-                </div>
+                <jsp:include page="./edsmSidebar.jsp"/>
             </div>
-
             <div class="col-md-9">
-                <div class="card">
-                    <div class="header">
-                        header
-                    </div>
-                    <div class="content">
-                        content
-                    </div>
-                </div>
+                <jsp:include page="./edsmContents.jsp"/>
             </div>
         </div>
     </div>

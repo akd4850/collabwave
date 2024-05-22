@@ -7,12 +7,12 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
 
-        <div class="navbar-minimize">
+        <!--div class="navbar-minimize">
             <button id="minimizeSidebar" class="btn btn-warning btn-fill btn-round btn-icon">
                 <i class="fa fa-ellipsis-v visible-on-sidebar-regular"></i>
                 <i class="fa fa-navicon visible-on-sidebar-mini"></i>
             </button>
-        </div>
+        </div-->
 
         <div class="collapse navbar-collapse">
 
@@ -37,6 +37,16 @@
                         <li><a href="#">Notification 1</a></li>
                         <li><a href="#">Notification 2</a></li>
                     </ul>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="text-primary">
+                            <i class="pe-7s-plus"></i>
+                                로그인 연장
+                            </span>
+                        <span> - 09분 30초</span>
+                    </a>
                 </li>
 
                 <li>

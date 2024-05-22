@@ -9,7 +9,6 @@
 <head>
   
   <meta charset="utf-8" />
-	<link rel="icon" type="image/png" href="${contextPath}/resources/img/favicon.ico">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
@@ -18,14 +17,14 @@
 <!-- 페이지마다 다른 제목 -->
 <title>
   <c:choose>
-    <c:when test="${empty param.title}">Welcome</c:when>
-    <c:otherwise>${param.title}</c:otherwise>
+    <c:when test="${empty title}">Welcome</c:when>
+    <c:otherwise>${title}</c:otherwise>
   </c:choose>
 </title>
 
 <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet" />
 <link href="${contextPath}/resources/css/light-bootstrap-dashboard.css?v=1.4.1" rel="stylesheet"/>
-<link href="${contextPath}/resources/css/demo.css" rel="stylesheet" />
+<link href="${contextPath}/resources/css/demo.css?v=1.4.1" rel="stylesheet" />
 
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
 <link href='https://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>

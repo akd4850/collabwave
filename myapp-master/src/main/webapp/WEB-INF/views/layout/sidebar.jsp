@@ -6,14 +6,8 @@
 <c:set var="dt" value="<%=System.currentTimeMillis()%>"/>
 
 <style>
-    .sidebar-sub1 span, .sidebar-sub1 p {
-        font-size: 12px;
+    .sidebar-sub {
         padding-left: 50px;
-    }
-
-    .sidebar-sub2 > li > a > span {
-        font-size: 11px;
-        padding-left: 75px;
     }
 </style>
 
@@ -38,37 +32,42 @@
                     <img src="${contextPath}/resources/img/avatar.jpg" />
                 </div>
   
-                <a data-toggle="collapse" href="#collapseExample" class="collapsed">
+                <a data-toggle="collapse" href="#">
                     <span>
                         김민식
-                        <b class="caret"></b>
                     </span>
                 </a>
   
-                <div class="collapse" id="collapseExample">
+                <divid="collapseExample">
                     <ul class="nav">
-                        <li>
-                            <a href="#pablo">
+                        <li class="sidebar-sub">
+                            <a href="/myPage/workLeave.page">
+                                <span class="sidebar-mini"><!--MP--></span>
+                                <span class="sidebar-normal">근퇴 관리</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-sub">
+                            <a href="/myPage/myInfo.page">
                                 <span class="sidebar-mini"><!--MP--></span>
                                 <span class="sidebar-normal">내 정보</span>
                             </a>
                         </li>
-  
-                        <li>
-                            <a href="#pablo">
-                                <span class="sidebar-mini"><!--EP--></span>
-                                <span class="sidebar-normal">정보 수정</span>
-                            </a>
-                        </li>
                     </ul>
-                </div>
+                </divid=>
             </div>
         </div>
         <!--[end user]-->
   
         <ul class="nav">
+            
+            <li>
+                <a href="/main.page">
+                    <i class="pe-7s-home"></i>
+                    <p>홈</p>
+                </a>
+            </li>
 
-            <li class="active">
+            <li>
                 <a href="#">
                     <i class="pe-7s-date"></i>
                     <p>일정관리</p>
@@ -76,7 +75,7 @@
             </li>
         
             <li>
-                <a href="#">
+                <a href="/reservation/management.page"">
                     <i class="pe-7s-note"></i>
                     <p>예약관리</p>
                 </a>
@@ -90,43 +89,11 @@
             </li>
         
             <li>
-                <a data-toggle="collapse" href="#componentsExamples">
-                    <i class="pe-7s-smile"></i>
-                    <p>커뮤니티
-                        <b class="caret"></b>
-                    </p>
+                <a href="#">
+                    <i class="pe-7s-note2"></i>
+                    <p>커뮤니티</p>
                 </a>
-                <div class="collapse" id="componentsExamples">
-                    <ul class="nav sidebar-sub1">
-                        <li>
-                            <a href="#pablo">
-                                <span>자유게시판</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#pablo">
-                                <span>공지사항</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a data-toggle="collapse" href="#community">
-                                <p>부서별게시판
-                                    <b class="caret"></b>
-                                </p>
-                            </a>
-                            <div class="collapse" id="community">
-                                <ul class="nav sidebar-sub2">
-                                    <li>
-                                        <a href="#pablo">
-                                            <span>보드게임</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </li>
+            </li>            
 
             <li>
                 <a href="#">

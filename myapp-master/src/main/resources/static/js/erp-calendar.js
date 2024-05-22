@@ -1,6 +1,7 @@
 erpCalendar = {
-  initGoodsCalendar: function(){
-    $calendar = $('#goodsCalendar');
+  initGoodsCalendar: function(calendarID){
+    //$calendar = $('#goodsCalendar');
+    $calendar = $('#' + calendarID);
 
     today = new Date();
     y = today.getFullYear();

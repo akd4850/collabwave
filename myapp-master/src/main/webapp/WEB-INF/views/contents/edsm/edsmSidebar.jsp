@@ -19,25 +19,28 @@
         전자 결재 메뉴
     </div>
     <div class="content">
+        <div>
+            <button type="button" class="btn btn-info btn-fill" onclick="erpModal.showSwal('edsm','새 결재 진행')">새 결재 진행</button>
+        </div>
         <ul class="list-unstyled subtab">
             <li><b>결제하기</b></li>
             <li>
                 <ul class="list-unstyled subtab2">
-                    <li><a href="">대기 문서</a></li>
+                    <li><a href="/edsm/edsmWaiting.page">결재 대기 문서</a></li>
                     <li><a href="">결재 수신 문서</a></li>
                 </ul>
             </li>
             <li><b>개인 문서함</b></li>
             <li>
                 <ul class="list-unstyled subtab2">
-                    <li><a href="">기안 문서함</a></li>
+                    <li><a href="/edsm/edsmDrafting.page">기안 문서함</a></li>
                     <li><a href="">결재 문서함</a></li>
                 </ul>
             </li>
             <li><b>문서함</b></li>
             <li>
                 <ul class="list-unstyled subtab2">
-                    <li><a href="">전자결재 양식</a></li>
+                    <li><a href="/edsm/edsmForm.page">전자결재 양식</a></li>
                 </ul>
             </li>
         </ul>

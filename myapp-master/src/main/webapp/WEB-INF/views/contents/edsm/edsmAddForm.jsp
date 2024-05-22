@@ -7,24 +7,23 @@
 
 <div class="card">
     <div class="header">
-        내 예약 현황
+        전자결재 양식 추가
     </div>
     <div class="content table-responsive table-full-width">
+        <input type="button" class="btn btn-info btn-fill" style="margin-left:10px" value="등록">
+        <input type="button" class="btn btn-info btn-fill" value="수정">
+        <input type="button" class="btn btn-info btn-fill" value="삭제">
+        <hr>
         <table class="table table-hover table-striped">
-            <thead>
-                <th>자산</th>
-                <th>내용</th>
-                <th>예약 시간</th>
-                <th>취소</th>
-            </thead>
             <tbody>
                 <tr>
-                    <td>대회의실1</td>
-                    <td>회의실 예약</td>
-                    <td>2024.05.22 17:30 ~ 2024.05.23 18:30</td>
-                    <td><button type="submit" class="btn btn-info btn-fill">취소</button></td>
+                    <td>파일명</td>
+                    <td><input type="file" name="" id=""></td>
                 </tr>
             </tbody>
         </table>
+    </div>
+    <div class="card">
+        <jsp:include page="./payForm/example1.jsp"/>
     </div>
 </div>

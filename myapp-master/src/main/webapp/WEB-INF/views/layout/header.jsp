@@ -30,6 +30,8 @@
 <link href='https://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
 <link href="${contextPath}/resources/css/pe-icon-7-stroke.css" rel="stylesheet" />
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.15/themes/default/style.min.css" />
+
 </head>
 <body>
 

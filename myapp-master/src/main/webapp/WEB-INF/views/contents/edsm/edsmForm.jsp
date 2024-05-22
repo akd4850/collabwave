@@ -7,22 +7,26 @@
 
 <div class="card">
     <div class="header">
-        내 예약 현황
+        전자결재 양식
     </div>
     <div class="content table-responsive table-full-width">
+        <input type="button"
+                class="btn btn-info btn-fill"
+                style="margin-left:10px"
+                onclick="location.href='/edsm/edsmAddForm.page'"
+                value="양식 추가">
         <table class="table table-hover table-striped">
             <thead>
-                <th>자산</th>
-                <th>내용</th>
-                <th>예약 시간</th>
-                <th>취소</th>
+                <th>양식 번호</th>
+                <th>양식명</th>
+                <th>등록일</th>
             </thead>
             <tbody>
                 <tr>
-                    <td>대회의실1</td>
-                    <td>회의실 예약</td>
-                    <td>2024.05.22 17:30 ~ 2024.05.23 18:30</td>
-                    <td><button type="submit" class="btn btn-info btn-fill">취소</button></td>
+                    <td>0001</td>
+                    <td>업무협조</td>
+                    <td>업무협조</td>
+                    <td>2024-05-22</td>
                 </tr>
             </tbody>
         </table>

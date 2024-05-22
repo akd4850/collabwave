@@ -10,9 +10,11 @@
         자산 관리
     </div>
     <div class="content table-responsive table-full-width">
-        <button class="btn btn-info btn-fill" 
-                onclick="erpModal.showSwal('goods', '자산 추가', '/')" 
-                style="margin-left:10px">자산 추가</button>
+        <input type="button"
+                class="btn btn-info btn-fill"
+                style="margin-left:10px"
+                onclick="location.href='/reservation/addGoods.page'"
+                value="자산 추가">
         <table class="table table-hover table-striped">
             <thead>
                 <th>코드</th>

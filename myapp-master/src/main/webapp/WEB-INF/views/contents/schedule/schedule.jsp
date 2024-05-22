@@ -10,10 +10,12 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3">
-                <jsp:include page="./edsmSidebar.jsp"/>
+                <jsp:include page="./scheduleSidebar.jsp"/>
             </div>
             <div class="col-md-9">
-                <jsp:include page="./${submenu}"/>
+                <div class="card card-calendar">
+                    <div id="scheduleCalendar"></div>
+                </div>
             </div>
         </div>
     </div>

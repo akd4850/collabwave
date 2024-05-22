@@ -29,4 +29,11 @@ public class ReservationController {
 		model.addAttribute("submenu", "curReservation.jsp");
 		return "contents/reservation/reservation";
 	}
+	
+	@GetMapping("/addGoods.page")
+	public String addGoods(Model model) {
+		
+		model.addAttribute("submenu", "addGoods.jsp");
+		return "contents/reservation/reservation";
+	}
 }

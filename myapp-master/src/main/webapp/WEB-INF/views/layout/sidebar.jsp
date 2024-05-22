@@ -68,7 +68,7 @@
             </li>
 
             <li>
-                <a href="#">
+                <a href="/schedule/mySchedule.page">
                     <i class="pe-7s-date"></i>
                     <p>일정관리</p>
                 </a>
@@ -82,7 +82,7 @@
             </li>
 
             <li>
-                <a href="#">
+                <a href="/edsm/edsmMain.page">
                     <i class="pe-7s-note2"></i>
                     <p>전자결재</p>
                 </a>

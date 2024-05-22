@@ -89,14 +89,14 @@
             </li>
         
             <li>
-                <a href="#">
+                <a href="/community/notice.page">
                     <i class="pe-7s-note2"></i>
                     <p>커뮤니티</p>
                 </a>
             </li>            
 
             <li>
-                <a href="#">
+                <a href="/employee/management.page">
                     <i class="pe-7s-network"></i>
                     <p>인사관리</p>
                 </a>

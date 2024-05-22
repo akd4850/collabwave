@@ -99,7 +99,7 @@
       if('${submenu}' === 'schedule.jsp') {
         erpCalendar.initGoodsCalendar('scheduleCalendar');
       }
-      if('${submenu}' === 'edsmRequest.jsp') {
+      if('${submenu}' === 'edsmRequest.jsp' || '${submenu}' === 'departManage.jsp') {
         $("#jstree").jstree({
             "plugins": ["search"],
             'core': {

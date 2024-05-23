@@ -10,9 +10,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ScheduleController {
 
 	@GetMapping("/mySchedule.page")
-	public String revPublicGoods(Model model) {
+	public String schedule(Model model) {
 		
 		model.addAttribute("submenu", "schedule.jsp");
 		return "contents/schedule/schedule";
+	}
+	
+	@GetMapping("/registerSchedule.page")
+	public String registerSchedule(Model model) {
+		
+		model.addAttribute("submenu", "registerSchedule.jsp");
+		return "contents/schedule/registerSchedule";
 	}
 }

@@ -17,11 +17,13 @@
                 value="자산 추가">
         <table class="table table-hover table-striped">
             <thead>
-                <th>코드</th>
-                <th>이름</th>
-                <th>타입</th>
-                <th>수정</th>
-                <th>삭제</th>
+                <tr>
+                    <th>코드</th>
+                    <th>이름</th>
+                    <th>타입</th>
+                    <th>수정</th>
+                    <th>삭제</th>
+                </tr>
             </thead>
             <tbody>
                 <tr>

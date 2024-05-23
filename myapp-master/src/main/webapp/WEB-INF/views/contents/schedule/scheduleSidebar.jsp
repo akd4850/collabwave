@@ -19,7 +19,13 @@
         일정 관리 메뉴
     </div>
     <div class="content">
+        <div>
+            <button type="button" class="btn btn-info btn-fill" onclick="location.href='/schedule/registerSchedule.page'">일정 등록</button>
+        </div>
         <hr>
+        <ul class="list-unstyled subtab">
+            <li><a href="/schedule/mySchedule.page">일정 확인</a></li>
+        </ul>
         <div class="checkbox">
             <input id="checkboxMine" type="checkbox">
             <label for="checkboxMine">

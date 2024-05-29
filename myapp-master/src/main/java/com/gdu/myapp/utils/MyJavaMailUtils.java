@@ -15,7 +15,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-@PropertySource(value = "classpath:application.properties")
+@PropertySource(value = "classpath:application-secret.properties")
 @Component
 public class MyJavaMailUtils {
 

@@ -165,4 +165,6 @@ build/
 ### VS Code ###
 .vscode/
 
+myapp-master/src/main/resources/wallet
+
 # End of https://www.toptal.com/developers/gitignore/api/eclipse,maven,java,windows

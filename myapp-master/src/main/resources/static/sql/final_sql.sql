@@ -58,7 +58,6 @@ CREATE TABLE attach_t (
 CREATE TABLE position_t (
 	position_code	varchar2(5)		NOT NULL,
 	position_name	varchar2(20)		NOT NULL,
-	position_user	number		NOT NULL,
 	use_yn	char(1)		NOT NULL
 );
 

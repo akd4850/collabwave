@@ -9,10 +9,10 @@
 <div class="main-content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <jsp:include page="./edsmSidebar.jsp"/>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-10">
                 <jsp:include page="./${submenu}"/>
             </div>
         </div>

@@ -68,31 +68,35 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
-                        <form method="" action="/main.page">
+                        <form method="POST" action="/signin.do">
 
                         <!--   if you want to have the card without animation please remove the ".card-hidden" class   -->
                             <div class="card card-hidden">
-                                <div class="header text-center">로그인</div>
+                                <div class="header text-center">
+                                    ${messageSource.getMessage("login", null, locale)}
+                                </div>
                                 <div class="content">
                                     <div class="form-group">
-                                        <label>사원 번호</label>
-                                        <input type="email" placeholder="사원번호" class="form-control">
+                                        <label>${messageSource.getMessage("empCode", null, locale)}</label>
+                                        <input type="text" name="empCode" placeholder='${messageSource.getMessage("empCode", null, locale)}' class="form-control">
                                     </div>
                                     <div class="form-group">
-                                        <label>비밀번호</label>
-                                        <input type="password" placeholder="비밀번호" class="form-control">
+                                        <label>${messageSource.getMessage("password", null, locale)}</label>
+                                        <input type="password" name="pw" placeholder="${messageSource.getMessage('password', null, locale)}" class="form-control">
                                     </div>
                                     <div class="form-group">
 										<div class="checkbox">
 			  							  	<input id="checkbox30" type="checkbox">
 			  							  	<label for="checkbox30">
-			  								  	사원번호 저장
+                                                ${messageSource.getMessage("empCode", null, locale)} ${messageSource.getMessage("save", null, locale)}
 			  							  	</label>
 			  						  	</div>
                                     </div>
                                 </div>
                                 <div class="footer text-center">
-                                    <button type="submit" class="btn btn-primary btn-fill btn-wd">로그인</button>
+                                    <button type="submit" class="btn btn-primary btn-fill btn-wd">
+                                        ${messageSource.getMessage("login", null, locale)}
+                                    </button>
                                 </div>
                             </div>
 

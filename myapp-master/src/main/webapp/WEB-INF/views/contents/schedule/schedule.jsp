@@ -9,10 +9,10 @@
 <div class="main-content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <jsp:include page="./scheduleSidebar.jsp"/>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-10">
                 <div class="card card-calendar">
                     <div id="scheduleCalendar"></div>
                 </div>

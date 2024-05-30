@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gdu.myapp.mapper.EmpMapper">
+
+  <select id="getEmpByMap"
+          parameterType="Map"
+          resultType="EmpDto">
+    SELECT EMP_CODE, DEPT_CODE, POSITION_CODE, PASSWORD, EMP_NAME, PHONE,
+    	   MOBILE, EMAIL, ZIP_CODE, ADDRESS, DETAIL_ADDRESS, BIRTHDAY_DATE,
+    	   JOIN_DATE, SIGN_FILE_NAME, PASSWORD_MODIFY_DATETIME, STATUS_CODE, LEAVE_DATE
+      FROM EMP_T
+     WHERE EMP_CODE = #{empCode} AND PASSWORD = #{pw}
+  </select>
+
+</mapper>

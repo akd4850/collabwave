@@ -19,7 +19,7 @@
 
 <body>
     <h1>Classic editor</h1>
-    <form action="/ckeditor/register.do" method="post">
+    <form action="/reference/register.do" method="post">
         <textarea name="content" id="editor">
         </textarea>
         <p><input type="submit" value="test"></p>

@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
  * 실제 서비스 전에는 제외한다
  */
 
-@RequestMapping("reference")
+@RequestMapping("/reference")
 @Controller
 public class ProjectReferenceController {
 	

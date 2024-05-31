@@ -14,13 +14,19 @@ import jakarta.servlet.http.HttpServletRequest;
  * 실제 서비스 전에는 제외한다
  */
 
-@RequestMapping("ckeditor")
+@RequestMapping("reference")
 @Controller
 public class ProjectReferenceController {
 	
 	private final ProjectReferenceService projectReferenceService;
 	public ProjectReferenceController(ProjectReferenceService projectReferenceService) {
 		this.projectReferenceService = projectReferenceService;
+	}
+	
+	@GetMapping("/")
+	public String referPage() {
+		
+		return "refer/index";
 	}
 
 	@GetMapping("/ckeditor.page")

@@ -40,7 +40,7 @@
             <li><b>문서함</b></li>
             <li>
                 <ul class="list-unstyled subtab2">
-                    <li><a href="/edsm/edsmForm.page">전자결재 양식</a></li>
+                    <li><a href="/edsm/edsmForm.do">전자결재 양식</a></li>
                 </ul>
             </li>
         </ul>

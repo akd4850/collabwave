@@ -127,4 +127,39 @@ public class MyPageUtils {
     
   }
   
+  public String getPagingNewVersion(String requestURI, String sort, int display) {
+
+	    StringBuilder builder = new StringBuilder();
+	    
+	    builder.append("<div style=\"text-align:center\"><ul class=\"pagination pagination-no-border\">");
+
+	    // <
+	    if(beginPage == 1) {
+	      builder.append("<li><a href=\"#\">«</a></li>");
+	    } else {
+	      //builder.append("<div><a href=\"" + requestURI + "?page=" + (beginPage - 1) + "&sort=" + sort + "&display=" + display + "&" + params + "\">&lt;</a></div>");
+	      builder.append("<li><a href=\"" + requestURI + "?page=" + (beginPage - 1) + "&sort=" + sort + "&display=" + display + "\">«</a></li>");
+	    }
+
+	    // 1 2 3 4 5 6 7 8 9 10
+	    for(int p = beginPage; p <= endPage; p++) {
+	      if(p == page) {
+	        builder.append("<li class=\"active\"><a href=\"" + requestURI + "?page=" + p + "&sort=" + sort + "&display=" + display + "\">" + p + "</a></li>");
+	      } else {
+	        builder.append("<li><a href=\"" + requestURI + "?page=" + p + "&sort=" + sort + "&display=" + display + "\">" + p + "</a></li>");
+	      }
+	    }
+
+	    // >
+	    if(endPage == totalPage) {
+	      builder.append("<li><a href=\"#\">»</a></li>");
+	    } else {
+	      builder.append("<li><a href=\"" + requestURI + "?page=" + (endPage + 1) + "&sort=" + sort + "&display=" + display + "\">»</a></li>");
+	    }
+	    
+	    builder.append("</ul></div>");
+
+	    return builder.toString();
+	  }
+  
 }

@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.gdu.myapp.service.ProjectReferenceService;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 /*
@@ -19,15 +18,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/reference")
 @Controller
 public class ProjectReferenceController {
-	
+
 	private final ProjectReferenceService projectReferenceService;
 	public ProjectReferenceController(ProjectReferenceService projectReferenceService) {
 		this.projectReferenceService = projectReferenceService;
 	}
-	
+
 	@GetMapping("/")
 	public String referPage() {
-		
+
 		return "refer/index";
 	}
 
@@ -36,23 +35,23 @@ public class ProjectReferenceController {
 	 */
 	@GetMapping("/ckeditor.page")
 	public String ckeditorPage() {
-		
+
 		return "refer/ckeditor";
 	}
-	
+
 	@PostMapping("/register.do")
 	public void register(HttpServletRequest request) {
-		
+
 		projectReferenceService.register(request);
 	}
 	/*
 	 * End ===========================================================================
 	 */
-	
+
 	@GetMapping("/jstree.page")
 	public String jstreePage() {
-		
+
 		return "refer/jstree";
 	}
-	
+
 }

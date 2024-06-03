@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.gdu.myapp.service.ProjectReferenceService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 /*
  * 프로젝트에서 사용할 각 API 테스트 및 레퍼런스 용도
@@ -29,6 +31,9 @@ public class ProjectReferenceController {
 		return "refer/index";
 	}
 
+	/*
+	 * Ckeditor ===========================================================================
+	 */
 	@GetMapping("/ckeditor.page")
 	public String ckeditorPage() {
 		
@@ -40,4 +45,14 @@ public class ProjectReferenceController {
 		
 		projectReferenceService.register(request);
 	}
+	/*
+	 * End ===========================================================================
+	 */
+	
+	@GetMapping("/jstree.page")
+	public String jstreePage() {
+		
+		return "refer/jstree";
+	}
+	
 }

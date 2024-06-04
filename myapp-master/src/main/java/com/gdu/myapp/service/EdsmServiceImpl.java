@@ -1,5 +1,6 @@
 package com.gdu.myapp.service;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,10 +12,14 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.gdu.myapp.dto.EdsmFormDto;
 import com.gdu.myapp.dto.EmpDto;
 import com.gdu.myapp.mapper.EdsmMapper;
+import com.gdu.myapp.mapper.EmpMapper;
+import com.gdu.myapp.utils.MyFileUtils;
 import com.gdu.myapp.utils.MyPageUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,12 +29,16 @@ import jakarta.servlet.http.HttpSession;
 @Service
 public class EdsmServiceImpl implements EdsmService {
 
+	private final MyFileUtils myFileUtils;
 	private final MyPageUtils myPageUtils;
 	private final EdsmMapper edsmMapper;
-	public EdsmServiceImpl(MyPageUtils myPageUtils, EdsmMapper edsmMapper) {
+	private final EmpMapper empMapper;
+	public EdsmServiceImpl(MyFileUtils myFileUtils, MyPageUtils myPageUtils, EdsmMapper edsmMapper, EmpMapper empMapper) {
 		super();
+		this.myFileUtils = myFileUtils;
 		this.myPageUtils = myPageUtils;
 		this.edsmMapper = edsmMapper;
+		this.empMapper = empMapper;
 	}
 
 	@Override
@@ -109,5 +118,36 @@ public class EdsmServiceImpl implements EdsmService {
 	public void removeForm(String sampleCode) {
 		
 		edsmMapper.removeForm(sampleCode);
+	}
+	
+	@Override
+	public void registerSign(MultipartHttpServletRequest multipartRequest) { 
+		
+		MultipartFile multipartFile = multipartRequest.getFile("file");
+		
+		if(multipartFile != null) {
+			String uploadPath = myFileUtils.getUploadPath();
+			File dir = new File(uploadPath);
+	        if(!dir.exists()) {
+	          dir.mkdirs();
+	        }
+	        
+	        String originalFilename = multipartFile.getOriginalFilename();
+	        String filesystemName = myFileUtils.getFilesystemName(originalFilename);
+	        File file = new File(dir, filesystemName);
+	        String path = "/upload" + uploadPath + "/" + filesystemName;
+	        
+	        try {
+	        	multipartFile.transferTo(file);
+	        	
+	        	HttpSession session = multipartRequest.getSession();
+	    		EmpDto empDto = (EmpDto)session.getAttribute("emp");
+	    		empDto.setSignFileName(path);
+	    		
+	    		empMapper.registerSign(empDto);
+	        } catch(Exception e) {
+	        	e.printStackTrace();
+	        }
+		}
 	}
 }

@@ -43,6 +43,13 @@
                     <li><a href="/edsm/edsmForm.do">전자결재 양식</a></li>
                 </ul>
             </li>
+            <li><b>결재 관리</b></li>
+            <li>
+                <ul class="list-unstyled subtab2">
+                    <li><a href="/edsm/manageSign.page">내 사인 관리</a></li>
+                    <li><a href="/edsm/">내 결재선 관리</a></li>
+                </ul>
+            </li>
         </ul>
     </div>
 </div>

@@ -9,4 +9,5 @@ import com.gdu.myapp.dto.EmpDto;
 @Mapper
 public interface EmpMapper {
 	EmpDto getEmpByMap(Map<String, Object> map);
+	int registerSign(EmpDto empDto);
 }

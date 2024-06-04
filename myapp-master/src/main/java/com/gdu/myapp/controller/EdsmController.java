@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.gdu.myapp.service.EdsmService;
 
@@ -110,5 +111,24 @@ public class EdsmController {
 		edsmService.removeForm(code);
 		
 		return "redirect:/edsm/edsmForm.do";
+	}
+	
+	@GetMapping("/manageSign.page")
+	public String manageSign(Model model, Locale locale) {
+		
+		model.addAttribute("submenu", "manageSign.jsp");
+		model.addAttribute("messageSource", messageSource);
+		model.addAttribute("locale", locale);
+
+		return "contents/edsm/edsm";
+	}
+	
+	@PostMapping("/registerSign.do")
+	public String registerSign(MultipartHttpServletRequest multipartRequest) {
+		
+		//edsmService.registerForm(request);
+		edsmService.registerSign(multipartRequest);
+
+		return "redirect:/edsm/manageSign.page";
 	}
 }

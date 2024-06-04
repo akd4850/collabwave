@@ -14,5 +14,9 @@
       FROM EMP_T
      WHERE EMP_CODE = #{empCode} AND PASSWORD = #{pw}
   </select>
+  
+  <update id="registerSign" parameterType="EmpDto">
+	UPDATE EMP_T SET SIGN_FILE_NAME = #{signFileName} WHERE EMP_CODE = #{empCode}
+  </update>
 
 </mapper>

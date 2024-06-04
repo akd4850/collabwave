@@ -1,6 +1,7 @@
 package com.gdu.myapp.service;
 
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -10,4 +11,5 @@ public interface EdsmService {
 	void loadSample(HttpServletRequest request, Model model);
 	void modifyForm(HttpServletRequest request);
 	void removeForm(String sampleCode);
+	void registerSign(MultipartHttpServletRequest multipartRequest);
 }

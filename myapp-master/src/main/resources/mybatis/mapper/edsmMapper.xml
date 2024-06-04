@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gdu.myapp.mapper.EdsmMapper">
+	
+	<resultMap type="EdsmFormDto" id="EdsmFormMap">
+	    <id property="sampleDotCode" column="SAMPLE_DOT_CODE" />
+	    <result property="sampleContent" column="SAMPLE_CONTENT" />
+	    <result property="createDatetime" column="CREATE_DATETIME" />
+	    <result property="modifyDatetime" column="MODIFY_DATETIME" />
+	    <result property="useYn" column="USE_YN" />
+	    <result property="sampleTitle" column="SAMPLE_TITLE" />
+	    <association property="emp" javaType="EmpDto">
+	    	<id property="empCode" column="EMP_CODE" />
+    	</association>
+	</resultMap>
+
+	<insert id="registerForm" parameterType="EdsmFormDto">
+		INSERT INTO EDSM_SAMPLE_T (
+			SAMPLE_DOT_CODE,
+			EMP_CODE,
+			SAMPLE_CONTENT,
+			CREATE_DATETIME,
+			MODIFY_DATETIME,
+			USE_YN,
+			SAMPLE_TITLE
+		) VALUES (
+			#{sampleDotCode},
+			#{emp.empCode},
+			#{sampleContent},
+			CURRENT_DATE,
+			CURRENT_DATE,
+			#{useYn},
+			#{sampleTitle}
+		)
+	</insert>
+	
+	<select id="getSampleCount" resultType="int">
+		SELECT COUNT(*) FROM EDSM_SAMPLE_T
+	</select>
+	
+	<select id="getSampleList" parameterType="Map" resultMap="EdsmFormMap">
+		SELECT 	SAMPLE_DOT_CODE,
+				SAMPLE_CONTENT,
+				CREATE_DATETIME,
+				MODIFY_DATETIME,
+				USE_YN,
+				SAMPLE_TITLE
+		  FROM	(SELECT ROW_NUMBER() OVER(ORDER BY SAMPLE_DOT_CODE) AS RN,
+		 		 		SAMPLE_DOT_CODE,
+				 		SAMPLE_CONTENT,
+				 		CREATE_DATETIME,
+				 		MODIFY_DATETIME,
+				 		USE_YN,
+				 		SAMPLE_TITLE
+		    	   FROM EDSM_SAMPLE_T)
+		 WHERE RN BETWEEN #{begin} AND #{end}		 
+	</select>
+	
+	<!-- Test Data 삽입용 -->
+	<update id="insertTest" parameterType="java.util.Map">
+		<foreach collection="list" item="item" index="index" separator=" " open="INSERT ALL" close="SELECT * FROM DUAL">
+			INTO EDSM_SAMPLE_T (
+				 SAMPLE_DOT_CODE,
+				 EMP_CODE,
+				 SAMPLE_CONTENT,
+				 CREATE_DATETIME,
+				 MODIFY_DATETIME,
+				 USE_YN,
+				 SAMPLE_TITLE )
+		  VALUES (
+				 #{sampleDotCode},
+				 #{emp.empCode},
+				 #{sampleContent},
+				 #{createDatetime},
+				 #{modifyDatetime},
+				 #{useYn},
+				 #{sampleTitle}
+				 )
+		</foreach>
+	</update>
+	
+	<select id="getSample" resultMap="EdsmFormMap">
+		SELECT 	SAMPLE_DOT_CODE,
+				SAMPLE_CONTENT,
+				CREATE_DATETIME,
+				MODIFY_DATETIME,
+				USE_YN,
+				SAMPLE_TITLE,
+				EMP_CODE
+		   FROM EDSM_SAMPLE_T
+		  WHERE SAMPLE_DOT_CODE = #{sampleDotCode}
+	</select>
+	
+	<update id="modifyForm" parameterType="EdsmFormDto">
+		UPDATE EDSM_SAMPLE_T
+		   SET SAMPLE_CONTENT = #{sampleContent},
+		   	   MODIFY_DATETIME = CURRENT_DATE,
+		   	   USE_YN = #{useYn},
+		   	   SAMPLE_TITLE = #{sampleTitle}
+		 WHERE SAMPLE_DOT_CODE = #{sampleDotCode}
+	</update>
+	
+	<delete id="removeForm">
+		DELETE FROM EDSM_SAMPLE_T WHERE SAMPLE_DOT_CODE = #{sampleDotCode}
+	</delete>
+
+</mapper>

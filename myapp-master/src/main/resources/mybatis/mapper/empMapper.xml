@@ -14,5 +14,70 @@
       FROM EMP_T
      WHERE EMP_CODE = #{empCode} AND PASSWORD = #{pw}
   </select>
+  
+  <select id="getEmpCount"
+  	      resultType="int">
+    SELECT COUNT(*)
+      FROM EMP_T
+  </select>
+  
+  <select id="getEmpList"
+  	      parameterType="Map"
+  	      resultType="EmpDto">
+  	SELECT EMP_T.EMP_CODE,
+  		   EMP_T.EMP_NAME,
+       	   DEPT_T.DEPT_NAME,
+           POSITION_T.POSITION_NAME,
+           EMP_T.MOBILE,
+           EMP_T.EMAIL
+      FROM EMP_T
+           INNER JOIN DEPT_T ON EMP_T.DEPT_CODE = DEPT_T.DEPT_CODE
+           INNER JOIN POSITION_T ON EMP_T.POSITION_CODE = POSITION_T.POSITION_CODE
+    ORDER BY JOIN_DATE DESC
+  </select>
+  
+  <!--
+  <insert id="registerEmp"
+  		  parameterType="EmpDto">
+    INSERT INTO EMP_T (
+        EMP_CODE
+      , EMP_NAME
+      , PASSWORD
+      , BIRTHDAY_DATE
+      , JOIN_DATE
+      , DEPT_CODE
+      , POSITION_CODE
+      , ADDRESS
+      , MOBILE
+      , EMAIL
+      , PROFILE_FILE_NAME
+      , STATUS_CODE
+      ) VALUES (
+          SUBSTR(EXTRACT(YEAR FROM SYSDATE), 3, 2)
+        , #{EMP_NAME}
+        , 1111
+        , #{BIRTHDAY_DATE}
+        , #{JOIN_DATE}
+        , #{DPET_CODE}
+        , #{POSITION_CODE}
+        , #{ADDRESS}
+        , #{MOBILE}
+        , #{EMAIL}
+        , #{PROFILE_FILE_NAME}
+        , 1
+      )
+  </insert>
+
+  <select id="getDeptListByMap"
+   		  parameterType="Map"
+   		  resultType="DeptDto">
+    SELECT D.DEPT_NAME, D.DEPT_CODE, D.DEPT_LEADER_EMP_NO, 
+       (SELECT COUNT(*)
+          FROM EMP_T E
+         WHERE D.DEPT_CODE = E.DEPT_CODE) AS DEPT_HEADCOUNT,
+       DEPT_CREATEDATE
+      FROM DEPT_T D;
+  </select>
+  -->
 
 </mapper>

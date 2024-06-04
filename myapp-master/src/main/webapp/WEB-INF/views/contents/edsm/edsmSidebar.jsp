@@ -47,7 +47,7 @@
             <li>
                 <ul class="list-unstyled subtab2">
                     <li><a href="/edsm/manageSign.page">내 사인 관리</a></li>
-                    <li><a href="/edsm/">내 결재선 관리</a></li>
+                    <li><a href="/edsm/manageLine.do">내 결재선 관리</a></li>
                 </ul>
             </li>
         </ul>

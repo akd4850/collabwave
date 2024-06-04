@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.gdu.myapp.dto.EdsmCustomApprDto;
 import com.gdu.myapp.dto.EdsmFormDto;
 import com.gdu.myapp.dto.EmpDto;
 import com.gdu.myapp.mapper.EdsmMapper;
@@ -149,5 +150,35 @@ public class EdsmServiceImpl implements EdsmService {
 	        	e.printStackTrace();
 	        }
 		}
+	}
+	
+	@Override
+	public void loadLineList(HttpServletRequest request, Model model) {
+
+		HttpSession session = request.getSession();
+		EmpDto empDto = (EmpDto)session.getAttribute("emp");
+		
+	    int total = edsmMapper.getLineCount(empDto.getEmpCode());
+	    
+	    int display = 10;
+	    
+	    Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
+	    int page = Integer.parseInt(opt.orElse("1"));
+	    
+	    myPageUtils.setPaging(total, display, page);
+	    
+	    Map<String, Object> map = Map.of("begin", myPageUtils.getBegin()
+	                                   , "end", myPageUtils.getEnd()
+	                                   , "empCode", empDto.getEmpCode());
+	    
+	    // DB 에서 목록 가져오기
+	    List<EdsmCustomApprDto> customApprList = edsmMapper.getLineList(map);
+	    
+	    // 뷰로 전달할 데이터를 Model 에 저장
+	    model.addAttribute("beginNo", total - (page - 1) * display);
+	    model.addAttribute("customApprList", customApprList);
+	    model.addAttribute("paging", myPageUtils.getPagingNewVersion(request.getContextPath() + "/edsm/manageLine.do"
+	                                                     , null
+	                                                     , display));
 	}
 }

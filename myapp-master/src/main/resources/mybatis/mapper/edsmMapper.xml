@@ -106,5 +106,22 @@
 	<delete id="removeForm">
 		DELETE FROM EDSM_SAMPLE_T WHERE SAMPLE_DOT_CODE = #{sampleDotCode}
 	</delete>
+	
+	<select id="getLineCount" resultType="int">
+		SELECT COUNT(*) FROM EDSM_CUSTOM_APPROVAL_T WHERE EMP_CODE = #{empCode}
+	</select>
+	
+	<select id="getLineList" parameterType="Map" resultType="EdsmCustomApprDto">
+		SELECT 	CUSTOM_APPR_NO,
+				EMP_CODE,
+				LINE_NAME
+		  FROM	(SELECT ROW_NUMBER() OVER(ORDER BY CUSTOM_APPR_NO) AS RN,
+		 		 		CUSTOM_APPR_NO,
+				 		EMP_CODE,
+				 		LINE_NAME
+		    	   FROM EDSM_CUSTOM_APPROVAL_T
+		    	  WHERE EMP_CODE = #{empCode})
+		 WHERE RN BETWEEN #{begin} AND #{end}		 
+	</select>
 
 </mapper>

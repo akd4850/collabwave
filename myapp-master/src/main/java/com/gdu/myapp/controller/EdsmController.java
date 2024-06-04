@@ -131,4 +131,16 @@ public class EdsmController {
 
 		return "redirect:/edsm/manageSign.page";
 	}
+	
+	@GetMapping("/manageLine.do")
+	public String manageLine(Model model, Locale locale, HttpServletRequest request) {
+		
+		model.addAttribute("submenu", "manageLine.jsp");
+		model.addAttribute("messageSource", messageSource);
+		model.addAttribute("locale", locale);
+		
+		edsmService.loadLineList(request, model);
+
+		return "contents/edsm/edsm";
+	}
 }

@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -18,7 +16,6 @@ import com.gdu.myapp.utils.MySecurityUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
 
 @Transactional
 @Service
@@ -31,26 +28,25 @@ public class EmpServiceImpl implements EmpService {
     this.empMapper = empMapper;
     this.myPageUtils = myPageUtils;
   }
-  
-  
-  @Override
+
+	@Override
 	public void signin(HttpServletRequest request, HttpServletResponse response) {
-    
-    try {
-      String empCode = request.getParameter("empCode");
-  	  String pw = MySecurityUtils.getSha256(request.getParameter("pw"));
-  	  		
-  	  Map<String, Object> params = Map.of("empCode", empCode,
-  	  											                   "pw", pw);
-  	  		
-  	  EmpDto empDto = empMapper.getEmpByMap(params);
-  	  		
-  	  if(empDto != null) {
-  	  	HttpSession session = request.getSession();
-  	  	session.setAttribute("emp", empDto);
-  	    session.setMaxInactiveInterval(60 * 10);
-  	    response.sendRedirect("/main.page");
-  	    }
+
+  		try {
+  			String empCode = request.getParameter("empCode");
+  	  		String pw = MySecurityUtils.getSha256(request.getParameter("pw"));
+
+  	  		Map<String, Object> params = Map.of("empCode", empCode,
+  	  											"pw", pw);
+
+  	  		EmpDto empDto = empMapper.getEmpByMap(params);
+
+  	  		if(empDto != null) {
+  	  			HttpSession session = request.getSession();
+  	  		  session.setAttribute("emp", empDto);
+  	          session.setMaxInactiveInterval(60 * 10);
+  	          response.sendRedirect("/main.page");
+  	  		}
   		} catch(Exception e) {
   			e.printStackTrace();
   		} finally {

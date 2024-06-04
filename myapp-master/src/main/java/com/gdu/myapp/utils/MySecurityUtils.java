@@ -19,16 +19,16 @@ public class MySecurityUtils {
       MessageDigest digest = MessageDigest.getInstance("SHA-256");
       digest.update(original.getBytes());
       byte[] bytes = digest.digest();
-      for(int i = 0; i < bytes.length; i++) {
-        builder.append(String.format("%02X", bytes[i]));
+      for (byte element : bytes) {
+        builder.append(String.format("%02X", element));
       }
     } catch (Exception e) {
       e.printStackTrace();
     }
     return builder.toString();
   }
-  
-  /* 
+
+  /*
    * 크로스 사이트 스크립팅 (Cross Site Scripting)
    * 1. 스크립트 코드를 입력하여 시스템을 공격할 수 있다.
    * 2. 스크립트 코드에 반드시 필요한 "<script>" 입력을 무력화하기 위해서
@@ -37,7 +37,7 @@ public class MySecurityUtils {
   public static String getPreventXss(String original) {
     return original.replace("<script>", "&lt;script&gt;").replace("</script>", "&lt;/script&gt;");
   }
-  
+
   /*
    * 인증코드
    * 1. 랜덤으로 생성해야 한다.
@@ -45,7 +45,7 @@ public class MySecurityUtils {
    */
   public static String getRandomString(int count, boolean letter, boolean number) {
     StringBuilder builder = new StringBuilder();
-    List<String> list = new ArrayList<String>();
+    List<String> list = new ArrayList<>();
     if(letter) {
       for(char ch = 'A'; ch <= 'Z'; ch++) {
         list.add(ch + "");
@@ -68,5 +68,5 @@ public class MySecurityUtils {
     }
     return builder.toString();
   }
-  
+
 }

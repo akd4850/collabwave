@@ -7,28 +7,30 @@
 
 <div class="card">
     <div class="header">
-        전자결재 양식
+        ${messageSource.getMessage("edsm", null, locale)} ${messageSource.getMessage("form", null, locale)}
     </div>
     <div class="content table-responsive table-full-width">
         <input type="button"
                 class="btn btn-info btn-fill"
                 style="margin-left:10px"
                 onclick="location.href='/edsm/edsmAddForm.page'"
-                value="양식 추가">
+                value="${messageSource.getMessage('form', null, locale)} ${messageSource.getMessage('add', null, locale)}">
         <table class="table table-hover table-striped">
             <thead>
-                <th>양식 번호</th>
-                <th>양식명</th>
-                <th>등록일</th>
+                <th>${messageSource.getMessage("form", null, locale)} ${messageSource.getMessage("number", null, locale)}</th>
+                <th>${messageSource.getMessage("formName", null, locale)}</th>
+                <th>${messageSource.getMessage("regiDay", null, locale)}</th>
             </thead>
             <tbody>
-                <tr>
-                    <td>0001</td>
-                    <td>업무협조</td>
-                    <td>업무협조</td>
-                    <td>2024-05-22</td>
-                </tr>
+                <c:forEach items="${sampleList}" var="sample" varStatus="vs">
+                    <tr>
+                        <td><a href="/edsm/edsmDetailForm.do?code=${sample.sampleDotCode}">${sample.sampleDotCode}</a></td>
+                        <td>${sample.sampleTitle}</td>
+                        <td>${sample.createDatetime}</td>
+                    </tr>
+                </c:forEach>
             </tbody>
         </table>
+        ${paging}
     </div>
 </div>

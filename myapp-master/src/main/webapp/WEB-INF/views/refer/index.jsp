@@ -19,6 +19,7 @@
 
 <ul>
     <li><a href="/reference/ckeditor.page">CKEDITOR</a></li>
+    <li><a href="/reference/jstree.page">JSTREE</a></li>
 </ul>
 
 </body>

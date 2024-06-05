@@ -12,4 +12,5 @@ public interface EmpMapper {
   int getEmpCount();
 	EmpDto getEmpByMap(Map<String, Object> map);
 	List<EmpDto> getEmpList(Map<String, Object> map);
+	int registerSign(EmpDto empDto);
 }

@@ -1,5 +1,6 @@
 package com.gdu.myapp.service;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,10 +12,15 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.gdu.myapp.dto.EdsmCustomApprDto;
 import com.gdu.myapp.dto.EdsmFormDto;
 import com.gdu.myapp.dto.EmpDto;
 import com.gdu.myapp.mapper.EdsmMapper;
+import com.gdu.myapp.mapper.EmpMapper;
+import com.gdu.myapp.utils.MyFileUtils;
 import com.gdu.myapp.utils.MyPageUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,12 +30,16 @@ import jakarta.servlet.http.HttpSession;
 @Service
 public class EdsmServiceImpl implements EdsmService {
 
+	private final MyFileUtils myFileUtils;
 	private final MyPageUtils myPageUtils;
 	private final EdsmMapper edsmMapper;
-	public EdsmServiceImpl(MyPageUtils myPageUtils, EdsmMapper edsmMapper) {
+	private final EmpMapper empMapper;
+	public EdsmServiceImpl(MyFileUtils myFileUtils, MyPageUtils myPageUtils, EdsmMapper edsmMapper, EmpMapper empMapper) {
 		super();
+		this.myFileUtils = myFileUtils;
 		this.myPageUtils = myPageUtils;
 		this.edsmMapper = edsmMapper;
+		this.empMapper = empMapper;
 	}
 
 	@Override
@@ -109,5 +119,66 @@ public class EdsmServiceImpl implements EdsmService {
 	public void removeForm(String sampleCode) {
 		
 		edsmMapper.removeForm(sampleCode);
+	}
+	
+	@Override
+	public void registerSign(MultipartHttpServletRequest multipartRequest) { 
+		
+		MultipartFile multipartFile = multipartRequest.getFile("file");
+		
+		if(multipartFile != null) {
+			String uploadPath = myFileUtils.getUploadPath();
+			File dir = new File(uploadPath);
+	        if(!dir.exists()) {
+	          dir.mkdirs();
+	        }
+	        
+	        String originalFilename = multipartFile.getOriginalFilename();
+	        String filesystemName = myFileUtils.getFilesystemName(originalFilename);
+	        File file = new File(dir, filesystemName);
+	        String path = "/upload" + uploadPath + "/" + filesystemName;
+	        
+	        try {
+	        	multipartFile.transferTo(file);
+	        	
+	        	HttpSession session = multipartRequest.getSession();
+	    		EmpDto empDto = (EmpDto)session.getAttribute("emp");
+	    		empDto.setSignFileName(path);
+	    		
+	    		empMapper.registerSign(empDto);
+	        } catch(Exception e) {
+	        	e.printStackTrace();
+	        }
+		}
+	}
+	
+	@Override
+	public void loadLineList(HttpServletRequest request, Model model) {
+
+		HttpSession session = request.getSession();
+		EmpDto empDto = (EmpDto)session.getAttribute("emp");
+		
+	    int total = edsmMapper.getLineCount(empDto.getEmpCode());
+	    
+	    int display = 10;
+	    
+	    Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
+	    int page = Integer.parseInt(opt.orElse("1"));
+	    
+	    myPageUtils.setPaging(total, display, page);
+	    
+	    Map<String, Object> map = Map.of("begin", myPageUtils.getBegin()
+	                                   , "end", myPageUtils.getEnd()
+	                                   , "empCode", empDto.getEmpCode());
+	    
+	    // DB 에서 목록 가져오기
+	    List<EdsmCustomApprDto> customApprList = edsmMapper.getLineList(map);
+	    
+	    // 뷰로 전달할 데이터를 Model 에 저장
+	    model.addAttribute("beginNo", total - (page - 1) * display);
+	    model.addAttribute("customApprList", customApprList);
+	    model.addAttribute("paging", myPageUtils.getPagingNewVersion(request.getContextPath() + "/edsm/manageLine.do"
+	                                                     , null
+	                                                     , display));
 	}
 }

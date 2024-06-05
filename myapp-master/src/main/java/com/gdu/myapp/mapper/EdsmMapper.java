@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.gdu.myapp.dto.EdsmCustomApprDto;
 import com.gdu.myapp.dto.EdsmFormDto;
 
 @Mapper
@@ -16,4 +17,6 @@ public interface EdsmMapper {
 	EdsmFormDto getSample(String sampleCode);
 	int modifyForm(EdsmFormDto edsmFormDto);
 	int removeForm(String sampleCode);
+	int getLineCount(String empCode);
+	List<EdsmCustomApprDto> getLineList(Map<String, Object> map);
 }

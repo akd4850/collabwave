@@ -79,5 +79,9 @@
       FROM DEPT_T D;
   </select>
   -->
+  
+  <update id="registerSign" parameterType="EmpDto">
+	UPDATE EMP_T SET SIGN_FILE_NAME = #{signFileName} WHERE EMP_CODE = #{empCode}
+  </update>
 
 </mapper>

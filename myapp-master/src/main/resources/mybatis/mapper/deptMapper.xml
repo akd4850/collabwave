@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gdu.myapp.mapper.DeptMapper">
+	
+	<resultMap type="DeptDto" id="DeptDtoMap">
+	    <id property="deptCode" column="DEPT_CODE" />
+	    <result property="deptName" column="DEPT_NAME" />
+	    <result property="deptLevel" column="DEPT_LEVEL" />
+	    <result property="deptLeaderEmpCode" column="DEPT_LEADER_EMP_CODE" />
+	    <result property="deptLocation" column="DEPT_LOCATION" />
+	    <result property="deptCreatedate" column="DEPT_CREATEDATE" />
+	    <result property="useYn" column="USE_YN" />
+	    <result property="deptUpstairCode" column="DEPT_UPSTAIR_CODE" />
+	    <association property="emp" javaType="EmpDto">
+	    	<id property="empCode" column="EMP_CODE" />
+	    	<result property="empName" column="EMP_NAME" />
+    	</association>
+	</resultMap>
+	
+	<select id="getDeptList">
+		SELECT  DEPT_CODE,
+		        DEPT_NAME,
+		        DEPT_LEVEL,
+		        DEPT_LEADER_EMP_CODE,
+		        DEPT_LOCATION,
+		        DEPT_CREATEDATE,
+		        USE_YN,
+		        DEPT_UPSTAIR_CODE
+		FROM    DEPT_T
+		<where>
+	      	<if test="deptCode!='d0000'">DEPT_CODE = #{deptCode}</if>
+	      	<if test="deptCode=='d0000'">DEPT_LEVEL = 0</if>
+    	</where>
+	</select>
+	
+</mapper>

@@ -18,7 +18,7 @@
     .demo { overflow:auto; border:1px solid silver; min-height:100px; }
 </style>-->
 
-<link rel="stylesheet" href="${contextPath}/jstree/bootstrap/css/bootstrap.min.css" />
+<!--<link rel="stylesheet" href="${contextPath}/jstree/bootstrap/css/bootstrap.min.css" />-->
 <link rel="stylesheet" href="${contextPath}/jstree/dist/themes/proton/style.css" />
 <!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /-->
 
@@ -26,7 +26,7 @@
 <link rel="apple-touch-icon-precomposed" href="${contextPath}/jstree/apple-touch-icon-precomposed.png" />
 
 <script src="${contextPath}/resources/js/jquery.min.js" type="text/javascript"></script>
-<script src="${contextPath}/jstree/jstree.min.js"></script>
+<script src="${contextPath}/jstree/dist/jstree.min.js"></script>
 
 <style>
     .proton-demo{

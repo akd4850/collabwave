@@ -11,4 +11,5 @@ import com.gdu.myapp.dto.EmpDto;
 @Mapper
 public interface DeptMapper {
 	List<DeptDto> getDeptList(String deptCode);
+	List<EmpDto> getBelongEmpList(String deptCode);
 }

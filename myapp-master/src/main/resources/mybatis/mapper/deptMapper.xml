@@ -31,8 +31,20 @@
 		        DEPT_UPSTAIR_CODE
 		FROM    DEPT_T
 		<where>
-	      	<if test="deptCode!='d0000'">DEPT_CODE = #{deptCode}</if>
+	      	<if test="deptCode!='d0000'">DEPT_UPSTAIR_CODE = #{deptCode}</if>
 	      	<if test="deptCode=='d0000'">DEPT_LEVEL = 0</if>
+    	</where>
+	</select>
+	
+	<select id="getBelongEmpList" resultType="EmpDto">
+		SELECT  A.EMP_CODE,
+        		A.EMP_NAME
+		FROM    EMP_T A
+		LEFT OUTER JOIN DEPT_T B
+		ON      A.DEPT_CODE = B.DEPT_CODE
+		<where>
+	      	<if test="deptCode!='d0000'">A.DEPT_CODE = #{deptCode}</if>
+	      	<if test="deptCode=='d0000'">A.DEPT_CODE IS NULL</if>
     	</where>
 	</select>
 	

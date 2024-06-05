@@ -27,7 +27,7 @@ public class DeptServiceImpl implements DeptService {
 
 	@Override
 	public List<EmpDto> getBelongEmpList(String deptCode) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return deptMapper.getBelongEmpList(deptCode);
 	}
 }

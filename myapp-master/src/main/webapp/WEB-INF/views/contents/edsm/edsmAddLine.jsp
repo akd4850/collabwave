@@ -24,6 +24,7 @@
         type: 'GET',
         url: '${contextPath}/dept/getOrganization.do',
         data: 'deptCode=d0000',
+        contentType: "application/json; charset=utf-8;",
         dataType: 'json',
         success: (resData) => {
             $('#jstree').jstree({
@@ -36,26 +37,40 @@
                         'responsive': true
                     }
                 },
-                "types": {
-                    "dept": {
-                        "icon": "${contextPath}/jstree/images/management-4-16.png"
-                    },
-                    "person": {
-                        "icon": "${contextPath}/jstree/images/user-128-16.png"
-                    }
-                },
             }).on('changed.jstree', function (e, data) {
                 var i, j, r = [];
                 for(i = 0, j = data.selected.length; i < j; i++) {
-                    //r.push(data.instance.get_node(data.selected[i]).text);
-                    //r.push( );
-                    alert( data.instance.get_node( data.selected[i] ).id );
+                    let node = data.instance.get_node( data.selected[i] );
+                    if(node.original.type === 'dept' && node.original.isAjaxOpen !== true) {
+                        getOrganization(node);
+                    } else if(node.original.type === 'person') {
+                    }
                 }
-                //alert( 'Selected: ' + r.join(', ') );
             });
         },
         error: (jqXHR) => {
             alert(jqXHR.statusText + '(' + jqXHR.status + ')');
         }
     });
+
+    function getOrganization(node) {
+        $.ajax({
+            type: 'GET',
+            url: '${contextPath}/dept/getOrganization.do',
+            data: 'deptCode=' + node.original.id,
+            contentType: "application/json; charset=utf-8;",
+            success: (resData) => {
+                var arr = $.parseJSON(resData);
+                for(let i in arr) {
+                    let myNode = arr[i];
+                    $('#jstree').jstree(true).create_node(node, myNode, "last", () => {});
+                }
+                node.original.isAjaxOpen = true;
+                $('#jstree').jstree("open_node", node);
+            },
+            error: (jqXHR) => {
+                alert(jqXHR.statusText + '(' + jqXHR.status + ')');
+            }
+        });
+    }
 </script>

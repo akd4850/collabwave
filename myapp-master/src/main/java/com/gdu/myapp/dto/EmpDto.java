@@ -1,5 +1,6 @@
 package com.gdu.myapp.dto;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import lombok.AllArgsConstructor;
@@ -12,9 +13,11 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class EmpDto {
-	private String empCode, deptCode, positionCode, password, 
+	private String empCode, positionCode, password, 
 			empName, phone, mobile, email, address, detailAddress, 
 			signFileName, profileFileName, statusCode;
 	private int zipCode;
-	private Date birthdayDate, joinDate, leaveDate, passwordModifyDatetime;
+	private LocalDate birthdayDate, joinDate, leaveDate, passwordModifyDatetime;
+	private DeptDto dept;
+	private PositionDto position;
 }

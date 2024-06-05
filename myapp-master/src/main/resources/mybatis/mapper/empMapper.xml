@@ -4,7 +4,34 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.gdu.myapp.mapper.EmpMapper">
-
+	
+	<resultMap type="EmpDto" id="EmpDtoMap">
+	    <id property="empCode" column="EMP_CODE" />
+	    <result property="empName" column="EMP_NAME" />
+	    <result property="password" column="PASSWORD" />
+	    <result property="phone" column="PHONE" />
+	    <result property="mobile" column="MOBILE" />
+	    <result property="email" column="EMAIL" />
+	    <result property="address" column="ADDRESS" />
+	    <result property="detailAddress" column="DETAIL_ADDRESS" />
+	    <result property="signFileName" column="SIGN_FILE_NAME" />
+	    <result property="profileFileName" column="PROFILE_FILE_NAME" />
+	    <result property="statusCode" column="STATUS_CODE" />
+	    <result property="zipCode" column="ZIP_CODE" />
+	    <result property="birthdayDate" column="BIRTHDAY_DATE" />
+	    <result property="joinDate" column="JOIN_DATE" />
+	    <result property="leaveDate" column="LEAVE_DATE" />
+	    <result property="passwordModifyDatetime" column="PASSWORD_MODIFY_DATETIME" />
+	    <association property="dept" javaType="DeptDto">
+	    	<id property="deptCode" column="DEPT_CODE" />
+	    	<result property="deptName" column="DEPT_NAME" />
+    	</association>
+    	<association property="position" javaType="PositionDto">
+	    	<id property="positionCode" column="POSITION_CODE" />
+	    	<result property="positionName" column="POSITION_NAME" />
+    	</association>
+	</resultMap>
+	
   <select id="getEmpByMap"
           parameterType="Map"
           resultType="EmpDto">
@@ -23,50 +50,89 @@
   
   <select id="getEmpList"
   	      parameterType="Map"
-  	      resultType="EmpDto">
+  	      resultMap="EmpDtoMap">
   	SELECT EMP_T.EMP_CODE,
   		   EMP_T.EMP_NAME,
        	   DEPT_T.DEPT_NAME,
-           POSITION_T.POSITION_NAME,
+       	   POSITION_T.POSITION_NAME,
            EMP_T.MOBILE,
-           EMP_T.EMAIL
+           EMP_T.EMAIL,
+           EMP_T.STATUS_CODE
       FROM EMP_T
            INNER JOIN DEPT_T ON EMP_T.DEPT_CODE = DEPT_T.DEPT_CODE
            INNER JOIN POSITION_T ON EMP_T.POSITION_CODE = POSITION_T.POSITION_CODE
-    ORDER BY JOIN_DATE DESC
+    WHERE STATUS_CODE IN('s01', 's02')
+    ORDER BY EMP_CODE ASC
   </select>
   
-  <!--
-  <insert id="registerEmp"
-  		  parameterType="EmpDto">
+  <select id="getEmpDetail"
+  		  parameterType="Map"
+  		  resultMap="EmpDtoMap">
+    SELECT E.EMP_CODE,
+           E.EMP_NAME,
+           E.PASSWORD,
+       	   E.BIRTHDAY_DATE,
+           E.JOIN_DATE,
+           D.DEPT_NAME,
+           P.POSITION_NAME,
+           E.ZIP_CODE,
+           E.ADDRESS,
+           E.DETAIL_ADDRESS,
+           E.MOBILE,
+           E.EMAIL
+      FROM EMP_T E
+           INNER JOIN DEPT_T  D ON E.DEPT_CODE = D.DEPT_CODE
+           INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
+     WHERE E.EMP_CODE = #{empCode}
+  </select>
+  
+  <insert id="insertEmployee">
     INSERT INTO EMP_T (
         EMP_CODE
       , EMP_NAME
       , PASSWORD
-      , BIRTHDAY_DATE
-      , JOIN_DATE
-      , DEPT_CODE
-      , POSITION_CODE
-      , ADDRESS
       , MOBILE
       , EMAIL
-      , PROFILE_FILE_NAME
-      , STATUS_CODE
+      , ZIP_CODE
+      , ADDRESS
+      , DETAIL_ADDRESS
+      , POSITION_CODE
+      , BIRTHDAY_DATE
+      , JOIN_DATE
       ) VALUES (
-          SUBSTR(EXTRACT(YEAR FROM SYSDATE), 3, 2)
-        , #{EMP_NAME}
-        , 1111
-        , #{BIRTHDAY_DATE}
-        , #{JOIN_DATE}
-        , #{DPET_CODE}
-        , #{POSITION_CODE}
-        , #{ADDRESS}
-        , #{MOBILE}
-        , #{EMAIL}
-        , #{PROFILE_FILE_NAME}
-        , 1
+          #{empCode}
+        , #{empName}
+        , #{password}
+        , #{mobile}
+        , #{email}
+        , #{zipCode}
+        , #{address}
+        , #{detailAddress}
+        , #{positionCode}
+        , #{birthdayDate}
+        , CURRENT_DATE
       )
   </insert>
+  
+  <update id="updateEmployee">
+	UPDATE EMP_T
+	   SET EMP_NAME = #{empName},
+	       EMP_CODE = #{empCode},
+	       POSITION_CODE = #{positionCode},
+	       MOBILE = #{mobile},
+	       EMAIL = #{email},
+	       BIRTHDAY_DATE = #{birthdayDate},
+	       ZIP_CODE = #{zipCode},
+	       ADDRESS = #{address},
+		   DETAIL_ADDRESS = #{detailAddress}
+	 WHERE EMP_CODE= #{empCode}
+  </update>
+  
+  <update id="resignEmp">
+	UPDATE EMP_T
+	   SET STATUS_CODE = 's03'
+	 WHERE EMP_CODE = #{empCode}
+  </update>
 
   <select id="getDeptListByMap"
    		  parameterType="Map"
@@ -78,7 +144,6 @@
        DEPT_CREATEDATE
       FROM DEPT_T D;
   </select>
-  -->
   
   <update id="registerSign" parameterType="EmpDto">
 	UPDATE EMP_T SET SIGN_FILE_NAME = #{signFileName} WHERE EMP_CODE = #{empCode}

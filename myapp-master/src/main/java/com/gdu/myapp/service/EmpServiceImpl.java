@@ -1,9 +1,13 @@
 package com.gdu.myapp.service;
 
+import java.io.PrintWriter;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -77,5 +81,90 @@ public class EmpServiceImpl implements EmpService {
                                                      , null
                                                      , display));
     }
+  
+  @Override
+  public void registerEmp(HttpServletRequest request, HttpServletResponse response) {
+    
+    // 전달된 파라미터
+    String empCode = request.getParameter("empCode");
+    String empName = MySecurityUtils.getPreventXss(request.getParameter("empName"));
+    String password = MySecurityUtils.getSha256(request.getParameter("password"));
+    String mobile = request.getParameter("mobile");
+    String email = request.getParameter("email");
+    String zipCode = request.getParameter("zipCode");
+    String address = request.getParameter("address");
+    String detailAddress = request.getParameter("detailAddress");
+    String positionCode = request.getParameter("positionCode");
+    String birthdayDate = request.getParameter("birthdayDate");
+    
+    // Mapper로 보낼 EmpDto 객체 생성
+    EmpDto emp = EmpDto.builder()
+                    .empCode(empCode)
+                    .empName(empName)
+                    .password(password)
+                    .mobile(mobile)
+                    .email(email)
+                    .zipCode(Integer.parseInt(zipCode))
+                    .address(address)
+                    .detailAddress(detailAddress)
+                    .positionCode(positionCode)
+                    .birthdayDate(LocalDate.parse(birthdayDate))
+                  .build();
+    
+    // 직원등록
+    int insertCount = empMapper.insertEmployee(emp);
+    
+    // 응답 만들기 (성공하면 /management.page 이동, 실패하면 뒤로가기)
+    
+    try {
+      
+      response.setContentType("text/html; charset=UTF-8");
+      PrintWriter out = response.getWriter();
+      out.println("<script>");
+      
+      // 등록 성공
+      if(insertCount == 1) {
+        
+        out.println("alert('직원이 등록되었습니다.');");
+        out.println("location.href='" + request.getContextPath() + "/employee/management.page';");
+        
+        // 등록 실패
+      } else {
+        out.println("alert('직원 등록이 실패했습니다.');");
+        out.println("history.back();");
+      }
+      out.println("</script>");
+      out.flush();
+      out.close();
+      
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
+  
+  @Override
+  public EmpDto getEmpDetail(String empCode) {
+    return empMapper.getEmpDetail(empCode);
+  }
+  
+//  @Override
+//  public int editEmployee(EmpDto emp) {
+//
+//    String empCode = emp.getEmpCode();
+//    String empName = emp.getEmpName();
+//    String mobile = emp.getMobile();
+//    String email = emp.getEmail();
+//    String birthdayDate = emp.getBirthdayDate();
+//    String zipCode = emp.getZipCode();
+//    String address = emp.getAddress();
+//    String detailAddress = emp.getDetailAddress();
+//    
+//    return empMapper.updateEmployee(empCode);
+//  }
+  
+  
+
+
+
+}
   

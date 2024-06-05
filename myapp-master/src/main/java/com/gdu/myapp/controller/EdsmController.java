@@ -143,4 +143,14 @@ public class EdsmController {
 
 		return "contents/edsm/edsm";
 	}
+	
+	@GetMapping("/edsmAddLine.page")
+	public String registerLine(Model model, Locale locale) {
+		
+		model.addAttribute("submenu", "edsmAddLine.jsp");
+		model.addAttribute("messageSource", messageSource);
+		model.addAttribute("locale", locale);
+		
+		return "contents/edsm/edsm";
+	}	
 }

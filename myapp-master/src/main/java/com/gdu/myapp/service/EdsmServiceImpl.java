@@ -3,6 +3,7 @@ package com.gdu.myapp.service;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.gdu.myapp.dto.CustomApprItemDto;
 import com.gdu.myapp.dto.EdsmCustomApprDto;
 import com.gdu.myapp.dto.EdsmFormDto;
 import com.gdu.myapp.dto.EmpDto;
@@ -180,5 +182,32 @@ public class EdsmServiceImpl implements EdsmService {
 	    model.addAttribute("paging", myPageUtils.getPagingNewVersion(request.getContextPath() + "/edsm/manageLine.do"
 	                                                     , null
 	                                                     , display));
+	}
+	
+	@Override
+	public void registerLine(HttpServletRequest request) {
+		
+		String title = request.getParameter("apprName");
+		String[] empCodes = request.getParameterValues("empCode");
+		
+		HttpSession session = request.getSession();
+		EmpDto empDto = (EmpDto)session.getAttribute("emp");
+		
+		int curApprItemSeq = 0;
+		CustomApprItemDto customApprItem = edsmMapper.getCustomApprItemLastID();
+		if(customApprItem != null) curApprItemSeq = customApprItem.getCustomApprItemNo();
+		
+		int nextVal = edsmMapper.getCustomApprSeqNextval();
+		Map<String, Object> map = Map.of("title", title,
+				 						 "myEmpCode", empDto.getEmpCode(),
+				 						 "nextVal", nextVal);
+		
+		edsmMapper.registerLine(map);
+		
+		Map<String, Object> itemMap = Map.of("empCodeList", Arrays.asList(empCodes),
+											 "customApprNo", nextVal,
+											 "curApprItemSeq", curApprItemSeq);
+		
+		edsmMapper.registerLineItem(itemMap);
 	}
 }

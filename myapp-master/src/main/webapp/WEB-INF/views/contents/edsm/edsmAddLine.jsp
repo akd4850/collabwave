@@ -13,13 +13,61 @@
         ${messageSource.getMessage('add', null, locale)}
     </div>
     <div class="content table-responsive table-full-width">
-        <div id="jstree"></div>
+        <div class="row" style="margin-left: 10px;">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="header">
+                        ${messageSource.getMessage('organizationChart', null, locale)}
+                    </div>
+                    <div class="content table-responsive table-full-width">
+                        <div id="jstree"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="card">
+                    <div class="header">
+                        ${messageSource.getMessage('appr', null, locale)}${messageSource.getMessage('line', null, locale)}
+                    </div>
+                    <div class="content">
+                        <p class="text-info">
+                            ${messageSource.getMessage('apprLineHelpMessage', null, locale)}
+                        </p>
+
+                        <form action="${contextPath}/edsm/edsmAddLine.do" method="post">
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                    <th>${messageSource.getMessage('turn', null, locale)}</th>
+                                    <th>${messageSource.getMessage('name', null, locale)}</th>
+                                    <th>${messageSource.getMessage('dept', null, locale)}</th>
+                                    <th>${messageSource.getMessage('delete', null, locale)}</th>                                
+                                </thead>
+                                <tbody id="appr-line">
+                                </tbody>
+                            </table>
+
+                            <br>
+                            <div class="form-group">
+                                <label>
+                                    ${messageSource.getMessage('appr', null, locale)}${messageSource.getMessage('line', null, locale)} 
+                                    ${messageSource.getMessage('name', null, locale)}
+                                </label>
+                                <input type="text" class="form-control" name="apprName">
+                            </div>
+                            <input type="submit" class="btn btn-info btn-fill" style="margin-left:10px" value="${messageSource.getMessage('register', null, locale)}">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <script src="${contextPath}/resources/js/jquery.min.js" type="text/javascript"></script>
 <script src="${contextPath}/jstree/dist/jstree.min.js"></script>
 <script>
+    let seq = 1;
+
     $.ajax({
         type: 'GET',
         url: '${contextPath}/dept/getOrganization.do',
@@ -28,7 +76,7 @@
         dataType: 'json',
         success: (resData) => {
             $('#jstree').jstree({
-                'plugins': ["wholerow"],
+                'plugins': ["wholerow", "contextmenu"],
                 'core': {
                     "check_callback": true,
                     'data': resData,
@@ -37,6 +85,28 @@
                         'responsive': true
                     }
                 },
+                'contextmenu': {
+                    "items": function(node) {
+                        var tree = $('#jstree').jstree(true);
+                        return {
+                            "Menu1" : {
+                                "label": "결재선 추가",
+                                "_disabled": node.original.type == 'dept',
+                                action: function(obj) {
+                                    let parentNode = $('#jstree').jstree(true).get_node(node.parents[0]);
+                                    $('#appr-line').append(
+                                        "<tr><td>" + seq++ + 
+                                        "</td><td>" + node.text + 
+                                        "</td><td>" + parentNode.text + 
+                                        "</td><td>" + 
+                                        "<input type='hidden' name='empCode' value='" + node.original.id + "'>" +
+                                        "<i class='pe-7s-close-circle'></i>" + 
+                                        "</td></tr>");
+                                }
+                            }
+                        }
+                    }
+                }
             }).on('changed.jstree', function (e, data) {
                 var i, j, r = [];
                 for(i = 0, j = data.selected.length; i < j; i++) {

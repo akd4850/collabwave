@@ -17,4 +17,5 @@ public interface EdsmService {
 	void removeForm(String sampleCode);
 	void registerSign(MultipartHttpServletRequest multipartRequest);
 	void loadLineList(HttpServletRequest request, Model model);
+	void registerLine(HttpServletRequest request);
 }

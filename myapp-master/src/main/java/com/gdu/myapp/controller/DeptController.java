@@ -35,18 +35,6 @@ public class DeptController {
 		StringBuilder builder = new StringBuilder();
 		builder.append("[");
 		
-		/*
-		 * ,
-                "type": {
-                    "dept": {
-                        "icon": "${contextPath}/jstree/images/management-4-16.png"
-                    },
-                    "person": {
-                        "icon": "${contextPath}/jstree/images/user-128-16.png"
-                    }
-                }
-		 */
-		
 		for(int i = 0; i < deptList.size(); i++) {
 			builder.append("{");
 			builder.append("\"text\" : \"" + deptList.get(i).getDeptName() + "\", ");

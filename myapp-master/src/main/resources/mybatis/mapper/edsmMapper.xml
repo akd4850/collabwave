@@ -59,29 +59,6 @@
 		 WHERE RN BETWEEN #{begin} AND #{end}		 
 	</select>
 	
-	<!-- Test Data 삽입용 -->
-	<update id="insertTest" parameterType="java.util.Map">
-		<foreach collection="list" item="item" index="index" separator=" " open="INSERT ALL" close="SELECT * FROM DUAL">
-			INTO EDSM_SAMPLE_T (
-				 SAMPLE_DOT_CODE,
-				 EMP_CODE,
-				 SAMPLE_CONTENT,
-				 CREATE_DATETIME,
-				 MODIFY_DATETIME,
-				 USE_YN,
-				 SAMPLE_TITLE )
-		  VALUES (
-				 #{sampleDotCode},
-				 #{emp.empCode},
-				 #{sampleContent},
-				 #{createDatetime},
-				 #{modifyDatetime},
-				 #{useYn},
-				 #{sampleTitle}
-				 )
-		</foreach>
-	</update>
-	
 	<select id="getSample" resultMap="EdsmFormMap">
 		SELECT 	SAMPLE_DOT_CODE,
 				SAMPLE_CONTENT,
@@ -123,5 +100,25 @@
 		    	  WHERE EMP_CODE = #{empCode})
 		 WHERE RN BETWEEN #{begin} AND #{end}		 
 	</select>
+
+	<select id="getCustomApprSeqNextval">
+		SELECT EDSM_CUSTOM_APPROVAL_SEQ.NEXTVAL FROM DUAL
+	</select>
+	
+	<insert id="registerLine" parameterType="Map">
+		INSERT INTO EDSM_CUSTOM_APPROVAL_T (CUSTOM_APPR_NO, EMP_CODE, LINE_NAME) VALUES 
+			(#{nextVal}, #{myEmpCode}, #{title})
+	</insert>
+	
+	<select id="getCustomApprItemLastID" resultType="CustomApprItemDto">
+		SELECT CUSTOM_APPR_ITEM_NO FROM (SELECT CUSTOM_APPR_ITEM_NO FROM EDSM_CUSTOM_APPROVAL_ITEM_T ORDER BY CUSTOM_APPR_ITEM_NO DESC) WHERE ROWNUM = 1
+	</select>
+	
+	<insert id="registerLineItem" parameterType="Map">
+		INSERT INTO EDSM_CUSTOM_APPROVAL_ITEM_T (CUSTOM_APPR_ITEM_NO, CUSTOM_APPR_NO, EMP_CODE, APPR_SEQ) 
+    	<foreach collection="empCodeList" item="empCode" index="index" separator=" UNION ALL ">
+			SELECT #{curApprItemSeq}+#{index}+1, #{customApprNo}, #{empCode}, #{index}+1 FROM DUAL
+        </foreach>
+	</insert>
 
 </mapper>

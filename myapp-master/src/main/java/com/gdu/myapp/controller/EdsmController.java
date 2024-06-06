@@ -145,12 +145,20 @@ public class EdsmController {
 	}
 	
 	@GetMapping("/edsmAddLine.page")
-	public String registerLine(Model model, Locale locale) {
+	public String registerLinePage(Model model, Locale locale) {
 		
 		model.addAttribute("submenu", "edsmAddLine.jsp");
 		model.addAttribute("messageSource", messageSource);
 		model.addAttribute("locale", locale);
 		
 		return "contents/edsm/edsm";
-	}	
+	}
+	
+	@PostMapping("/edsmAddLine.do")
+	public String registerLine(HttpServletRequest request) {
+		
+		edsmService.registerLine(request);
+		
+		return "redirect:/edsm/manageLine.do";
+	}
 }

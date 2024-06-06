@@ -91,7 +91,7 @@
                         return {
                             "Menu1" : {
                                 "label": "결재선 추가",
-                                "_disabled": node.original.type == 'dept',
+                                "_disabled": node.original.type == 'dept' || node.original.id == '${sessionScope.emp.empCode}',
                                 action: function(obj) {
                                     let parentNode = $('#jstree').jstree(true).get_node(node.parents[0]);
                                     $('#appr-line').append(

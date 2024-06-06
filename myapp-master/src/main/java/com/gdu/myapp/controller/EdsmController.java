@@ -163,4 +163,16 @@ public class EdsmController {
 		
 		return "redirect:/edsm/manageLine.do";
 	}
+	
+	@GetMapping("/edsmDetailLine.do")
+	public String detailLine(HttpServletRequest request, Model model, Locale locale) {
+		
+		model.addAttribute("submenu", "edsmDetailLine.jsp");
+		model.addAttribute("messageSource", messageSource);
+		model.addAttribute("locale", locale);
+		
+		edsmService.loadLine(request, model);
+		
+		return "contents/edsm/edsm";
+	}
 }

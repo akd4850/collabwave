@@ -16,6 +16,17 @@
 	    	<id property="empCode" column="EMP_CODE" />
     	</association>
 	</resultMap>
+	
+	<resultMap type="EdsmCustomApprItemDto" id="EdsmCustomApprItemMap">
+		<id property="customApprItemNo" column="CUSTOM_APPR_ITEM_NO" />
+		<result property="apprSeq" column="APPR_SEQ" />
+		<association property="emp" javaType="EmpDto">
+	    	<id property="empCode" column="EMP_CODE" />
+    	</association>
+    	<association property="appr" javaType="EdsmCustomApprDto">
+	    	<id property="lineName" column="LINE_NAME" />
+    	</association>
+	</resultMap>
 
 	<insert id="registerForm" parameterType="EdsmFormDto">
 		INSERT INTO EDSM_SAMPLE_T (
@@ -120,5 +131,18 @@
 			SELECT #{curApprItemSeq}+#{index}+1, #{customApprNo}, #{empCode}, #{index}+1 FROM DUAL
         </foreach>
 	</insert>
+	
+	<select id="getLineDetail" resultMap="EdsmCustomApprItemMap">
+		SELECT  A.CUSTOM_APPR_ITEM_NO,
+		        A.CUSTOM_APPR_NO,        
+		        A.APPR_SEQ,
+		        B.EMP_CODE,
+		        B.LINE_NAME
+		FROM    EDSM_CUSTOM_APPROVAL_ITEM_T A
+		LEFT 	OUTER JOIN EDSM_CUSTOM_APPROVAL_T B
+		ON      A.CUSTOM_APPR_NO = B.CUSTOM_APPR_NO
+		WHERE   A.CUSTOM_APPR_NO = #{apprNo}
+		ORDER 	BY APPR_SEQ
+	</select>
 
 </mapper>

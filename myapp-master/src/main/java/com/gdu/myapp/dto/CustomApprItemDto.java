@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-public class EdsmCustomApprItemDto {
+public class CustomApprItemDto {
 	private int customApprItemNo, apprSeq;
+	private CustomApprDto customAppr;
 	private EmpDto emp;
-	private EdsmCustomApprDto appr;
 }

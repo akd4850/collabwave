@@ -16,7 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.gdu.myapp.dto.EdsmCustomApprItemDto;
+import com.gdu.myapp.dto.CustomApprItemDto;
 import com.gdu.myapp.dto.EdsmCustomApprDto;
 import com.gdu.myapp.dto.EdsmFormDto;
 import com.gdu.myapp.dto.EmpDto;
@@ -194,7 +194,7 @@ public class EdsmServiceImpl implements EdsmService {
 		EmpDto empDto = (EmpDto)session.getAttribute("emp");
 		
 		int curApprItemSeq = 0;
-		EdsmCustomApprItemDto customApprItem = edsmMapper.getCustomApprItemLastID();
+		CustomApprItemDto customApprItem = edsmMapper.getCustomApprItemLastID();
 		if(customApprItem != null) curApprItemSeq = customApprItem.getCustomApprItemNo();
 		
 		int nextVal = edsmMapper.getCustomApprSeqNextval();
@@ -209,15 +209,5 @@ public class EdsmServiceImpl implements EdsmService {
 											 "curApprItemSeq", curApprItemSeq);
 		
 		edsmMapper.registerLineItem(itemMap);
-	}
-	
-	@Override
-	public void loadLine(HttpServletRequest request, Model model) {
-		
-		int apprNo = Integer.parseInt( request.getParameter("apprNo") );
-		
-		List<EdsmCustomApprItemDto> apprItemList = edsmMapper.getLineDetail(apprNo);
-		
-		model.addAttribute("apprItemList", apprItemList);
 	}
 }

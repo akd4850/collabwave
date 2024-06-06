@@ -24,4 +24,5 @@ public interface EdsmMapper {
 	CustomApprItemDto getCustomApprItemLastID();
 	int registerLineItem(Map<String, Object> map);
 	int getCustomApprSeqNextval();
+	List<CustomApprItemDto>	getLineDetail(int apprNo);
 }

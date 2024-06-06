@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CustomApprItemDto {
 	private int customApprItemNo, apprSeq;
-	private CustomApprDto customAppr;
+	private EdsmCustomApprDto customAppr;
 	private EmpDto emp;
 }

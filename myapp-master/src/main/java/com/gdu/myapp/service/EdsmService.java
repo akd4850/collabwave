@@ -18,4 +18,5 @@ public interface EdsmService {
 	void registerSign(MultipartHttpServletRequest multipartRequest);
 	void loadLineList(HttpServletRequest request, Model model);
 	void registerLine(HttpServletRequest request);
+    void loadLine(HttpServletRequest request, Model model);
 }

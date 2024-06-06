@@ -86,7 +86,12 @@
 
   <script src="${contextPath}/resources/js/erp-modal.js"></script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.15/jstree.min.js"></script>
+  <script src="${contextPath}/resources/js/common.js"></script>
+
+  <c:if test="${submenu == 'edsmAddLine.jsp'}">
+    <script src="${contextPath}/jstree/dist/jstree.min.js"></script>
+    <script src="${contextPath}/resources/js/erp-organization.js"></script>
+  </c:if>
 
   <script>
     $().ready(function() {

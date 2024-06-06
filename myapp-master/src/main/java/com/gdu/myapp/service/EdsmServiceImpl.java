@@ -1,11 +1,7 @@
 package com.gdu.myapp.service;
 
 import java.io.File;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -210,4 +206,14 @@ public class EdsmServiceImpl implements EdsmService {
 		
 		edsmMapper.registerLineItem(itemMap);
 	}
+	
+    @Override
+    public void loadLine(HttpServletRequest request, Model model) {
+        
+        int apprNo = Integer.parseInt( request.getParameter("apprNo") );
+        
+        List<CustomApprItemDto> apprItemList = edsmMapper.getLineDetail(apprNo);
+        
+        model.addAttribute("apprItemList", apprItemList);
+    }
 }

@@ -46,10 +46,10 @@ public class EmpServiceImpl implements EmpService {
   	  		EmpDto empDto = empMapper.getEmpByMap(params);
 
   	  		if(empDto != null) {
-  	  			HttpSession session = request.getSession();
+  	  		  HttpSession session = request.getSession();
   	  		  session.setAttribute("emp", empDto);
   	          session.setMaxInactiveInterval(60 * 10);
-  	          response.sendRedirect("/main.page");
+  	          response.sendRedirect(request.getParameter("url"));
   	  		}
   		} catch(Exception e) {
   			e.printStackTrace();
@@ -161,10 +161,31 @@ public class EmpServiceImpl implements EmpService {
 //    
 //    return empMapper.updateEmployee(empCode);
 //  }
-  
-  
 
+    @Override
+	public String getRedirectURLAfterSignin(HttpServletRequest request) {
 
+    	// Sign In 페이지 이전의 주소가 저장되어 있는 Request Header 의 referer 값 확인
+        String referer = request.getHeader("referer");
+        
+        // referer 로 돌아가면 안 되는 예외 상황 (아이디/비밀번호 찾기 화면, 가입 화면 등)
+        String[] excludeURLs = {"/findId.page", "/findPw.page", "/signup.page", "/upload/edit.do"};
+        
+        // Sign In 이후 이동할 url
+        String url = referer;
+        if(referer != null) {
+          for(String excludeURL : excludeURLs) {
+            if(referer.contains(excludeURL)) {
+              url = request.getContextPath() + "/main.page";
+              break;
+            }
+          }
+        } else {
+          url = request.getContextPath() + "/main.page";
+        }
+        
+        return url;
+	}
 
 }
   

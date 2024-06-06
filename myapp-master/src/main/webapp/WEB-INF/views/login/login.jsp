@@ -74,6 +74,7 @@
                             <div class="card card-hidden">
                                 <div class="header text-center">
                                     ${messageSource.getMessage("login", null, locale)}
+                                    <input type="hidden" name="url" value="${url}">
                                 </div>
                                 <div class="content">
                                     <div class="form-group">

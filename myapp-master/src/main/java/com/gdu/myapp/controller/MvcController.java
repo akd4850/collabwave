@@ -38,6 +38,7 @@ public class MvcController {
 		localeResolver.resolveLocale(request);
 		model.addAttribute("messageSource", messageSource);
 		model.addAttribute("locale", locale);
+		model.addAttribute("url",  empService.getRedirectURLAfterSignin(request));
 
 		return "login/login";
 	}

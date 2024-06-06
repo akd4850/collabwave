@@ -40,7 +40,7 @@
                 </li>
 
                 <li>
-                    <a href="#">
+                    <a href="${contextPath}/">
                         <span class="text-primary">
                             <i class="pe-7s-plus"></i>
                                 로그인 연장

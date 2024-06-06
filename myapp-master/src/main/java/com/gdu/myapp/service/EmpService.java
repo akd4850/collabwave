@@ -13,4 +13,5 @@ public interface EmpService {
 	void registerEmp(HttpServletRequest request, HttpServletResponse response);
 	EmpDto getEmpDetail(String empCode);
 //	int editEmployee(EmpDto emp);
+	String getRedirectURLAfterSignin(HttpServletRequest request);
 }

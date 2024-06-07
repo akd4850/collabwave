@@ -1,4 +1,5 @@
 let seq = 1;
+let empArr = [];
 
 $.ajax({
     type: 'GET',
@@ -23,16 +24,17 @@ $.ajax({
                     return {
                         "Menu1" : {
                             "label": "결재선 추가",
-                            "_disabled": node.original.type == 'dept' || node.original.id == '${sessionScope.emp.empCode}',
+                            "_disabled": node.original.type == 'dept' || node.original.id == '${sessionScope.emp.empCode}' || empArr.includes(node.original.id) == true,
                             action: function(obj) {
+                                empArr.push(node.original.id);
                                 let parentNode = $('#jstree').jstree(true).get_node(node.parents[0]);
                                 $('#appr-line').append(
-                                    "<tr><td>" + seq++ + 
+                                    "<tr id=tr_" + node.original.id + "><td>" + seq++ + 
                                     "</td><td>" + node.text + 
                                     "</td><td>" + parentNode.text + 
                                     "</td><td>" + 
                                     "<input type='hidden' name='empCode' value='" + node.original.id + "'>" +
-                                    "<i class='pe-7s-close-circle'></i>" + 
+                                    "<input type='button' onclick='deleteApprEmpcodeFromLine(\"" + node.original.id + "\")' value='삭제' class='btn btn-info btn-fill'>" +
                                     "</td></tr>");
                             }
                         }
@@ -74,4 +76,23 @@ function getOrganization(node) {
             alert(jqXHR.statusText + '(' + jqXHR.status + ')');
         }
     });
+}
+
+function deleteApprEmpcodeFromLine(empCode) {
+	let tdSeq = 1;
+    $('#appr-line:last > #tr_' + empCode).remove();
+    console.log(empArr);
+    removeItem(empArr, empCode);
+    seq -= 1;
+    $('#appr-line:last > tr > td:nth-child(1)').each(function() {
+		$(this).html(tdSeq++);
+	});
+}
+
+function removeItem(arr, value) {
+  var index = arr.indexOf(value);
+  if (index > -1) {
+    arr.splice(index, 1);
+  }
+  return arr;
 }

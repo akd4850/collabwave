@@ -52,7 +52,7 @@
                                     ${messageSource.getMessage('appr', null, locale)}${messageSource.getMessage('line', null, locale)} 
                                     ${messageSource.getMessage('name', null, locale)}
                                 </label>
-                                <input type="text" class="form-control" name="apprName">
+                                <input type="text" class="form-control" name="apprName" value="${apprItemList[0].customAppr.lineName}">
                             </div>
                             <input type="submit" class="btn btn-info btn-fill" style="margin-left:10px" value="${messageSource.getMessage('register', null, locale)}">
                         </form>
@@ -62,3 +62,6 @@
         </div>
     </div>
 </div>
+<script>
+    
+</script>

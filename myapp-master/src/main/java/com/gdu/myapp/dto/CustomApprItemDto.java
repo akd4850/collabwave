@@ -12,5 +12,4 @@ import lombok.NoArgsConstructor;
 public class CustomApprItemDto {
 	private int customApprItemNo, apprSeq;
 	private EdsmCustomApprDto customAppr;
-	private EmpDto emp;
 }

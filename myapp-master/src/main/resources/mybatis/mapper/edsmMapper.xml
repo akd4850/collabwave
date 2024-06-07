@@ -20,12 +20,12 @@
     <resultMap type="CustomApprItemDto" id="CustomApprItemMap">
         <id property="customApprItemNo" column="CUSTOM_APPR_ITEM_NO" />
         <result property="apprSeq" column="APPR_SEQ" />
-        <association property="appr" javaType="EdsmCustomApprDto">
+        <association property="customAppr" javaType="EdsmCustomApprDto">
 			<id property="customApprNo" column="CUSTOM_APPR_NO" />
             <result property="lineName" column="LINE_NAME" />
-        </association>
-        <association property="emp" javaType="EmpDto">
-			<id property="empCode" column="EMP_CODE" />
+            <association property="emp" javaType="EmpDto">
+				<id property="empCode" column="EMP_CODE" />
+	        </association>
         </association>
     </resultMap>
 

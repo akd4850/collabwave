@@ -6,38 +6,50 @@
 <c:set var="dt" value="<%=System.currentTimeMillis()%>"/>
 
 <div class="card">
-    <div class="header">
-        공지사항
-    </div>
+    <div class="header">공지사항</div>
+    
     <div class="content table-responsive table-full-width">
         <input type="button"
-                class="btn btn-info btn-fill"
-                style="margin-left:10px"
-                onclick="location.href='/community/write.page'"
-                value="글쓰기">
-        <table class="table table-hover table-striped">
+               class="btn btn-info btn-fill"
+               style="margin-left:10px"
+               onclick="location.href='/community/notice/write.do'"
+               value="글쓰기">
+                
+        <table class="table table-hover table-striped" id="list">       
             <thead>
                 <tr>
-                    <th>글 번호</th>
                     <th>글 제목</th>
                     <th>작성자</th>
+                    <th>작성일자</th>
+                    <th>조회수</th>
                 </tr>
-            </thead>
+            </thead>          
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td><a href="/community/detail.page">공지사항 필독바랍니다</a></td>
-                    <td>관리자</td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <input type="text" value="" class="form-control" placeholder="검색어를 입력해주세요">
-                    </td>
-                    <td style="width:100px">
-                        <button type="button" class="btn btn-info btn-fill">검색</button>
-                    </td>
-                </tr>
-            </tbody>
+                <c:forEach items="${postList}" var="post" varStatus="vs">
+	                <tr>
+	                    <td><a href="/community/detail.do?postNo=${post.postNo}">${post.postTitle}</a></td>
+	                    <td>${post.emp.empName}</td>
+	                    <td>${post.postCreateDatetime}</td>
+	                    <td>${post.postHit}</td>
+	                </tr>
+                </c:forEach>
+                
+			<form action="${contextPath}/community/notice/search.do" method="get">
+			    <tr>
+			        <td colspan="3">
+			            <input type="text" name="query" class="form-control" placeholder="검색어를 입력해주세요">
+			        </td>
+			        <td style="width:100px">
+			            <button type="submit" class="btn btn-info btn-fill" id="btn-search">검색</button>
+			        </td>
+			    </tr>
+			</form>
+
+            </tbody>      
         </table>
+		
     </div>
+
+	<div>${paging}</div>
+
 </div>

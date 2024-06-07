@@ -89,7 +89,7 @@
             </li>
         
             <li>
-                <a href="/community/notice.page">
+                <a href="/community/notice">
                     <i class="pe-7s-note2"></i>
                     <p>커뮤니티</p>
                 </a>

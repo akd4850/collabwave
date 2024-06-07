@@ -32,7 +32,6 @@
 	<script src="${contextPath}/resources/js/bootstrap.min.js" type="text/javascript"></script>
 	<script src="${contextPath}/resources/js/perfect-scrollbar.jquery.min.js" type="text/javascript"></script>
 
-
 	<!--  Forms Validations Plugin -->
 	<script src="${contextPath}/resources/js/jquery.validate.min.js"></script>
 

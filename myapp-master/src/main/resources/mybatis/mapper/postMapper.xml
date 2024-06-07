@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gdu.myapp.mapper.PostMapper">
+
+  <resultMap type="PostDto" id="PostMap">
+    <id     property="postNo"             column="POST_NO" />
+    <result property="postTitle"          column="POST_TITLE" />
+    <result property="postContent"        column="POST_CONTENT" />
+    <result property="postCreateDatetime" column="POST_CREATE_DATETIME" />
+    <result property="postModifyDatetime" column="POST_MODIFY_DATETIME" />
+    <result property="postState"          column="POST_STATE" />
+    <result property="postOpenYn"         column="POST_OPEN_YN" />
+    <result property="postOpenDatetime"   column="POST_OPEN_DATETIME" />
+    <result property="postHit"            column="POST_HIT" />
+	    <association property="emp" javaType="EmpDto">
+	      <id     property="empCode"  column="EMP_CODE" />
+	      <result property="empName"  column="EMP_NAME"/>
+	    </association>
+	    <association property="brd" javaType="BoardDto">
+	      <id     property="brdCode"  column="BRD_CODE" />
+	    </association>
+  </resultMap>
+  
+  <resultMap type="CommentDto" id="CommentMap">
+	<id     property="cmmtNo"       column="CMMT_NO" />
+	<result property="cmmtContent"  column="CMMT_CONTENT" />
+	<result property="cmmtGroup"    column="CMMT_GROUP" />
+	<result property="cmmtDepth"    column="CMMT_DEPTH" />
+	<result property="cmmtCreateDatetime"  column="CMMT_CREATE_DATETIME" />
+	<result property="cmmtModifyDatetime"  column="CMMT_MODIFY_DATETIME" />
+	<result property="cmmtStatus"    column="CMMT_STATUS" />
+		<association property="emp" javaType="EmpDto">
+			<id      property="empCode" column="EMP_CODE" />
+			<result  property="empName" column="EMP_NAME" />
+		</association>
+		<association property="post" javaType="PostDto">
+			<id      property="postNo" column="POST_NO" />
+		</association>
+  </resultMap>
+  
+<!-- 게시글 등록 -->  
+<insert id="insertPost" parameterType="PostDto">
+  INSERT INTO POST_T (
+		POST_NO,
+		POST_TITLE,
+		POST_CONTENT,
+		POST_CREATE_DATETIME,
+		POST_MODIFY_DATETIME,
+		POST_HIT,
+		POST_STATE,
+		POST_OPEN_YN,
+		POST_OPEN_DATETIME,
+		EMP_CODE,
+		EMP_NAME,
+		BRD_CODE
+  ) VALUES (
+		POST_SEQ.NEXTVAL,
+		#{postTitle},
+		#{postContent},
+		CURRENT_DATE,
+		CURRENT_DATE,
+		0, 
+		#{postState},
+		#{postOpenYn},
+		CURRENT_DATE,
+		#{empCode},
+		#{empName},
+		#{brdCode}
+  )
+</insert>
+  
+<!-- 전체 게시글 수 -->  
+<select id="getPostCount"
+        resultType="int">
+  SELECT COUNT(*)
+    FROM POST_T
+</select>
+
+<!-- 각 게시판 목록 -->
+<select id="getPostList"
+        parameterType="Map"
+        resultMap="PostMap">
+  SELECT BRD_CODE, POST_NO, POST_TITLE, POST_CONTENT, POST_HIT, POST_CREATE_DATETIME, POST_MODIFY_DATETIME, EMP_CODE, EMP_NAME
+    FROM (SELECT ROW_NUMBER() OVER(ORDER BY P.POST_NO DESC) AS RN
+               , P.BRD_CODE, P.POST_NO, P.POST_TITLE, P.POST_CONTENT, P.POST_HIT, P.POST_CREATE_DATETIME, P.POST_MODIFY_DATETIME
+               , E.EMP_CODE, E.EMP_NAME
+            FROM EMP_T E INNER JOIN POST_T P
+              ON E.EMP_CODE = P.EMP_CODE
+           WHERE P.BRD_CODE = #{brdCode}
+          )
+   WHERE RN BETWEEN #{begin} AND #{end}
+</select>
+
+<!-- 조회수 -->
+<update id="updateHit">
+  UPDATE POST_T
+     SET POST_HIT = POST_HIT + 1
+   WHERE POST_NO = #{postNo}
+</update>
+
+<!-- 상세보기 -->
+<select id="getPostByNo"
+        resultMap="PostMap">
+  SELECT P.POST_NO, P.POST_TITLE, P.POST_CONTENT, P.POST_CREATE_DATETIME, P.POST_MODIFY_DATETIME, P.POST_HIT
+       , E.EMP_CODE, E.EMP_NAME
+    FROM EMP_T E INNER JOIN POST_T P
+      ON E.EMP_CODE = P.EMP_CODE
+   WHERE P.POST_NO = #{postNo}
+</select>
+
+<!-- 게시글 수정 -->
+<update id="updatePost" 
+        parameterType="PostDto">
+  UPDATE POST_T
+     SET POST_TITLE = #{postTitle}
+       , POST_CONTENT = #{postContent}
+       , POST_MODIFY_DATETIME = CURRENT_DATE
+   WHERE POST_NO = #{postNo}
+</update>
+
+<!-- 게시글 삭제 (실제로는 state = 0 으로 업데이트) -->
+<update id="deletePost">
+  UPDATE POST_T
+     SET POST_STATE = 0
+   WHERE POST_NO = #{postNo}
+</update>
+
+<!-- 검색 결과 개수 -->
+<select id="getSearchCount"
+        parameterType="Map"
+        resultType="int">
+  SELECT COUNT(*)
+    FROM EMP_T E INNER JOIN POST_T P
+      ON E.EMP_CODE = P.EMP_CODE
+   WHERE #{query} || '%'
+</select>
+
+<!-- 검색 결과 목록 -->
+<select id="getSearchList"
+        parameterType="Map"
+        resultMap="PostMap">          
+  SELECT POST_NO, POST_TITLE, POST_CONTENT, POST_CREATE_DATETIME, POST_STATE, POST_OPEN_YN, POST_OPEN_DATETIME, POST_HIT
+    FROM (SELECT ROW_NUMBER() OVER(ORDER BY P.POST_NO DESC) AS RN, P.POST_NO, P.POST_CONTENT, P.POST_CREATE_DATETIME, P.POST_STATE, P.POST_OPEN_YN, P.POST_OPEN_DATETIME, P.POST_HIT, 
+             E.EMP_CODE, E.EMP_NAME 
+            FROM EMP_T E INNER JOIN POST_T P
+              ON E.EMP_CODE = P.EMP_CODE
+           WHERE ${postContent} LIKE CONCAT(CONCAT('%', #{query}), '%'))
+   WHERE RN BETWEEN #{begin} AND #{end}
+</select>
+
+<!-- 댓글 등록 -->
+<insert id="insertComment" parameterType="CommentDto">
+  INSERT INTO CMMT_T (
+      CMMT_NO
+    , CMMT_CONTENT
+    , CMMT_CREATE_DATETIME
+    , CMMT_STATE
+    , CMMT_DEPTH
+    , CMMT_GROUP
+    , EMP_CODE
+    , POST_NO
+  ) VALUES (
+      CMMT_SEQ.NEXTVAL
+    , #{cmmtContent}
+    , CURRENT_DATE
+    , 1
+    , 0
+    , CMMT_SEQ.CURRVAL
+    , #{emp.empCode}
+    , #{postNo}
+  )
+</insert>
+
+<!-- 댓글 수정 -->
+<update id="modifyComment"
+		parameterType="CommentDto">
+  UPDATE CMMT_T
+     SET CMMT_CONTENT = #{cmmtContent}
+   WHERE CMMT_NO = #{cmmtNo}
+</update>
+
+<!-- 댓글 삭제 -->
+<update id="deleteComment">
+  UPDATE CMMT_T
+     SET CMMT_STATE = 0
+   WHERE CMMT_NO = #{cmmtNo}
+</update>
+
+
+<select id="getCommentCount"
+        resultType="int">
+  SELECT COUNT(*)
+    FROM CMMT_T
+   WHERE POST_NO = #{postNo}
+</select>
+
+
+<select id="getCommentList"
+        parameterType="Map"
+        resultMap="CommentMap">
+  SELECT CMMT_NO, CMMT_CONTENT, CMMT_CREATE_DATETIME, CMMT_MODIFY_DATETIME, CMMT_STATE, CMMT_DEPTH, CMMT_GROUP, POST_NO, EMP_CODE, EMP_NAME 
+    FROM (SELECT ROW_NUMBER() OVER(ORDER BY C.CMMT_GROUP DESC, C.CMMT_DEPTH ASC, C.CMMT_NO DESC) AS RN
+               , C.CMMT_NO, C.CMMT_CONTENT, C.CMMT_CREATE_DATETIME, C.CMMT_MODIFY_DATETIME, C.CMMT_STATE, C.CMMT_DEPTH, C.CMMT_GROUP, C.POST_NO
+               , E.EMP_CODE, E.EMP_NAME
+            FROM EMP_T E INNER JOIN CMMT_T C
+              ON E.EMP_CODE = C.EMP_CODE
+           WHERE POST_NO = #{postNo})
+   WHERE RN BETWEEN #{begin} AND #{end}
+</select>
+  
+</mapper>

@@ -30,10 +30,11 @@ window.addEventListener('DOMContentLoaded', function(){
                                 action: function(obj) {
                                     empArr.push(node.original.id);
                                     let parentNode = $('#jstree').jstree(true).get_node(node.parents[0]);
+                                    let dept = (parentNode.text === undefined) ? '' : parentNode.text;
                                     $('#appr-line').append(
                                         "<tr id=tr_" + node.original.id + "><td>" + apprSeq++ + 
                                         "</td><td>" + node.text + 
-                                        "</td><td>" + parentNode.text + 
+                                        "</td><td>" + dept + 
                                         "</td><td>" + 
                                         "<input type='hidden' name='empCode' value='" + node.original.id + "'>" +
                                         "<input type='button' onclick='deleteApprEmpcodeFromLine(\"" + node.original.id + "\")' value='삭제' class='btn btn-info btn-fill'>" +

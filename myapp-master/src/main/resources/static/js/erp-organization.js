@@ -1,4 +1,4 @@
-let seq = 1;
+let apprSeq = 1;
 let empArr = [];
 
 $.ajax({
@@ -29,7 +29,7 @@ $.ajax({
                                 empArr.push(node.original.id);
                                 let parentNode = $('#jstree').jstree(true).get_node(node.parents[0]);
                                 $('#appr-line').append(
-                                    "<tr id=tr_" + node.original.id + "><td>" + seq++ + 
+                                    "<tr id=tr_" + node.original.id + "><td>" + apprSeq++ + 
                                     "</td><td>" + node.text + 
                                     "</td><td>" + parentNode.text + 
                                     "</td><td>" + 
@@ -81,9 +81,8 @@ function getOrganization(node) {
 function deleteApprEmpcodeFromLine(empCode) {
 	let tdSeq = 1;
     $('#appr-line:last > #tr_' + empCode).remove();
-    console.log(empArr);
     removeItem(empArr, empCode);
-    seq -= 1;
+    apprSeq -= 1;
     $('#appr-line:last > tr > td:nth-child(1)').each(function() {
 		$(this).html(tdSeq++);
 	});

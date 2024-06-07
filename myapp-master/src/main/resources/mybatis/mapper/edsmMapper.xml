@@ -25,6 +25,11 @@
             <result property="lineName" column="LINE_NAME" />
             <association property="emp" javaType="EmpDto">
 				<id property="empCode" column="EMP_CODE" />
+				<result property="empName" column="EMP_NAME" />
+				<association property="dept" javaType="DeptDto">
+					<id property="deptCode" column="DEPT_CODE" />
+					<result property="deptName" column="DEPT_NAME" />
+		        </association>
 	        </association>
         </association>
     </resultMap>
@@ -135,15 +140,21 @@
 
     <select id="getLineDetail" resultMap="CustomApprItemMap">
         SELECT  A.CUSTOM_APPR_ITEM_NO,
-                A.CUSTOM_APPR_NO,        
-                A.APPR_SEQ,
-                B.EMP_CODE,
-                B.LINE_NAME
-        FROM    EDSM_CUSTOM_APPROVAL_ITEM_T A
-        LEFT    OUTER JOIN EDSM_CUSTOM_APPROVAL_T B
-        ON      A.CUSTOM_APPR_NO = B.CUSTOM_APPR_NO
-        WHERE   A.CUSTOM_APPR_NO = #{apprNo}
-        ORDER   BY A.APPR_SEQ
+		        A.CUSTOM_APPR_NO,        
+		        A.APPR_SEQ,
+		        A.EMP_CODE,
+		        B.LINE_NAME,
+		        C.EMP_NAME,
+        		D.DEPT_NAME
+		FROM    EDSM_CUSTOM_APPROVAL_ITEM_T A
+		LEFT 	OUTER JOIN EDSM_CUSTOM_APPROVAL_T B
+		ON      A.CUSTOM_APPR_NO = B.CUSTOM_APPR_NO
+		LEFT 	OUTER JOIN EMP_T C
+		ON      A.EMP_CODE = C.EMP_CODE
+		LEFT 	OUTER JOIN DEPT_T D
+		ON      C.DEPT_CODE = D.DEPT_CODE
+		WHERE   A.CUSTOM_APPR_NO = #{apprNo}
+		ORDER 	BY A.APPR_SEQ
     </select>
     
 </mapper>

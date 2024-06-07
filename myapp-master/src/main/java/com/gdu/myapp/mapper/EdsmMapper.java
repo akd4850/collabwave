@@ -25,4 +25,6 @@ public interface EdsmMapper {
 	int registerLineItem(Map<String, Object> map);
 	int getCustomApprSeqNextval();
 	List<CustomApprItemDto>	getLineDetail(int apprNo);
+	int removeLineItem(Map<String, Object> map);
+	int removeLine(int apprNo);
 }

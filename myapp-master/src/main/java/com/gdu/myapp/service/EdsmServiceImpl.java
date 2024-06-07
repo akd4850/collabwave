@@ -216,4 +216,17 @@ public class EdsmServiceImpl implements EdsmService {
         
         model.addAttribute("apprItemList", apprItemList);
     }
+    
+    @Override
+    public void removeLine(HttpServletRequest request, int apprNo) {
+    	
+    	HttpSession session = request.getSession();
+		EmpDto empDto = (EmpDto)session.getAttribute("emp");
+    	
+    	Map<String, Object> map = Map.of("apprNo", apprNo,
+										 "empCode", empDto.getEmpCode());
+    	
+    	//edsmMapper.removeLineItem(map);
+    	edsmMapper.removeLine(apprNo);
+    }
 }

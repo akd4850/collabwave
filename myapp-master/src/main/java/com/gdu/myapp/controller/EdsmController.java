@@ -175,4 +175,12 @@ public class EdsmController {
         
         return "contents/edsm/edsm";
     }
+    
+    @GetMapping("/removeLine.do")
+    public String removeLine(HttpServletRequest request, @RequestParam int apprNo) {
+ 
+    	edsmService.removeLine(request, apprNo);
+		
+		return "redirect:/edsm/manageLine.do";
+    }
 }

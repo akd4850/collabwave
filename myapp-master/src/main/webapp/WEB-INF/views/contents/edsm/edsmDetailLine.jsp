@@ -66,7 +66,7 @@
                                 <input type="text" class="form-control" name="apprName" value="${apprItemList[0].customAppr.lineName}">
                             </div>
                             <input type="submit" class="btn btn-info btn-fill" style="margin-left:10px" value="${messageSource.getMessage('modify', null, locale)}">
-                            <input type="button" class="btn btn-info btn-fill" value="${messageSource.getMessage('delete', null, locale)}">
+                            <input type="button" class="btn btn-info btn-fill" value="${messageSource.getMessage('delete', null, locale)}" onclick="location.href='${contextPath}/edsm/removeLine.do?apprNo=${apprItemList[0].customAppr.customApprNo}'">
                         </form>
                     </div>
                 </div>

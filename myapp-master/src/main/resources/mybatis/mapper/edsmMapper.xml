@@ -157,8 +157,8 @@
 		ORDER 	BY A.APPR_SEQ
     </select>
     
-    <delete id="removeLineItem" parameterType="Map">
-		DELETE FROM EDSM_CUSTOM_APPROVAL_ITEM_T WHERE CUSTOM_APPR_NO = #{apprNo} AND EMP_CODE = #{empCode}
+    <delete id="removeLineItem">
+		DELETE FROM EDSM_CUSTOM_APPROVAL_ITEM_T WHERE CUSTOM_APPR_NO = #{apprNo}
 	</delete>
 	
 	<delete id="removeLine">

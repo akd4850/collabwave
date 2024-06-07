@@ -20,4 +20,5 @@ public interface EdsmService {
 	void registerLine(HttpServletRequest request);
     void loadLine(HttpServletRequest request, Model model);
     void removeLine(HttpServletRequest request, int apprNo);
+    void modifyLine(HttpServletRequest request);
 }

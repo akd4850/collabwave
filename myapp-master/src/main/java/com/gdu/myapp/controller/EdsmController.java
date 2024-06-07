@@ -183,4 +183,12 @@ public class EdsmController {
 		
 		return "redirect:/edsm/manageLine.do";
     }
+    
+    @PostMapping("/modifyLine.do")
+    public String modifyLine(HttpServletRequest request) {
+    	
+    	edsmService.modifyLine(request);
+
+		return "redirect:/edsm/manageLine.do";
+    }
 }

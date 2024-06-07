@@ -219,14 +219,30 @@ public class EdsmServiceImpl implements EdsmService {
     
     @Override
     public void removeLine(HttpServletRequest request, int apprNo) {
+    	    	
+    	edsmMapper.removeLine(apprNo);
+    }
+    
+    @Override
+    public void modifyLine(HttpServletRequest request) {
+    	
+    	int apprNo = Integer.parseInt( request.getParameter("apprNo") );
     	
     	HttpSession session = request.getSession();
 		EmpDto empDto = (EmpDto)session.getAttribute("emp");
     	
-    	Map<String, Object> map = Map.of("apprNo", apprNo,
-										 "empCode", empDto.getEmpCode());
+    	edsmMapper.removeLineItem(apprNo);
     	
-    	//edsmMapper.removeLineItem(map);
-    	edsmMapper.removeLine(apprNo);
+    	String[] empCodes = request.getParameterValues("empCode");
+    	
+    	int curApprItemSeq = 0;
+		CustomApprItemDto customApprItem = edsmMapper.getCustomApprItemLastID();
+		if(customApprItem != null) curApprItemSeq = customApprItem.getCustomApprItemNo();
+    	
+    	Map<String, Object> itemMap = Map.of("empCodeList", Arrays.asList(empCodes),
+											 "customApprNo", apprNo,
+											 "curApprItemSeq", curApprItemSeq);
+
+    	edsmMapper.registerLineItem(itemMap);
     }
 }

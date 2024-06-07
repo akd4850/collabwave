@@ -34,7 +34,7 @@
                             ${messageSource.getMessage('apprLineHelpMessage', null, locale)}
                         </p>
 
-                        <form action="${contextPath}/edsm/edsmModifyLine.do" method="post">
+                        <form action="${contextPath}/edsm/modifyLine.do" method="post">
                             <table class="table table-hover table-striped">
                                 <thead>
                                     <th>${messageSource.getMessage('turn', null, locale)}</th>
@@ -63,6 +63,7 @@
                                     ${messageSource.getMessage('appr', null, locale)}${messageSource.getMessage('line', null, locale)} 
                                     ${messageSource.getMessage('name', null, locale)}
                                 </label>
+                                <input type="hidden" name="apprNo" value="${apprItemList[0].customAppr.customApprNo}">
                                 <input type="text" class="form-control" name="apprName" value="${apprItemList[0].customAppr.lineName}">
                             </div>
                             <input type="submit" class="btn btn-info btn-fill" style="margin-left:10px" value="${messageSource.getMessage('modify', null, locale)}">

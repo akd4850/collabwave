@@ -6,13 +6,13 @@
 <c:set var="dt" value="<%=System.currentTimeMillis()%>"/>
 
 <div class="card">
-    <div class="header">자유게시판</div>
+    <div class="header">자료실</div>
     
     <div class="content table-responsive table-full-width">
         <input type="button"
                 class="btn btn-info btn-fill"
                 style="margin-left:10px"
-                onclick="location.href='/community/free/write.do'"
+                onclick="location.href='/community/ref/write.do'"
                 value="글쓰기">
                 
         <table class="table table-hover table-striped">
@@ -27,14 +27,14 @@
             <tbody>
                 <c:forEach items="${postList}" var="post" varStatus="vs">
 	                <tr>
-	                    <td><a href="/community/freeDetail.do?postNo=${post.postNo}">${post.postTitle}</a></td>
+	                    <td><a href="/community/detail.do?postNo=${post.postNo}">${post.postTitle}</a></td>
 	                    <td>${post.emp.empName}</td>
 	                    <td>${post.postCreateDatetime}</td>
 	                    <td>${post.postHit}</td>
 	                </tr>
                 </c:forEach>
                 
-             <form action="${contextPath}/community/free/search.do" method="get">
+            <form action="${contextPath}/community/search.do" method="get">
 			    <tr>
 			        <td colspan="3">
 			            <input type="text" name="query" class="form-control" placeholder="검색어를 입력해주세요">
@@ -44,11 +44,11 @@
 			        </td>
 			    </tr>
 			</form>
-			
+
             </tbody>
         </table>
     </div>
-
-	<div>${paging}</div>
-
+    
+    <div>${paging}</div>
+    
 </div>

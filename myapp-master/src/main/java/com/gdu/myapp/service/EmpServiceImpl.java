@@ -37,7 +37,7 @@ public class EmpServiceImpl implements EmpService {
   	  		if(empDto != null) {
   	  			HttpSession session = request.getSession();
   	  		  session.setAttribute("emp", empDto);
-  	          session.setMaxInactiveInterval(60 * 10);
+  	          session.setMaxInactiveInterval(60 * 60);
   	          response.sendRedirect("/main.page");
   	  		}
   		} catch(Exception e) {

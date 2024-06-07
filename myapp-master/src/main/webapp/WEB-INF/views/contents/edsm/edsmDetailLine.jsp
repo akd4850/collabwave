@@ -49,7 +49,7 @@
                                             <td>${appr.customAppr.emp.empName}</td>
                                             <td>${appr.customAppr.emp.dept.deptName}</td>
                                             <td>
-                                                <input type="hidden" name="detailEmpCode" value="${appr.customAppr.emp.empCode}">
+                                                <input type="hidden" name="empCode" value="${appr.customAppr.emp.empCode}">
                                                 <input type='button' onclick='deleteApprEmpcodeFromLine("${appr.customAppr.emp.empCode}")' value='삭제' class='btn btn-info btn-fill'>
                                             </td>
                                         </tr>
@@ -65,7 +65,8 @@
                                 </label>
                                 <input type="text" class="form-control" name="apprName" value="${apprItemList[0].customAppr.lineName}">
                             </div>
-                            <input type="submit" class="btn btn-info btn-fill" style="margin-left:10px" value="${messageSource.getMessage('register', null, locale)}">
+                            <input type="submit" class="btn btn-info btn-fill" style="margin-left:10px" value="${messageSource.getMessage('modify', null, locale)}">
+                            <input type="button" class="btn btn-info btn-fill" value="${messageSource.getMessage('delete', null, locale)}">
                         </form>
                     </div>
                 </div>
@@ -74,12 +75,13 @@
     </div>
 </div>
 <script>
-    window.onload = function() {
-        apprSeq = 1 * '${apprItemList.size()}' + 1;
+    window.addEventListener('DOMContentLoaded', function(){
+		apprSeq = 1 * '${apprItemList.size()}' + 1;
+        myEmpCode = '${sessionScope.emp.empCode}';
 
-        let inputAry = document.querySelectorAll("input[name^='detailEmpCode");
+        let inputAry = document.querySelectorAll("input[name^='empCode");
         for(let i = 0; i < inputAry.length; i++) {
             empArr.push(inputAry[i].defaultValue);
         }
-    }
+	});
 </script>

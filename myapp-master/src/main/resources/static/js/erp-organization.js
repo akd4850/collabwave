@@ -1,60 +1,63 @@
 let apprSeq = 1;
 let empArr = [];
+let myEmpCode = '';
 
-$.ajax({
-    type: 'GET',
-    url: fnGetContextPath() + '/dept/getOrganization.do',
-    data: 'deptCode=d0000',
-    contentType: "application/json; charset=utf-8;",
-    dataType: 'json',
-    success: (resData) => {
-        $('#jstree').jstree({
-            'plugins': ["wholerow", "contextmenu"],
-            'core': {
-                "check_callback": true,
-                'data': resData,
-                'themes': {
-                    'name': 'proton',
-                    'responsive': true
-                }
-            },
-            'contextmenu': {
-                "items": function(node) {
-                    var tree = $('#jstree').jstree(true);
-                    return {
-                        "Menu1" : {
-                            "label": "결재선 추가",
-                            "_disabled": node.original.type == 'dept' || node.original.id == '${sessionScope.emp.empCode}' || empArr.includes(node.original.id) == true,
-                            action: function(obj) {
-                                empArr.push(node.original.id);
-                                let parentNode = $('#jstree').jstree(true).get_node(node.parents[0]);
-                                $('#appr-line').append(
-                                    "<tr id=tr_" + node.original.id + "><td>" + apprSeq++ + 
-                                    "</td><td>" + node.text + 
-                                    "</td><td>" + parentNode.text + 
-                                    "</td><td>" + 
-                                    "<input type='hidden' name='empCode' value='" + node.original.id + "'>" +
-                                    "<input type='button' onclick='deleteApprEmpcodeFromLine(\"" + node.original.id + "\")' value='삭제' class='btn btn-info btn-fill'>" +
-                                    "</td></tr>");
+window.addEventListener('DOMContentLoaded', function(){
+    $.ajax({
+        type: 'GET',
+        url: fnGetContextPath() + '/dept/getOrganization.do',
+        data: 'deptCode=d0000',
+        contentType: "application/json; charset=utf-8;",
+        dataType: 'json',
+        success: (resData) => {
+            $('#jstree').jstree({
+                'plugins': ["wholerow", "contextmenu"],
+                'core': {
+                    "check_callback": true,
+                    'data': resData,
+                    'themes': {
+                        'name': 'proton',
+                        'responsive': true
+                    }
+                },
+                'contextmenu': {
+                    "items": function(node) {
+                        var tree = $('#jstree').jstree(true);
+                        return {
+                            "Menu1" : {
+                                "label": "결재선 추가",
+                                "_disabled": node.original.type == 'dept' || node.original.id == myEmpCode || empArr.includes(node.original.id) == true,
+                                action: function(obj) {
+                                    empArr.push(node.original.id);
+                                    let parentNode = $('#jstree').jstree(true).get_node(node.parents[0]);
+                                    $('#appr-line').append(
+                                        "<tr id=tr_" + node.original.id + "><td>" + apprSeq++ + 
+                                        "</td><td>" + node.text + 
+                                        "</td><td>" + parentNode.text + 
+                                        "</td><td>" + 
+                                        "<input type='hidden' name='empCode' value='" + node.original.id + "'>" +
+                                        "<input type='button' onclick='deleteApprEmpcodeFromLine(\"" + node.original.id + "\")' value='삭제' class='btn btn-info btn-fill'>" +
+                                        "</td></tr>");
+                                }
                             }
                         }
                     }
                 }
-            }
-        }).on('changed.jstree', function (e, data) {
-            var i, j, r = [];
-            for(i = 0, j = data.selected.length; i < j; i++) {
-                let node = data.instance.get_node( data.selected[i] );
-                if(node.original.type === 'dept' && node.original.isAjaxOpen !== true) {
-                    getOrganization(node);
-                } else if(node.original.type === 'person') {
+            }).on('changed.jstree', function (e, data) {
+                var i, j, r = [];
+                for(i = 0, j = data.selected.length; i < j; i++) {
+                    let node = data.instance.get_node( data.selected[i] );
+                    if(node.original.type === 'dept' && node.original.isAjaxOpen !== true) {
+                        getOrganization(node);
+                    } else if(node.original.type === 'person') {
+                    }
                 }
-            }
-        });
-    },
-    error: (jqXHR) => {
-        alert(jqXHR.statusText + '(' + jqXHR.status + ')');
-    }
+            });
+        },
+        error: (jqXHR) => {
+            alert(jqXHR.statusText + '(' + jqXHR.status + ')');
+        }
+    });    
 });
 
 function getOrganization(node) {

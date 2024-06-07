@@ -62,3 +62,8 @@
         </div>
     </div>
 </div>
+<script>
+    window.addEventListener('DOMContentLoaded', function(){
+        myEmpCode = '${sessionScope.emp.empCode}';
+    });
+</script>

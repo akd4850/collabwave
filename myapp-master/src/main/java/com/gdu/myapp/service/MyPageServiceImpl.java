@@ -34,6 +34,13 @@ public class MyPageServiceImpl implements MyPageService {
 			.detailAddress(detailAddress)
 			.build();					
 		
-		return empMapper.updateInfo(emp);
+		int result = empMapper.updateInfo(emp);
+		
+		return result;
 	}
+	
+	@Override
+	  public EmpDto getEmpDetail(String empCode) {
+	    return empMapper.getEmpDetail(empCode);
+	  }
 }

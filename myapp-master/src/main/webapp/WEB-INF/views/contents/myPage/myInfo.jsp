@@ -6,6 +6,7 @@
 <c:set var="dt" value="<%=System.currentTimeMillis()%>"/>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <style>
     h2{
@@ -42,6 +43,11 @@
     cursor: pointer;
     transition: box-shadow 0.2s;
 }
+
+#previewImg{
+    max-width: 1000px;
+    max-height: 500px;
+}
 </style>
 
 <div class="main-content">
@@ -54,7 +60,7 @@
                         <h4 class="title">내 정보</h4>
                     </div>
                     <div class="content">
-                        <form>
+                        <form class="myInfoForm">
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -77,7 +83,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>부서</label>
-                                        <input type="text" class="form-control" placeholder="부서" value="${emp.dept.empName}" disabled>
+                                        <input type="text" class="form-control" placeholder="부서" value="${emp.dept.deptName}" disabled>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -145,11 +151,17 @@
                         
                         <div class="author">
                              <a href="#">
-                            <img class="avatar border-gray" src="${contextPath}/resources/img/avatar.jpg" alt="..."/>
-
-                              <h4 class="title">홍길동<br />
-                                 <small>사원</small>
-                              </h4>
+                                <c:choose>
+                                    <c:when test="${emp.profileFileName == null}">
+                                        <img class="avatar border-gray" src="${contextPath}/resources/img/new_logo.png" alt="기본 프로필" loading="lazy"/>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <img class="avatar border-gray" src="${emp.profileFileName}" alt="프로필 이미지" loading="lazy"/>
+                                    </c:otherwise>
+                                </c:choose>
+                                <h4 class="title">${emp.empName}<br/>
+                                    <small>${emp.position.positionName}</small>
+                                </h4>
                             </a>
                         </div>
                     </div>
@@ -172,7 +184,7 @@
         <h3>프로필 사진 변경</h3>
         <br>
         <div class="uploadImg">
-            <img id="previewImg" width="350px" height="450px">
+            <img id="previewImg">
             <div class="filebox">
                 <input type="file" id="file1" class="upload-hidden" name="file1">
             </div>
@@ -188,18 +200,20 @@
     <div class="modal_popup">
         <h3>패스워드 변경</h3>
             <br>
-            <div class="password">
-               <p>변경할 비밀번호</p>
-               <input type="password" class="form-control" id="pw" placeholder="8~15자 영문,숫자,특수문자 중 2개이상" style="width: 500px;"> 
-               <div id="msg-pw" class="signup-alert"></div>
-            </div>
-            <br>
-            <div class="passwordRe">
-                <p>변경할 비밀번호</p>
-                <input type="password" class="form-control" id="pw2" placeholder="8~15자 영문,숫자,특수문자 중 2개이상" style="width: 500px;">
-                <div id="msg-pw2" class="signup-alert"></div>
-            </div>
-            <br>
+            <form>
+                <div class="password">
+                    <p>변경할 비밀번호</p>
+                    <input type="password" class="form-control" id="pw" placeholder="8~15자 영문,숫자,특수문자 중 2개이상" style="width: 500px;" autocomplete="off"> 
+                    <div id="msg-pw" class="signup-alert"></div>
+                </div>
+                <br>
+                <div class="passwordRe">
+                    <p>변경할 비밀번호</p>
+                    <input type="password" class="form-control" id="pw2" placeholder="8~15자 영문,숫자,특수문자 중 2개이상" style="width: 500px;" autocomplete="off">
+                    <div id="msg-pw2" class="signup-alert"></div>
+                </div>
+            </form>
+                <br>
             
             <br>
         <button type="submit" class="btn btn-info btn-fill" id="password_modify">변경하기</button>
@@ -213,26 +227,27 @@
 /* 개인 정보 수정 */
 
 const fnModifyInfo = () => {
-    $(document).on('click', '#btn_modify', (evt) => {
-    $.ajax({
-        type: 'POST',
-        url: '${contextPath}/myPage/modifyInfo.page',
-        data: $(evt.target).serialize,
-        dataType: 'json',
-        success: (resData) => {
-            if(resData.modifyInfoCount === 1) {
-                alert('개인 정보가 수정되었습니다.');
-            } else {
-                alert('개인 정보 수정이 실패했습니다.');   
+    $(document).on('submit', '.myInfoForm', (evt) => {
+        evt.preventDefault(); // 기본 form 제출 동작을 막음
+        const formData = $(this).serialize();
+        $.ajax({
+            type: 'POST',
+            url: '${contextPath}/myPage/modifyInfo.page',
+            data: formData, // form 데이터를 직렬화
+            dataType: 'json',
+            success: (resData) => {
+                if (resData.modifyInfoCount === 1) {
+                    alert('개인 정보가 수정되었습니다.');
+                } else {
+                    alert('개인 정보 수정이 실패했습니다.');   
+                }
+            },
+            error: (jqXHR) => {
+                alert(jqXHR.statusText + '(' + jqXHR.status + ')');
             }
-          }
-        ,
-        error: (jqXHR) => {
-            alert(jqXHR.statusText + '(' + jqXHR.status + ')');
-        }
-    })
-  })
-}
+        });
+    });
+};
 
 fnModifyInfo();
 
@@ -296,6 +311,8 @@ $(document).ready(function(){
 	        reader.readAsDataURL(input.files[0]);
 	    }
 	}
+
+    
 
 /* 비밀번호 변경 */
 

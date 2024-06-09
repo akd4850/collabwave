@@ -100,17 +100,20 @@
 
     const fnDeleteEmployee = () => {
         $('#btn-remove').on('click', (evt) => {
-            if(confirm('직원을 삭제(퇴사처리)하시겠습니까?')){
+            if(confirm('${emp.empName}님을 삭제(퇴사처리)하시겠습니까?')){
                 $.ajax({
                     //요청
                     type: 'POST',
                     url: '${contextPath}/admin/emp/delete.do',
-                    data: 'empCode=' + $(evt.target).data('empCode'),
+                    data: {empCode: '${emp.empCode}'},
 
                     //응답
-                    dataType: 'json',
                     success: (resData) => {
-                        alert(resData.removeResult);
+                        alert('${emp.empName}님이 퇴사처리되었습니다.');
+                        location.href='${contextPath}/admin/emp/management.page';
+                    },
+                    error: (jqXHR) => {
+                        alert(jqXHR.statusText + '(' + jqXHR.status + ')');
                     }
                 })
             }

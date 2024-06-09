@@ -29,7 +29,7 @@
         <div class="checkbox">
             <input id="checkboxMine" type="checkbox">
             <label for="checkboxMine">
-                내 일정(기본)
+                개인 일정	
             </label><br>
             <input id="checkboxCompany" type="checkbox">
             <label for="checkboxCompany">

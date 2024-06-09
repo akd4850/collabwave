@@ -12,5 +12,6 @@ public interface EmpService {
 	void loadEmpList(HttpServletRequest request, Model model);
 	void registerEmp(HttpServletRequest request, HttpServletResponse response);
 	EmpDto getEmpDetail(String empCode);
-//	int editEmployee(EmpDto emp);
+	void loadEmpLeaveList(HttpServletRequest request, Model model);
+	int deleteEmp(String empCode);
 }

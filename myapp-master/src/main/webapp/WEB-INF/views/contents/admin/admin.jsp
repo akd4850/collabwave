@@ -10,7 +10,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-2">
-                <jsp:include page="./empSidebar.jsp"/>
+                <jsp:include page="./adminSidebar.jsp"/>
             </div>
             <div class="col-md-10">
                 <jsp:include page="./${submenu}"/>

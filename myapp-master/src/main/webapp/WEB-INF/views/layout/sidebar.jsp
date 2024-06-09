@@ -96,9 +96,9 @@
             </li>            
 
             <li>
-                <a href="/employee/management.page">
+                <a href="/admin/adminMain.page">
                     <i class="pe-7s-network"></i>
-                    <p>인사관리</p>
+                    <p>조직관리</p>
                 </a>
             </li>
         

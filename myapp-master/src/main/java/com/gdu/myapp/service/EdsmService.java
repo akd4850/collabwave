@@ -1,7 +1,9 @@
 package com.gdu.myapp.service;
 
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -21,4 +23,5 @@ public interface EdsmService {
     void loadLine(HttpServletRequest request, Model model);
     void removeLine(HttpServletRequest request, int apprNo);
     void modifyLine(HttpServletRequest request);
+    ResponseEntity<Map<String, Object>> getSampleList(HttpServletRequest request);
 }

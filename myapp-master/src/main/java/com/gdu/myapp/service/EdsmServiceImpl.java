@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -244,5 +246,11 @@ public class EdsmServiceImpl implements EdsmService {
 											 "curApprItemSeq", curApprItemSeq);
 
     	edsmMapper.registerLineItem(itemMap);
+    }
+    
+    @Override
+    public ResponseEntity<Map<String, Object>> getSampleList(HttpServletRequest request) {
+    	
+    	return new ResponseEntity<>(Map .of("sampleList", edsmMapper.getSampleListAll()), HttpStatus.OK);
     }
 }

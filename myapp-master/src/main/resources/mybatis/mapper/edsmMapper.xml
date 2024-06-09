@@ -164,5 +164,13 @@
 	<delete id="removeLine">
 		DELETE FROM EDSM_CUSTOM_APPROVAL_T WHERE CUSTOM_APPR_NO = #{apprNo}
 	</delete>
+	
+	<select id="getSampleListAll" resultMap="EdsmFormMap">
+		SELECT 	SAMPLE_DOT_CODE,
+				SAMPLE_CONTENT,
+				SAMPLE_TITLE
+		  FROM	EDSM_SAMPLE_T
+		 WHERE	USE_YN = 'Y'
+	</select>
     
 </mapper>

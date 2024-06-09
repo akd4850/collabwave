@@ -1,8 +1,10 @@
 package com.gdu.myapp.controller;
 
 import java.util.Locale;
+import java.util.Map;
 
 import org.springframework.context.MessageSource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -190,5 +192,11 @@ public class EdsmController {
     	edsmService.modifyLine(request);
 
 		return "redirect:/edsm/manageLine.do";
+    }
+    
+    @GetMapping(value="/getSampleList.do", produces="application/json")
+    public ResponseEntity<Map<String, Object>> getFormList(HttpServletRequest request) {
+
+      return edsmService.getSampleList(request);
     }
 }

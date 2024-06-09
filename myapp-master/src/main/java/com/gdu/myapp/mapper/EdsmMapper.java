@@ -27,4 +27,5 @@ public interface EdsmMapper {
 	List<CustomApprItemDto>	getLineDetail(int apprNo);
 	int removeLineItem(int apprNo);
 	int removeLine(int apprNo);
+	List<EdsmFormDto> getSampleListAll();
 }

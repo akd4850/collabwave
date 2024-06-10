@@ -43,6 +43,7 @@
 		<result property="edsmContent" column="EDSM_CONTENT" />
 		<result property="edsmStatus" column="EDSM_STATUS" />
 		<result property="edsmTitle" column="EDSM_TITLE" />
+		<result property="edsmSeq" column="EDSM_SEQ" />
 		<association property="sample" javaType="EdsmFormDto">
 	    	<id property="sampleDotCode" column="SAMPLE_DOT_CODE" />
 	    	<result property="sampleTitle" column="SAMPLE_TITLE" />
@@ -59,6 +60,7 @@
 		<result property="apprStatus" column="APPR_STATUS" />
 		<result property="apprComment" column="APPR_COMMENT" />
 		<result property="apprDatetime" column="APPR_DATETIME" />
+		<result property="apprSeq" column="APPR_SEQ" />
 		<association property="emp" javaType="EmpDto">
 	    	<id property="empCode" column="EMP_CODE" />
 	    	<result property="empName" column="EMP_NAME" />
@@ -395,6 +397,19 @@
 		  FROM	EDSM_APPROVAL_T A, EMP_T B
 		 WHERE	EDSM_NO = #{edsmNo}
 		   AND  A.EMP_CODE = B.EMP_CODE
+		 ORDER 	BY APPR_SEQ
 	</select>
+	
+	<select id="getEdsmApprByCode" parameterType="Map" resultMap="EdsmApprMap">
+		SELECT	APPR_NO, EDSM_NO, A.EMP_CODE, APPR_SEQ, APPR_STATUS, APPR_COMMENT, APPR_DATETIME, SIGN_FILE_NAME
+		  FROM	EDSM_APPROVAL_T A, EMP_T B
+		 WHERE	EDSM_NO = #{edsmNo} AND A.EMP_CODE = #{empCode}
+		   AND  A.EMP_CODE = B.EMP_CODE
+		 ORDER 	BY APPR_SEQ
+	</select>
+    
+    <update id="updateAppr" parameterType="Map">
+		UPDATE EDSM_APPROVAL_T SET APPR_STATUS = #{apprStatus}, APPR_COMMENT = #{comment}, APPR_DATETIME = CURRENT_DATE WHERE APPR_NO = #{apprNo}
+	</update>
     
 </mapper>

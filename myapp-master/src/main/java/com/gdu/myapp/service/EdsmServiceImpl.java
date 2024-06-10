@@ -397,8 +397,13 @@ public class EdsmServiceImpl implements EdsmService {
     @Override
     public void edsmDetail(HttpServletRequest request, Model model, int edsmNo) {
     	
-    	EdsmDto edsm = edsmMapper.getEdsmDetail(edsmNo);
-    	model.addAttribute("edsm", edsm);
+    	model.addAttribute("edsm", edsmMapper.getEdsmDetail(edsmNo));
+    	
+    	HttpSession session = request.getSession();
+		EmpDto empDto = (EmpDto)session.getAttribute("emp");
+		Map<String, Object> map = Map.of("empCode", empDto.getEmpCode(), "edsmNo", edsmNo);
+		EdsmApprDto appr = edsmMapper.getEdsmApprByCode(map);
+    	model.addAttribute("appr", appr);
     }
     
     @Override
@@ -406,5 +411,22 @@ public class EdsmServiceImpl implements EdsmService {
     	
     	int edsmNo = Integer.parseInt(request.getParameter("edsmNo")); 
     	return new ResponseEntity<>(Map.of("apprList", edsmMapper.getEdsmAppr(edsmNo)), HttpStatus.OK);
+    }
+    
+    @Override
+    public void confirmAppr(HttpServletRequest request) {
+    	
+    	int apprNo = Integer.parseInt(request.getParameter("apprNo"));
+    	int apprSeq = Integer.parseInt(request.getParameter("apprSeq"));
+    	int edsmNo = Integer.parseInt(request.getParameter("edsmNo"));
+    	int edsmSeq = Integer.parseInt(request.getParameter("edsmSeq"));
+    	String apprStatus = request.getParameter("apprStatus");
+    	String comment = request.getParameter("comment");
+    	
+    	Map<String, Object> map = Map.of("comment", comment,
+    									 "apprStatus", apprStatus,
+    									 "apprNo", apprNo);
+    	
+    	edsmMapper.updateAppr(map);
     }
 }

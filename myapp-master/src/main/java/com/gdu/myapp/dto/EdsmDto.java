@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class EdsmDto {
-	private int edsmNo, attachNo;
+	private int edsmNo, attachNo, edsmSeq;
 	private LocalDateTime edsmCreateDatetime, edsmStartDatetime, edsmEndDatetime, edsmExpireDatetime;
 	private String edsmContent, edsmStatus, edsmTitle;
 	private EdsmFormDto sample;

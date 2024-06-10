@@ -40,36 +40,58 @@
                 </tr>
             </tbody>
         </table>
+        <c:if test="${edsm.edsmSeq == appr.apprSeq && edsm.emp.empCode == sessionScope.emp.empCode}">
+            <form action="${contextPath}/edsm/confirmAppr.do" method="post">
+                <div class="content">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="의견" name="comment"/>
+                        <input type="hidden" name="apprNo" value="${appr.apprNo}">
+                        <input type="hidden" name="apprSeq" value="${appr.apprSeq}">
+                        <input type="hidden" name="edsmNo" value="${edsm.edsmNo}">
+                        <input type="hidden" name="edsmSeq" value="${edsm.edsmSeq}">
+                    </div>
+                    <div>
+                        <select name="apprStatus" class="selectpicker" data-title="--문서 승인--" data-style="btn-default btn-block" data-menu-style="dropdown-blue">
+                            <option value="p0003">승인</option>
+                            <option value="p0002">반려</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-info btn-fill" style="margin-top: 10px;">확인</button>
+                    </div>
+                </div>
+            </form>
+        </c:if>
     </div>
     <div class="content">
         ${edsm.edsmContent}
     </div>
 </div>
 <script>
-    window.addEventListener('DOMContentLoaded', function(){
-        $.ajax({
-            type: 'GET',
-            url: fnGetContextPath() + '/edsm/getApprList.do',
-            data: 'edsmNo=${edsmNo}',
-            contentType: "application/json; charset=utf-8;",
-            success: (resData) => {
-                var td = $('#tr2').children();
-                td.each(function(i) {
-                    var orgHtml = td.eq(i).html();
-                    td.eq(i).empty();
-                    if(i == 0) {
-                        td.eq(i).append("<img src='" + fnGetContextPath() + "${edsm.emp.signFileName}'>" + orgHtml);
-                    } else {
-                        if(resData.apprList[i-1].apprStatus == 'p0003')
-                            td.eq(i).append("<img src='" + fnGetContextPath() + resData.apprList[i-1].emp.signFileName + "'>" + orgHtml);
-                        else
+window.addEventListener('DOMContentLoaded', function(){
+    $.ajax({
+        type: 'GET',
+        url: fnGetContextPath() + '/edsm/getApprList.do',
+        data: 'edsmNo=${edsmNo}',
+        contentType: "application/json; charset=utf-8;",
+        success: (resData) => {
+            var td = $('#tr2').children();
+            td.each(function(i) {
+                var orgHtml = td.eq(i).html();
+                td.eq(i).empty();
+                if(i == 0) {
+                    td.eq(i).append("<img src='" + fnGetContextPath() + "${edsm.emp.signFileName}'>" + orgHtml);
+                } else {
+                    if(resData.apprList[i-1].apprStatus == 'p0003')
+                        td.eq(i).append("<img src='" + fnGetContextPath() + resData.apprList[i-1].emp.signFileName + "'>" + orgHtml);
+                    else
                         td.eq(i).append(orgHtml);
-                    }
-                });
-            },
-            error: (jqXHR) => {
-                alert(jqXHR.statusText + '(' + jqXHR.status + ')');
-            }
-        });
+                }
+            });
+        },
+        error: (jqXHR) => {
+            alert(jqXHR.statusText + '(' + jqXHR.status + ')');
+        }
     });
+});
 </script>

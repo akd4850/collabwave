@@ -43,4 +43,6 @@ public interface EdsmMapper {
 	List<EdsmApprDto> getExpectedList(Map<String, Object> map);
 	EdsmDto getEdsmDetail(int edsmNo);
 	List<EdsmApprDto> getEdsmAppr(int edsmNo);
+	EdsmApprDto getEdsmApprByCode(Map<String, Object> map);
+	int updateAppr(Map<String, Object> map);
 }

@@ -261,4 +261,12 @@ public class EdsmController {
 		
     	return edsmService.getApprList(request);
 	}
+    
+    @PostMapping("/confirmAppr.do")
+    public String confirmAppr(HttpServletRequest request) {
+    	
+    	edsmService.confirmAppr(request);
+    	
+    	return "redirect:/edsm/edsmDetail.do?edsmNo=" + Integer.parseInt(request.getParameter("edsmNo"));
+    }
 }

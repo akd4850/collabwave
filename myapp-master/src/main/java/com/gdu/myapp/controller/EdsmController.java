@@ -45,10 +45,12 @@ public class EdsmController {
 		return "contents/edsm/edsm";
 	}
 
-	@GetMapping("/edsmWaiting.page")
-	public String edsmWaiting(Model model) {
+	@GetMapping("/edsmWaiting.do")
+	public String edsmWaiting(HttpServletRequest request, Model model) {
 
 		model.addAttribute("submenu", "edsmWaiting.jsp");
+		edsmService.loadWaitList(request, model);
+		
 		return "contents/edsm/edsm";
 	}
 

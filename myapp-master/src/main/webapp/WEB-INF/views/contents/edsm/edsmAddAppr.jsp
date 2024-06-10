@@ -52,6 +52,9 @@
                 </div>
                 <div class="content">
                     <div class="form-group">
+                        <input type="text" class="form-control" placeholder="제목" name="edsmTitle"/>
+                    </div>
+                    <div class="form-group">
                         <input type="text" class="form-control datetimepicker" placeholder="기안 시작 일자" name="edsmStartDatetime"/>
                     </div>
                     <div class="form-group">

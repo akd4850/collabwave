@@ -26,7 +26,7 @@
             <li><b>결제하기</b></li>
             <li>
                 <ul class="list-unstyled subtab2">
-                    <li><a href="${contextPath}/edsm/edsmWaiting.page">결재 대기 문서</a></li>
+                    <li><a href="${contextPath}/edsm/edsmWaiting.do">결재 대기 문서</a></li>
                     <li><a href="${contextPath}/edsm/edsmExpected.page">결재 예정 문서</a></li>
                 </ul>
             </li>

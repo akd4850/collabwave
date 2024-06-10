@@ -269,13 +269,15 @@ public class EdsmServiceImpl implements EdsmService {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime edsmStartDatetime = LocalDateTime.parse(request.getParameter("edsmStartDatetime"), formatter);
 		LocalDateTime edsmExpireDatetime = LocalDateTime.parse(request.getParameter("edsmExpireDatetime"), formatter);
+		String edsmTitle = request.getParameter("edsmTitle");
     	
     	Map<String, Object> map = Map.of("sampleDotCode", request.getParameter("sampleDotCode"),
     									 "empCode", empDto.getEmpCode(),
     									 "edsmContent", request.getParameter("edsmContent"),
     									 "edsmStartDatetime", edsmStartDatetime,
     									 "edsmExpireDatetime", edsmExpireDatetime,
-    									 "edsmStatus", "a0001");
+    									 "edsmStatus", "a0001",
+    									 "edsmTitle", edsmTitle);
     	
     	edsmMapper.addApprDo(map);
     	int nextVal = edsmMapper.getApprSeqNextval();
@@ -328,6 +330,31 @@ public class EdsmServiceImpl implements EdsmService {
 	    model.addAttribute("beginNo", total - (page - 1) * display);
 	    model.addAttribute("draftList", draftList);
 	    model.addAttribute("paging", myPageUtils.getPagingNewVersion(request.getContextPath() + "/edsm/edsmDrafting.do"
+	                                                     , null
+	                                                     , display));
+    }
+    
+    @Override
+    public void loadWaitList(HttpServletRequest request, Model model) {
+    	
+    	HttpSession session = request.getSession();
+		EmpDto empDto = (EmpDto)session.getAttribute("emp");
+    	
+    	int total = edsmMapper.getWaitCount(empDto.getEmpCode());
+	    int display = 10;
+	    Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
+	    int page = Integer.parseInt(opt.orElse("1"));
+	    
+	    myPageUtils.setPaging(total, display, page);
+	    Map<String, Object> map = Map.of("begin", myPageUtils.getBegin()
+	                                   , "end", myPageUtils.getEnd()
+	                                   , "empCode", empDto.getEmpCode());
+	    
+	    List<EdsmApprDto> waitList = edsmMapper.getWaitList(map);
+	    
+	    model.addAttribute("beginNo", total - (page - 1) * display);
+	    model.addAttribute("waitList", waitList);
+	    model.addAttribute("paging", myPageUtils.getPagingNewVersion(request.getContextPath() + "/edsm/edsmWaiting.do"
 	                                                     , null
 	                                                     , display));
     }

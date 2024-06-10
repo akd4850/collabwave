@@ -15,6 +15,8 @@
                 <th>문서번호</th>
                 <th>기안일</th>
                 <th>완료일</th>
+                <th>만료일</th>
+                <th>제목</th>
                 <th>결재 양식</th>
                 <th>첨부</th>
                 <th>결재상태</th>
@@ -38,6 +40,8 @@
                         <td>${draft.edsmNo}</td>
                         <td>${draft.edsmStartDatetime}</td>
                         <td>${draft.edsmEndDatetime}</td>
+                        <td>${draft.edsmExpireDatetime}</td>
+                        <td>${draft.edsmTitle}</td>
                         <td>${draft.sample.sampleTitle}</td>
                         <td></td>
                         <td>
@@ -56,5 +60,6 @@
                 </c:forEach>
             </tbody>
         </table>
+        ${paging}
     </div>
 </div>

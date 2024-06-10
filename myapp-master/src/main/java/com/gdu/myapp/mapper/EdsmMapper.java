@@ -37,4 +37,6 @@ public interface EdsmMapper {
 	int registerEdsmLineItem(Map<String, Object> map);
 	int getDraftCount(String empCode);
 	List<EdsmDto> getDraftList(Map<String, Object> map);
+	int getWaitCount(String empCode);
+	List<EdsmApprDto> getWaitList(Map<String, Object> map);
 }

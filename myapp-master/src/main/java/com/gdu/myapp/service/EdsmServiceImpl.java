@@ -253,4 +253,11 @@ public class EdsmServiceImpl implements EdsmService {
     	
     	return new ResponseEntity<>(Map .of("sampleList", edsmMapper.getSampleListAll()), HttpStatus.OK);
     }
+    
+    @Override
+    public void addAppr(HttpServletRequest request, Model model, String sampleCode) {
+    	
+		EdsmFormDto sample = edsmMapper.getSample(sampleCode);
+		model.addAttribute("sample", sample);
+    }
 }

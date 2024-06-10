@@ -1,6 +1,12 @@
 let apprSeq = 1;
 let empArr = [];
+let nameArr = [];
 let myEmpCode = '';
+
+let bIsSignTable = false;
+let sampleContent;
+let signTable;
+let h2;
 
 window.addEventListener('DOMContentLoaded', function(){
     $.ajax({
@@ -28,17 +34,28 @@ window.addEventListener('DOMContentLoaded', function(){
                                 "label": "결재선 추가",
                                 "_disabled": node.original.type == 'dept' || node.original.id == myEmpCode || empArr.includes(node.original.id) == true,
                                 action: function(obj) {
+									
                                     empArr.push(node.original.id);
+                                    nameArr.push(node.text);
                                     let parentNode = $('#jstree').jstree(true).get_node(node.parents[0]);
                                     let dept = (parentNode.text === undefined) ? '' : parentNode.text;
+                                    
                                     $('#appr-line').append(
                                         "<tr id=tr_" + node.original.id + "><td>" + apprSeq++ + 
                                         "</td><td>" + node.text + 
                                         "</td><td>" + dept + 
                                         "</td><td>" + 
                                         "<input type='hidden' name='empCode' value='" + node.original.id + "'>" +
-                                        "<input type='button' onclick='deleteApprEmpcodeFromLine(\"" + node.original.id + "\")' value='삭제' class='btn btn-info btn-fill'>" +
+                                        "<input type='button' onclick='deleteApprEmpcodeFromLine(\"" + node.original.id + "\", \"" + node.text + "\");" + 
+                                        "deleteApprFromContent();' " +
+                                        "value='삭제' class='btn btn-info btn-fill'>" +
                                         "</td></tr>");
+                                        
+                                    if(bIsSignTable) {
+										$('#tr1').append('<td></td>');	
+										$('#tr2').append('<td class="td-img">' + node.text + '</td>');
+										$('#tr3').append('<td></td>');
+									}								
                                 }
                             }
                         }
@@ -82,10 +99,11 @@ function getOrganization(node) {
     });
 }
 
-function deleteApprEmpcodeFromLine(empCode) {
+function deleteApprEmpcodeFromLine(empCode, empName) {
 	let tdSeq = 1;
     $('#appr-line:last > #tr_' + empCode).remove();
     removeItem(empArr, empCode);
+    removeItem(nameArr, empName);
     apprSeq -= 1;
     $('#appr-line:last > tr > td:nth-child(1)').each(function() {
 		$(this).html(tdSeq++);
@@ -98,4 +116,23 @@ function removeItem(arr, value) {
     arr.splice(index, 1);
   }
   return arr;
+}
+
+function deleteApprFromContent() {
+	if(bIsSignTable == false) return;
+	
+	$('#sampleContent').empty();
+	$('#sampleContent').append(sampleContent);
+	
+	h2 = $('h2');
+	$(signTable).appendTo(h2);
+	
+	let hWidth = 20;
+    $('.appr-table').css('width', hWidth + 100);
+    
+    for(let i = 0; i < nameArr.length; i++) {
+		$('#tr1').append('<td></td>');	
+		$('#tr2').append('<td class="td-img">' + nameArr[i] + '</td>');
+		$('#tr3').append('<td></td>');
+	}
 }

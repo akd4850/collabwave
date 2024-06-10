@@ -26,28 +26,28 @@
             <li><b>결제하기</b></li>
             <li>
                 <ul class="list-unstyled subtab2">
-                    <li><a href="/edsm/edsmWaiting.page">결재 대기 문서</a></li>
+                    <li><a href="${contextPath}/edsm/edsmWaiting.page">결재 대기 문서</a></li>
                     <li><a href="">결재 수신 문서</a></li>
                 </ul>
             </li>
             <li><b>개인 문서함</b></li>
             <li>
                 <ul class="list-unstyled subtab2">
-                    <li><a href="/edsm/edsmDrafting.page">기안 문서함</a></li>
+                    <li><a href="${contextPath}/edsm/edsmDrafting.page">기안 문서함</a></li>
                     <li><a href="">결재 문서함</a></li>
                 </ul>
             </li>
             <li><b>문서함</b></li>
             <li>
                 <ul class="list-unstyled subtab2">
-                    <li><a href="/edsm/edsmForm.do">전자결재 양식</a></li>
+                    <li><a href="${contextPath}/edsm/edsmForm.do">전자결재 양식</a></li>
                 </ul>
             </li>
             <li><b>결재 관리</b></li>
             <li>
                 <ul class="list-unstyled subtab2">
-                    <li><a href="/edsm/manageSign.page">내 사인 관리</a></li>
-                    <li><a href="/edsm/manageLine.do">내 결재선 관리</a></li>
+                    <li><a href="${contextPath}/edsm/manageSign.page">내 사인 관리</a></li>
+                    <li><a href="${contextPath}/edsm/manageLine.do">내 결재선 관리</a></li>
                 </ul>
             </li>
         </ul>
@@ -77,7 +77,7 @@
             </form>
         </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-info btn-fill">확인</button>
+                <button type="button" class="btn btn-info btn-fill" onclick="addAppr();">확인</button>
                 <button type="button" class="btn btn-danger btn-fill" data-dismiss="modal">취소</button>
             </div>
         </div>
@@ -86,6 +86,7 @@
 
 <script>
 let sampleList;
+let sampleIndex = -1;
 $('#formModal').on('show.bs.modal', function (event) {
     getSampleList();
 });
@@ -112,6 +113,11 @@ function getSampleList() {
 function changeSample(index) {
     $('#preview').empty();
     $('#preview').append(sampleList[index].sampleContent);
+    sampleIndex = index;
+}
+function addAppr() {
+    if(sampleIndex == -1) return;
+    location.href="${contextPath}/edsm/addAppr.page?sampleCode=" + sampleList[sampleIndex].sampleDotCode;
 }
 </script>
 

@@ -199,4 +199,22 @@ public class EdsmController {
 
       return edsmService.getSampleList(request);
     }
+    
+    @GetMapping("/addAppr.page")
+    public String addAppr(HttpServletRequest request, Model model, @RequestParam String sampleCode, Locale locale) {
+ 
+    	model.addAttribute("submenu", "edsmAddAppr.jsp");
+    	model.addAttribute("messageSource", messageSource);
+        model.addAttribute("locale", locale);
+        
+    	edsmService.addAppr(request, model, sampleCode);
+		
+		return "contents/edsm/edsm";
+    }
+    
+    @PostMapping("/addAppr.do")
+    public String addApprDo() {
+    	
+    	return "redirect:/edsm/edsmMain.page";
+    }
 }

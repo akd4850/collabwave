@@ -25,4 +25,5 @@ public interface EdsmService {
     void modifyLine(HttpServletRequest request);
     ResponseEntity<Map<String, Object>> getSampleList(HttpServletRequest request);
     void addAppr(HttpServletRequest request, Model model, String sampleCode);
+    void addApprDo(HttpServletRequest request);
 }

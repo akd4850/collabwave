@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.gdu.myapp.dto.CustomApprItemDto;
 import com.gdu.myapp.dto.EdsmCustomApprDto;
+import com.gdu.myapp.dto.EdsmDto;
 import com.gdu.myapp.dto.EdsmFormDto;
 
 @Mapper
@@ -28,4 +29,5 @@ public interface EdsmMapper {
 	int removeLineItem(int apprNo);
 	int removeLine(int apprNo);
 	List<EdsmFormDto> getSampleListAll();
+	int addApprDo(Map<String, Object> map);
 }

@@ -213,7 +213,9 @@ public class EdsmController {
     }
     
     @PostMapping("/addAppr.do")
-    public String addApprDo() {
+    public String addApprDo(HttpServletRequest request) {
+    	
+    	edsmService.addApprDo(request);
     	
     	return "redirect:/edsm/edsmMain.page";
     }

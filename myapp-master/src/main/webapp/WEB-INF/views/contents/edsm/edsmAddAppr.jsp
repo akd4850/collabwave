@@ -7,35 +7,34 @@
 
 <link rel="stylesheet" href="${contextPath}/jstree/dist/themes/proton/style.css" />
 
-<div class="card">
-    <div class="header">
-        ${messageSource.getMessage('new', null, locale)} 
-        ${messageSource.getMessage('appr', null, locale)} 
-        ${messageSource.getMessage('progress', null, locale)}
-    </div>
-    <div class="content table-responsive table-full-width">
-        <div class="row" style="margin-left: 10px;">
-            <div class="col-md-3">
-                <div class="card">
-                    <div class="header">
-                        ${messageSource.getMessage('organizationChart', null, locale)}
-                    </div>
-                    <div class="content table-responsive table-full-width">
-                        <div id="jstree"></div>
+<form action="${contextPath}/edsm/addAppr.do" method="post" id="add-appr">
+    <div class="card">
+        <div class="header">
+            ${messageSource.getMessage('new', null, locale)} 
+            ${messageSource.getMessage('appr', null, locale)} 
+            ${messageSource.getMessage('progress', null, locale)}
+        </div>
+        <div class="content table-responsive table-full-width">
+            <div class="row" style="margin-left: 10px;">
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="header">
+                            ${messageSource.getMessage('organizationChart', null, locale)}
+                        </div>
+                        <div class="content table-responsive table-full-width">
+                            <div id="jstree"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-7">
-                <div class="card">
-                    <div class="header">
-                        ${messageSource.getMessage('appr', null, locale)}${messageSource.getMessage('line', null, locale)}
-                    </div>
-                    <div class="content">
-                        <p class="text-info">
-                            ${messageSource.getMessage('apprLineHelpMessage', null, locale)}
-                        </p>
-
-                        <form action="${contextPath}/edsm/edsmAddLine.do" method="post">
+                <div class="col-md-7">
+                    <div class="card">
+                        <div class="header">
+                            ${messageSource.getMessage('appr', null, locale)}${messageSource.getMessage('line', null, locale)}
+                        </div>
+                        <div class="content">
+                            <p class="text-info">
+                                ${messageSource.getMessage('apprLineHelpMessage', null, locale)}
+                            </p>
                             <table class="table table-hover table-striped">
                                 <thead>
                                     <th>${messageSource.getMessage('turn', null, locale)}</th>
@@ -46,26 +45,35 @@
                                 <tbody id="appr-line">
                                 </tbody>
                             </table>
-
                             <br>
-                        </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="form-group">
+                        <input type="text" class="form-control datetimepicker" placeholder="기안 시작 일자" name="edsmStartDatetime"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control datetimepicker" placeholder="기안 만료 일자" name="edsmExpireDatetime"/>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row" style="margin-left:10px;margin-right:10px;">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="content" id="sampleContent">                        
-                    </div>
-                    <div class="content">
-                        <input type="submit" class="btn btn-info btn-fill" style="margin-left:10px" value="${messageSource.getMessage('register', null, locale)}">
+            <div class="row" style="margin-left:10px;margin-right:10px;">
+                <div class="col-md-12">
+                    <div class="card">                        
+                        <div class="content" id="sampleContent">                        
+                        </div>
+                        <div class="content">
+                            <input type="hidden" name="sampleDotCode" value="${sample.sampleDotCode}">
+                            <input type="hidden" id="edsmContent" name="edsmContent">
+                            <input type="submit" class="btn btn-info btn-fill" style="margin-left:10px" value="${messageSource.getMessage('register', null, locale)}">
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</form>
 
 <style>
 .appr-table > tbody > tr > td { font-size: 15px; text-align: center; height:20px; }
@@ -105,5 +113,11 @@
         $('.appr-table').css('width', hWidth + 100);
 
         bIsSignTable = true;
-    });    
+        
+        $('#add-appr').submit(function(event){
+            //event.preventDefault();
+            $('#edsmContent').val($('#sampleContent').html());
+            //$('#add-appr').submit();
+        });
+    });
 </script>

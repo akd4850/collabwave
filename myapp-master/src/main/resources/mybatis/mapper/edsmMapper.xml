@@ -33,6 +33,22 @@
 	        </association>
         </association>
     </resultMap>
+    
+    <resultMap type="EdsmDto" id="EdsmMap">
+		<id property="edsmNo" column="EDSM_NO" />
+		<result property="edsmCreateDatetime" column="EDSM_CREATE_DATETIME" />
+		<result property="edsmStartDatetime" column="EDSM_START_DATETIME" />
+		<result property="edsmEndDatetime" column="EDSM_END_DATETIME" />
+		<result property="edsmExpireDatetime" column="EDSM_EXPIRE_DATETIME" />
+		<result property="edsmContent" column="EDSM_CONTENT" />
+		<result property="edsmStatus" column="EDSM_STATUS" />
+		<association property="sample" javaType="EdsmFormDto">
+	    	<id property="sampleDotCode" column="SAMPLE_DOT_CODE" />
+    	</association>
+    	<association property="emp" javaType="EmpDto">
+	    	<id property="empCode" column="EMP_CODE" />
+    	</association>
+    </resultMap>
 
 	<insert id="registerForm" parameterType="EdsmFormDto">
 		INSERT INTO EDSM_SAMPLE_T (
@@ -172,5 +188,27 @@
 		  FROM	EDSM_SAMPLE_T
 		 WHERE	USE_YN = 'Y'
 	</select>
+	
+	<insert id="addApprDo" parameterType="Map">
+		INSERT INTO	EDSM_T 
+					(EDSM_NO,
+					SAMPLE_DOT_CODE,
+					EMP_CODE,
+					EDSM_CREATE_DATETIME,
+					EDSM_CONTENT,
+					EDSM_START_DATETIME,
+					<!--EDSM_END_DATETIME,-->
+					EDSM_STATUS,
+					EDSM_EXPIRE_DATETIME)
+			 VALUES (EDSM_SEQ.NEXTVAL,
+			 		#{sampleDotCode},
+			 		#{empCode},
+			 		CURRENT_DATE,
+			 		#{edsmContent},
+			 		#{edsmStartDatetime},
+			 		<!--#{edsmEndDateTime},-->
+			 		#{edsmStatus},
+			 		#{edsmExpireDatetime})					
+	</insert>
     
 </mapper>

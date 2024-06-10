@@ -1,6 +1,8 @@
 package com.gdu.myapp.service;
 
 import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +18,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.gdu.myapp.dto.CustomApprItemDto;
 import com.gdu.myapp.dto.EdsmCustomApprDto;
+import com.gdu.myapp.dto.EdsmDto;
 import com.gdu.myapp.dto.EdsmFormDto;
 import com.gdu.myapp.dto.EmpDto;
 import com.gdu.myapp.mapper.EdsmMapper;
@@ -259,5 +262,28 @@ public class EdsmServiceImpl implements EdsmService {
     	
 		EdsmFormDto sample = edsmMapper.getSample(sampleCode);
 		model.addAttribute("sample", sample);
+    }
+    
+    @Override
+    public void addApprDo(HttpServletRequest request) {
+    	
+    	HttpSession session = request.getSession();
+		EmpDto empDto = (EmpDto)session.getAttribute("emp");
+		
+		//DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		LocalDateTime edsmStartDatetime = LocalDateTime.parse(request.getParameter("edsmStartDatetime"), formatter);
+		//LocalDateTime edsmEndDateTime = LocalDateTime.parse(request.getParameter("edsmEndDateTime"), formatter);
+		LocalDateTime edsmExpireDatetime = LocalDateTime.parse(request.getParameter("edsmExpireDatetime"), formatter);
+    	
+    	Map<String, Object> map = Map.of("sampleDotCode", request.getParameter("sampleDotCode"),
+    									 "empCode", empDto.getEmpCode(),
+    									 "edsmContent", request.getParameter("edsmContent"),
+    									 "edsmStartDatetime", edsmStartDatetime,
+    									 //"edsmEndDatetime", edsmEndDateTime,
+    									 "edsmExpireDatetime", edsmExpireDatetime,
+    									 "edsmStatus", "A0001");
+    	
+    	edsmMapper.addApprDo(map);
     }
 }

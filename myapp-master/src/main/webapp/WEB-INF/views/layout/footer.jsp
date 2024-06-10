@@ -76,7 +76,7 @@
 <script src="${contextPath}/resources/js/light-bootstrap-dashboard.js?v=1.4.1"></script>
 
 <!-- Light Bootstrap Dashboard DEMO methods, don't include it in your project! -->
-<script src="${contextPath}/resources/js/demo.js"></script>
+<script src="${contextPath}/resources/js/demo.js?v=<%=System.currentTimeMillis() %>"></script>
 
 <script src="${contextPath}/resources/js/erp-calendar.js"></script>
 
@@ -100,6 +100,8 @@
     if('${submenu}' === 'schedule.jsp') {
       erpCalendar.initGoodsCalendar('scheduleCalendar');
     }
+
+    demo.initFormExtendedDatetimepickers();
   });
 </script>
 

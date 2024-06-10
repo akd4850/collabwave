@@ -7,8 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.gdu.myapp.dto.DeptDto;
-
 import jakarta.servlet.http.HttpServletRequest;
 
 public interface EdsmService {

@@ -46,23 +46,24 @@
   	      resultType="int">
     SELECT COUNT(*)
       FROM EMP_T
+     WHERE STATUS_CODE IN ('s01', 's02') 
   </select>
   
   <select id="getEmpList"
   	      parameterType="Map"
   	      resultMap="EmpDtoMap">
-  	SELECT EMP_T.EMP_CODE,
-  		   EMP_T.EMP_NAME,
-       	   DEPT_T.DEPT_NAME,
-       	   POSITION_T.POSITION_NAME,
-           EMP_T.MOBILE,
-           EMP_T.EMAIL,
-           EMP_T.STATUS_CODE
-      FROM EMP_T
-           INNER JOIN DEPT_T ON EMP_T.DEPT_CODE = DEPT_T.DEPT_CODE
-           INNER JOIN POSITION_T ON EMP_T.POSITION_CODE = POSITION_T.POSITION_CODE
-    WHERE STATUS_CODE IN('s01', 's02')
-    ORDER BY EMP_CODE ASC
+  	SELECT E.EMP_CODE,
+           E.EMP_NAME,
+           D.DEPT_NAME,
+           P.POSITION_NAME,
+           E.MOBILE,
+           E.EMAIL,
+           E.STATUS_CODE
+      FROM EMP_T E
+           LEFT JOIN DEPT_T D ON E.DEPT_CODE = D.DEPT_CODE
+           INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
+     WHERE STATUS_CODE IN ('s01', 's02')
+     ORDER BY EMP_CODE ASC
   </select>
   
   <select id="getEmpDetail"
@@ -82,7 +83,7 @@
            E.MOBILE,
            E.EMAIL
       FROM EMP_T E
-           INNER JOIN DEPT_T  D ON E.DEPT_CODE = D.DEPT_CODE
+           LEFT JOIN DEPT_T  D ON E.DEPT_CODE = D.DEPT_CODE
            INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
      WHERE E.EMP_CODE = #{empCode}
   </select>
@@ -100,6 +101,7 @@
       , POSITION_CODE
       , BIRTHDAY_DATE
       , JOIN_DATE
+      , STATUS_CODE
       ) VALUES (
           #{empCode}
         , #{empName}
@@ -112,10 +114,12 @@
         , #{positionCode}
         , #{birthdayDate}
         , CURRENT_DATE
+        , 's01'
       )
   </insert>
   
-  <update id="updateEmployee">
+  <update id="updateEmployee"
+          parameterType="EmpDto">
 	UPDATE EMP_T
 	   SET EMP_NAME = #{empName},
 	       EMP_CODE = #{empCode},
@@ -129,9 +133,10 @@
 	 WHERE EMP_CODE= #{empCode}
   </update>
   
-  <update id="resignEmp">
+  <update id="removeEmp">
 	UPDATE EMP_T
-	   SET STATUS_CODE = 's03'
+	   SET STATUS_CODE = 's03',
+	       LEAVE_DATE = CURRENT_DATE
 	 WHERE EMP_CODE = #{empCode}
   </update>
 
@@ -166,5 +171,22 @@
 	   SET PROFILE_FILE_NAME = #{profileFileName}
 	 WHERE EMP_CODE = #{empCode}
   </update>
+  
+  <select id="getEmpLeaveList"
+  	      parameterType="Map"
+  	      resultMap="EmpDtoMap">
+  	SELECT EMP_T.EMP_CODE,
+  		   EMP_T.EMP_NAME,
+       	   DEPT_T.DEPT_NAME,
+       	   POSITION_T.POSITION_NAME,
+           EMP_T.MOBILE,
+           EMP_T.STATUS_CODE,
+           EMP_T.LEAVE_DATE
+      FROM EMP_T
+           INNER JOIN DEPT_T ON EMP_T.DEPT_CODE = DEPT_T.DEPT_CODE
+           INNER JOIN POSITION_T ON EMP_T.POSITION_CODE = POSITION_T.POSITION_CODE
+    WHERE STATUS_CODE = 's03'
+    ORDER BY LEAVE_DATE DESC
+  </select>
 
 </mapper>

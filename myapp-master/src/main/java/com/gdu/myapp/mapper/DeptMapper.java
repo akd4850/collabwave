@@ -12,4 +12,9 @@ import com.gdu.myapp.dto.EmpDto;
 public interface DeptMapper {
 	List<DeptDto> getDeptList(String deptCode);
 	List<EmpDto> getBelongEmpList(String deptCode);
+	List<DeptDto> getDeptListForManage(Map<String, Object> map);
+	int getDeptCount();
+	DeptDto getDeptDetail(String deptCode);
+	int insertDept(DeptDto dept);
+	List<EmpDto> getDeptMember(String deptCode);
 }

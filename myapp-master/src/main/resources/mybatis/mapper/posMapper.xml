@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gdu.myapp.mapper.PosMapper">
+	
+
+  <resultMap type="PosDto" id="PosDtoMap">
+    <id property="posCode" column="POSITION_CODE" />
+	 <result property="posName" column="POSITION_NAME" />
+	 <result property="useYn" column="USE_YN" />
+	 <association property="emp" javaType="EmpDto">
+	   <id property="empCode" column="EMP_CODE" />
+	   <result property="empName" column="EMP_NAME" />
+     </association>
+  </resultMap>
+ 
+
+  <select id="getPosByMap"
+          resultMap="PosDtoMap">
+	SELECT P.POSITION_CODE, P.POSITION_NAME, P.USE_YN
+      FROM POSITION_T P LEFT JOIN EMP_T E
+        ON P.POSITION_CODE = E.POSITION_CODE
+  GROUP BY P.POSITION_CODE, P.POSITION_NAME, P.USE_YN
+  ORDER BY P.POSITION_CODE
+  </select>
+  
+  <select id="getPosCount"
+          resultType="int">
+    SELECT COUNT(*)
+      FROM POSITION_T
+  </select>
+  
+	
+</mapper>

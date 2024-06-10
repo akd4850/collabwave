@@ -21,5 +21,20 @@ erpModal = {
         if(result == true) location.href = '/edsm/edsmRequest.page';
       }).catch(swal.noop);
     }
+    
+    else if(type == 'emp') {
+      swal({
+        title: title,
+        showCancelButton: true,
+        confirmButtonClass: 'btn btn-info btn-fill',
+        cancelButtonClass: 'btn btn-danger btn-fill',
+        confirmButtonText: '확인',
+        cancelButtonText: '취소',
+        buttonsStyling: false
+      }).then(function(result) {
+        if(result == true) location.href = '/admin/emp/management.page';
+      }).catch(swal.noop);
+    }
+    
   }
 }

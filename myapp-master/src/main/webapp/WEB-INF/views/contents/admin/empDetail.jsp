@@ -4,6 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <c:set var="contextPath" value="<%=request.getContextPath()%>"/>
 <c:set var="dt" value="<%=System.currentTimeMillis()%>"/>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
 <div class="card">
     <div class="header">
@@ -84,35 +85,51 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-info btn-fill right">수정</button>
-            <button type="button" id="deleteEmp" class="btn btn-info btn-fill right">삭제</button>
-            <button type="button" class="btn btn-info btn-fill right">취소</button>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>직급</label>
+                        <input type="text" class="form-control" placeholder="직급" value="${emp.position.positionName}">
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" id="btn-update" class="btn btn-info btn-fill">수정</button>
+            <button type="button" id="btn-remove" class="btn btn-info btn-fill">삭제</button>
+            <button type="button" id="btn-cancel" class="btn btn-danger btn-fill">취소</button>
             <div class="clearfix"></div>
         </form>
     </div>
 </div>
 
 <script>
-    const fnDeleteEmp = () => {
-        $(document).on('click', '.remove-attach', (evt) => {
-            if(!confirm('직원을 삭제(퇴사처리)하시겠습니까?')) {
-                return;
+    document.getElementById('btn-cancel').onclick=function(){
+        history.back();
+    }
+
+    const fnDeleteEmployee = () => {
+        $('#btn-remove').on('click', (evt) => {
+            if(confirm('${emp.empName}님을 삭제(퇴사처리)하시겠습니까?')){
+                $.ajax({
+                    //요청
+                    type: 'POST',
+                    url: '${contextPath}/admin/emp/delete.do',
+                    data: {empCode: '${emp.empCode}'},
+
+                    //응답
+                    success: (resData) => {
+                        alert('${emp.empName}님이 퇴사처리되었습니다.');
+                        location.href='${contextPath}/admin/emp/management.page';
+                    },
+                    error: (jqXHR) => {
+                        alert(jqXHR.statusText + '(' + jqXHR.status + ')');
+                    }
+                })
             }
-            fetch('$(contextPath)/employee/removeEmployee.do', {
-                
-            })
-
-
-
-
-
-
-
         })
     }
 
-
-
+    fnDeleteEmployee();
 
 
 </script>

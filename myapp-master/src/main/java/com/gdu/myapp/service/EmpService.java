@@ -14,4 +14,7 @@ public interface EmpService {
 	EmpDto getEmpDetail(String empCode);
 //	int editEmployee(EmpDto emp);
 	String getRedirectURLAfterSignin(HttpServletRequest request);
+	void loadEmpLeaveList(HttpServletRequest request, Model model);
+	int deleteEmp(String empCode);
+//	int modifyEmp(HttpServletRequest request);
 }

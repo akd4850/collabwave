@@ -13,7 +13,7 @@
         <input type="button"
                 class="btn btn-info btn-fill"
                 style="margin-left:10px"
-                onclick="location.href='/employee/addEmployee.page'"
+                onclick="location.href='/admin/emp/add.page'"
                 value="등록">
         <table class="table table-hover table-striped">
             
@@ -31,25 +31,18 @@
                 <c:forEach items="${empList}" var="emp" varStatus="vs">
                     <tr>
                         <td>${emp.empCode}</td>
-                        <td><a href="/employee/detailEmployee.do?empCode=${emp.empCode}">${emp.empName}</a></td>
+                        <td><a href="/admin/emp/detail.do?empCode=${emp.empCode}">${emp.empName}</a></td>
                         <td>${emp.dept.deptName}</td>
                         <td>${emp.position.positionName}</td>
                         <td>${emp.mobile}</td>
                         <td>${emp.email}</td>
                     </tr>
-                </c:forEach>     
+                </c:forEach>
             </tbody>
+            <tfoot>
+                <tr>
+                    <td>${paging}</td>
+            </tfoot>
         </table>
     </div>
 </div>
-
-<script>
-    // const fnEmpDetail = () => {
-
-    //     $(document).on('click', '.emp', (evt) => {
-    //         location.href = '${contextPath}/employee/detail.do?empCode=' + evt.target.dataset.empCode;
-    //     })
-
-    // }
-
-</script>

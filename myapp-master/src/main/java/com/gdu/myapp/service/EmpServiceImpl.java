@@ -1,13 +1,11 @@
 package com.gdu.myapp.service;
 
 import java.io.PrintWriter;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -56,32 +54,31 @@ public class EmpServiceImpl implements EmpService {
   		} finally {
   	}
 	}
-
-  @Override
-  public void loadEmpList(HttpServletRequest request, Model model) {
-    
-    int total = empMapper.getEmpCount();
-    
-    int display = 5;
-    
-    Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
-    int page = Integer.parseInt(opt.orElse("1"));
-    
-    myPageUtils.setPaging(total, display, page);
-    
-    Map<String, Object> map = Map.of("begin", myPageUtils.getBegin()
-                                    , "end", myPageUtils.getEnd());
-    
-    List<EmpDto> empList = empMapper.getEmpList(map);
-    
-    // 목록 화면으로 반환할 값 (목록 + 전체 페이지 수)
-    model.addAttribute("beginNo", total - (page - 1) * display);
-    model.addAttribute("empList", empList);
-    model.addAttribute("paging", myPageUtils.getPaging(request.getContextPath() + "contents/employee/list.do"
-                                                     , null
-                                                     , display));
-    }
-  
+	
+	@Override
+	public void loadEmpList(HttpServletRequest request, Model model) {
+	  
+	  int total = empMapper.getEmpCount();
+	  
+	  int display = 10;
+	  
+	  Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
+	  int page = Integer.parseInt(opt.orElse("1"));
+	  
+	  myPageUtils.setPaging(total, display, page);
+	  
+	  Map<String, Object> map = Map.of("begin", myPageUtils.getBegin()
+	                                 , "end", myPageUtils.getEnd());
+	  
+	  List<EmpDto> empList = empMapper.getEmpList(map);
+	  
+	  // 목록 화면으로 반환할 값 (목록 + 전체 페이지 수)
+	  model.addAttribute("beginNo", total - (page - 1) * display);
+	  model.addAttribute("empList", empList);
+	  model.addAttribute("paging", myPageUtils.getPaging(request.getContextPath() + "/list.do", null, display));
+	  
+	}
+	
   @Override
   public void registerEmp(HttpServletRequest request, HttpServletResponse response) {
     
@@ -126,7 +123,7 @@ public class EmpServiceImpl implements EmpService {
       if(insertCount == 1) {
         
         out.println("alert('직원이 등록되었습니다.');");
-        out.println("location.href='" + request.getContextPath() + "/employee/management.page';");
+        out.println("location.href='" + request.getContextPath() + "/admin/emp/management.page';");
         
         // 등록 실패
       } else {
@@ -147,19 +144,51 @@ public class EmpServiceImpl implements EmpService {
     return empMapper.getEmpDetail(empCode);
   }
   
+  @Override
+  public void loadEmpLeaveList(HttpServletRequest request, Model model) {
+    
+    // 수정해야함
+    int total = 15;
+    
+    int display = 10;
+    
+    Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
+    int page = Integer.parseInt(opt.orElse("1"));
+    
+    myPageUtils.setPaging(total, display, page);
+    
+    Map<String, Object> map = Map.of("begin", myPageUtils.getBegin()
+                                   , "end", myPageUtils.getEnd());
+    
+    List<EmpDto> empLeaveList = empMapper.getEmpLeaveList(map);
+    
+    // 목록 화면으로 반환할 값 (목록 + 전체 페이지 수)
+    model.addAttribute("beginNo", total - (page - 1) * display);
+    model.addAttribute("empLeaveList", empLeaveList);
+    model.addAttribute("paging", myPageUtils.getPaging(request.getContextPath() + "contents/employee/list.do", null, display));
+  }
+  
+  @Override
+  public int deleteEmp(String empCode) {
+    return empMapper.removeEmp(empCode);
+  }
+  
+  
 //  @Override
-//  public int editEmployee(EmpDto emp) {
-//
-//    String empCode = emp.getEmpCode();
-//    String empName = emp.getEmpName();
-//    String mobile = emp.getMobile();
-//    String email = emp.getEmail();
-//    String birthdayDate = emp.getBirthdayDate();
-//    String zipCode = emp.getZipCode();
-//    String address = emp.getAddress();
-//    String detailAddress = emp.getDetailAddress();
+//  public int modifyEmp(HttpServletRequest request) {
 //    
-//    return empMapper.updateEmployee(empCode);
+//    String empCode = request.getParameter("empCode");
+//    String empName = MySecurityUtils.getPreventXss(request.getParameter("empName"));
+//    String password = MySecurityUtils.getSha256(request.getParameter("password"));
+//    String mobile = request.getParameter("mobile");
+//    String email = request.getParameter("email");
+//    String zipCode = request.getParameter("zipCode");
+//    String address = request.getParameter("address");
+//    String detailAddress = request.getParameter("detailAddress"); 
+//    String positionCode = request.getParameter("positionCode");
+//    String birthdayDate = request.getParameter("birthdayDate");
+//    
+//    return 0;
 //  }
 
     @Override

@@ -11,7 +11,7 @@
     </div>
     <div class="content">
         <form method="POST"
-              action="${contextPath}/employee/addEmployee.do"
+              action="${contextPath}/admin/emp/add.do"
               id="frm-addEmployee">
 
             <div class="row">

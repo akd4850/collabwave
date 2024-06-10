@@ -52,12 +52,10 @@ public class EdsmController {
 		return "contents/edsm/edsm";
 	}
 
-	@GetMapping("/edsmDrafting.do")
-	public String edsmDrafting(HttpServletRequest request, Model model) {
+	@GetMapping("/edsmDrafting.page")
+	public String edsmDrafting(Model model) {
 
 		model.addAttribute("submenu", "edsmDrafting.jsp");
-		edsmService.loadDraftList(request, model);
-		
 		return "contents/edsm/edsm";
 	}
 

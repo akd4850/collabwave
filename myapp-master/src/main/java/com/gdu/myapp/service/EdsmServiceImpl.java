@@ -68,8 +68,13 @@ public class EdsmServiceImpl implements EdsmService {
 	@Override
 	public void loadSampleList(HttpServletRequest request, Model model) {
 
+		// 전체 BBS 게시글 수
 	    int total = edsmMapper.getSampleCount();
+	    
+	    // 한 화면에 표시할 BBS 게시글 수
 	    int display = 10;
+	    
+	    // 표시할 페이지 번호
 	    Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
 	    int page = Integer.parseInt(opt.orElse("1"));
 	    
@@ -305,30 +310,5 @@ public class EdsmServiceImpl implements EdsmService {
     	
     	int apprNo = Integer.parseInt( request.getParameter("apprNo") );
     	return new ResponseEntity<>(Map.of("itemList", edsmMapper.getLineDetail(apprNo)), HttpStatus.OK);
-    }
-    
-    @Override
-    public void loadDraftList(HttpServletRequest request, Model model) {
-    	
-    	HttpSession session = request.getSession();
-		EmpDto empDto = (EmpDto)session.getAttribute("emp");
-    	
-    	int total = edsmMapper.getDraftCount(empDto.getEmpCode());
-	    int display = 10;
-	    Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
-	    int page = Integer.parseInt(opt.orElse("1"));
-	    
-	    myPageUtils.setPaging(total, display, page);
-	    Map<String, Object> map = Map.of("begin", myPageUtils.getBegin()
-	                                   , "end", myPageUtils.getEnd()
-	                                   , "empCode", empDto.getEmpCode());
-	    
-	    List<EdsmDto> draftList = edsmMapper.getDraftList(map);
-	    
-	    model.addAttribute("beginNo", total - (page - 1) * display);
-	    model.addAttribute("draftList", draftList);
-	    model.addAttribute("paging", myPageUtils.getPagingNewVersion(request.getContextPath() + "/edsm/edsmDrafting.do"
-	                                                     , null
-	                                                     , display));
     }
 }

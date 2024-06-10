@@ -44,7 +44,6 @@
 		<result property="edsmStatus" column="EDSM_STATUS" />
 		<association property="sample" javaType="EdsmFormDto">
 	    	<id property="sampleDotCode" column="SAMPLE_DOT_CODE" />
-	    	<id property="sampleTitle" column="SAMPLE_TITLE" />
     	</association>
     	<association property="emp" javaType="EmpDto">
 	    	<id property="empCode" column="EMP_CODE" />
@@ -235,38 +234,5 @@
 			SELECT #{curApprItemSeq}+#{index}+1, #{edsmNo}, #{empCode}, #{index}+1, #{apprStatus} FROM DUAL
         </foreach>
 	</insert>
-	
-	<!-- 내가 기안한 문서 -->
-	<select id="getDraftCount" resultType="int">
-		SELECT COUNT(*) FROM EDSM_T WHERE EMP_CODE = #{empCode}
-	</select>
-    
-    <select id="getDraftList" parameterType="Map" resultMap="EdsmMap">
-		 SELECT 	EDSM_NO,
-			        SAMPLE_DOT_CODE,
-			        SAMPLE_TITLE,
-			        EMP_CODE,
-			        EDSM_CREATE_DATETIME,
-			        EDSM_CONTENT,
-			        EDSM_START_DATETIME,
-			        EDSM_END_DATETIME,
-			        EDSM_STATUS,
-			        EDSM_EXPIRE_DATETIME
-			  FROM	(SELECT ROW_NUMBER() OVER(ORDER BY EDSM_NO) AS RN
-			            , A.EDSM_NO 
-			            , A.SAMPLE_DOT_CODE 
-			            , B.SAMPLE_TITLE 
-			            , A.EMP_CODE 
-			            , A.EDSM_CREATE_DATETIME 
-			            , A.EDSM_CONTENT 
-			            , A.EDSM_START_DATETIME 
-			            , A.EDSM_END_DATETIME 
-			            , A.EDSM_STATUS 
-			            , A.EDSM_EXPIRE_DATETIME 
-			           FROM EDSM_T A, EDSM_SAMPLE_T B
-			          WHERE A.EMP_CODE = #{empCode}
-			          )
-			 WHERE RN BETWEEN #{begin} AND #{end}
-	</select>
     
 </mapper>

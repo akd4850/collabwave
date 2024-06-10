@@ -21,10 +21,6 @@
                         <table class="table table-hover table-striped">
                             <tbody>
                                 <tr>
-                                    <th>현재 시간</th>
-                                    <td>15:30:00(카운트한다)</td>
-                                </tr>
-                                <tr>
                                     <th>출근 시간</th>
                                     <td>08:50:10</td>
                                 </tr>
@@ -50,7 +46,7 @@
                         근퇴 현황
                     </div>
                     <div class="text-center">
-                        <h4><a href="#"><</a> 2023.05 <a href="#">></a></2023.05></h4>
+                        <h4><a href="#"></a> 2023.05 <a href="#">></a></2023.05></h4>
                     </div>
                     <div class="content table-responsive table-full-width">
                         <table class="table table-hover table-striped">

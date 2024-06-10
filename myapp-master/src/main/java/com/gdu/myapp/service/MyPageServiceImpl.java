@@ -15,6 +15,11 @@ public class MyPageServiceImpl implements MyPageService {
 	private final EmpMapper empMapper;
 	
 	@Override
+	  public EmpDto getEmpDetail(String empCode) {
+	    return empMapper.getEmpDetail(empCode);
+	  }
+	
+	@Override
 	public int modifyInfo(HttpServletRequest request) {
 		String empCode = request.getParameter("empCode");
 		String phone = request.getParameter("phone");
@@ -39,8 +44,19 @@ public class MyPageServiceImpl implements MyPageService {
 		return result;
 	}
 	
+	
+	
 	@Override
-	  public EmpDto getEmpDetail(String empCode) {
-	    return empMapper.getEmpDetail(empCode);
-	  }
+	public int modifyProfile(HttpServletRequest request) {
+		String empCode = request.getParameter("empCode");
+		String profileFileName = request.getParameter("profileFileName");
+		
+		EmpDto emp = EmpDto.builder()
+				.empCode(empCode)
+				.profileFileName(profileFileName)
+				.build();
+		int result = empMapper.updateProfile(emp);
+	
+		return result;
+	}
 }

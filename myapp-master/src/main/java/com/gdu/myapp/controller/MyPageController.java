@@ -35,10 +35,14 @@ public class MyPageController {
 		return "contents/myPage/myPage";
 	}
 	
-	@PostMapping(value="/myPage/modifyInfo.page", produces="application/json")
+	@PostMapping(value="/modifyInfo.page", produces="application/json")
 	  public ResponseEntity<Map<String, Object>> modifyInfo(HttpServletRequest request) {
-	    return ResponseEntity.ok(Map.of("modifyInfo", myPageService.modifyInfo(request)));
+	    return ResponseEntity.ok(Map.of("modifyInfoCount", myPageService.modifyInfo(request)));
 	  }
 	
+	@PostMapping(value="/modifyProfile.page", produces="application/json")
+	  public ResponseEntity<Map<String, Object>> modifyProfile(HttpServletRequest request) {
+		return ResponseEntity.ok(Map.of("modifyProfileCount", myPageService.modifyProfile(request)));
+	}
 	
 }

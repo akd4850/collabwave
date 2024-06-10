@@ -35,6 +35,7 @@
                             <p class="text-info">
                                 ${messageSource.getMessage('apprLineHelpMessage', null, locale)}
                             </p>
+                            <button type="button" class="btn btn-info btn-fill" data-toggle="modal" data-target="#formModalLine">내 결재선</button>
                             <table class="table table-hover table-striped">
                                 <thead>
                                     <th>${messageSource.getMessage('turn', null, locale)}</th>
@@ -115,9 +116,103 @@
         bIsSignTable = true;
         
         $('#add-appr').submit(function(event){
-            //event.preventDefault();
             $('#edsmContent').val($('#sampleContent').html());
-            //$('#add-appr').submit();
         });
     });
+</script>
+
+<div class="modal fade" id="formModalLine" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">내 결재선 선택</h4>
+            </div>
+        <div class="modal-body">
+            <table class="table table-hover table-striped" id="tr-line">
+                <tr>
+                    <th>결재선 이름</th>
+                    <th>선택</th>
+                </tr>
+            </table>
+        </div>
+            <div class="modal-footer">
+                <!--<button type="button" class="btn btn-info btn-fill" onclick="">확인</button>-->
+                <button type="button" class="btn btn-danger btn-fill" data-dismiss="modal">취소</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let aprrNo = -1;
+
+$('#formModalLine').on('show.bs.modal', function (event) {
+    getLineList();
+});
+$('#formModalLine').on('hidden.bs.modal', function (event) {
+    if(apprNo != -1) {
+        $.ajax({
+            type: 'GET',
+            url: fnGetContextPath() + '/edsm/getMyLineDetail.do',
+            data: 'apprNo=' + apprNo,
+            contentType: "application/json; charset=utf-8;",
+            success: (resData) => {
+                console.log(resData);
+                let list = resData.itemList;
+                for(let i = 0; i < list.length; i++) {
+                    empArr.push(list[i].customAppr.emp.empCode);
+                    nameArr.push(list[i].customAppr.emp.empName);
+                    let dept = (list[i].customAppr.emp.dept.deptName === undefined) ? '' : list[i].customAppr.emp.dept.deptName;
+                    
+                    $('#appr-line').append(
+                        "<tr id=tr_" + list[i].customAppr.emp.empCode + "><td>" + apprSeq++ + 
+                        "</td><td>" + list[i].customAppr.emp.empName + 
+                        "</td><td>" + dept + 
+                        "</td><td>" + 
+                        "<input type='hidden' name='empCode' value='" + list[i].customAppr.emp.empCode + "'>" +
+                        "<input type='button' onclick='deleteApprEmpcodeFromLine(\"" + list[i].customAppr.emp.empCode + "\", \"" + list[i].customAppr.emp.empName + "\");" + 
+                        "deleteApprFromContent();' " +
+                        "value='삭제' class='btn btn-info btn-fill'>" +
+                        "</td></tr>");
+                        
+                    if(bIsSignTable) {
+                        $('#tr1').append('<td></td>');	
+                        $('#tr2').append('<td class="td-img">' + list[i].customAppr.emp.empName + '</td>');
+                        $('#tr3').append('<td></td>');
+                    }			
+                }
+            },
+            error: (jqXHR) => {
+                alert(jqXHR.statusText + '(' + jqXHR.status + ')');
+            }
+        })
+    }
+})
+function setLineNumber(lineNumber) {
+    apprNo = lineNumber;
+}
+
+function getLineList() {
+    $.ajax({
+        type: 'GET',
+        url: fnGetContextPath() + '/edsm/getLineList.do',
+        data: 'empCode=${sessionScope.emp.empCode}',
+        contentType: "application/json; charset=utf-8;",
+        success: (resData) => {
+            //customApprNo, lineName
+            for(let i = 0; i < resData.lineList.length; i++) {
+                $('#tr-line').append(`
+                    <tr>
+                        <td>` + resData.lineList[i].lineName + `</td>
+                        <td><button type="button" class="btn btn-xs btn-fill" style="background-color:green;border:none" data-dismiss="modal" onclick="setLineNumber(` + resData.lineList[i].customApprNo + `)">선택</button></td>
+                    </tr>
+                `);
+            }
+        },
+        error: (jqXHR) => {
+            alert(jqXHR.statusText + '(' + jqXHR.status + ')');
+        }
+    });
+}
 </script>

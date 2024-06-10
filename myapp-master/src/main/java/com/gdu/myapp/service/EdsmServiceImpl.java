@@ -286,4 +286,17 @@ public class EdsmServiceImpl implements EdsmService {
     	
     	edsmMapper.addApprDo(map);
     }
+    
+    @Override
+    public ResponseEntity<Map<String, Object>> getLineList(HttpServletRequest request) {
+
+    	return new ResponseEntity<>(Map.of("lineList", edsmMapper.getLineListAll(request.getParameter("empCode"))), HttpStatus.OK);
+    }
+    
+    @Override
+    public ResponseEntity<Map<String, Object>> getMyLineDetail(HttpServletRequest request) {
+    	
+    	int apprNo = Integer.parseInt( request.getParameter("apprNo") );
+    	return new ResponseEntity<>(Map.of("itemList", edsmMapper.getLineDetail(apprNo)), HttpStatus.OK);
+    }
 }

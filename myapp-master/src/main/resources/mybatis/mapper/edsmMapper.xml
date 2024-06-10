@@ -210,5 +210,13 @@
 			 		#{edsmStatus},
 			 		#{edsmExpireDatetime})					
 	</insert>
+	
+	<select id="getLineListAll" resultType="EdsmCustomApprDto">
+		SELECT 	CUSTOM_APPR_NO,
+				EMP_CODE,
+				LINE_NAME
+		  FROM	EDSM_CUSTOM_APPROVAL_T
+		 WHERE	EMP_CODE = #{empCode}	 
+	</select>
     
 </mapper>

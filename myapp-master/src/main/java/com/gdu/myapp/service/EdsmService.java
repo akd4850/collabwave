@@ -26,4 +26,6 @@ public interface EdsmService {
     ResponseEntity<Map<String, Object>> getSampleList(HttpServletRequest request);
     void addAppr(HttpServletRequest request, Model model, String sampleCode);
     void addApprDo(HttpServletRequest request);
+    ResponseEntity<Map<String, Object>> getLineList(HttpServletRequest request);
+    ResponseEntity<Map<String, Object>> getMyLineDetail(HttpServletRequest request);
 }

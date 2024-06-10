@@ -219,4 +219,16 @@ public class EdsmController {
     	
     	return "redirect:/edsm/edsmMain.page";
     }
+    
+    @GetMapping(value="/getLineList.do", produces="application/json")
+	public ResponseEntity<Map<String, Object>> getLineList(HttpServletRequest request) {
+		
+    	return edsmService.getLineList(request);
+	}
+    
+    @GetMapping(value="/getMyLineDetail.do", produces="application/json")
+	public ResponseEntity<Map<String, Object>> getMyLineDetail(HttpServletRequest request) {
+		
+    	return edsmService.getMyLineDetail(request);
+	}
 }

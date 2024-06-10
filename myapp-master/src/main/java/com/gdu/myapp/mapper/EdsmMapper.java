@@ -30,4 +30,5 @@ public interface EdsmMapper {
 	int removeLine(int apprNo);
 	List<EdsmFormDto> getSampleListAll();
 	int addApprDo(Map<String, Object> map);
+	List<EdsmCustomApprDto> getLineListAll(String empCode);
 }

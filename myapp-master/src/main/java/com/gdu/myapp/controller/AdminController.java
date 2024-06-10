@@ -1,5 +1,8 @@
 package com.gdu.myapp.controller;
 
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -104,4 +107,9 @@ public class AdminController {
     return "contents/admin/admin";
 	}
 	
+	@GetMapping(value="/detailAjax.do", produces="application/json")
+	public ResponseEntity<Map<String, Object>> detailEmpAjax(@RequestParam String empCode, Model model) {
+
+	  return empService.getEmpDetailAjax(empCode);
+	}
 }

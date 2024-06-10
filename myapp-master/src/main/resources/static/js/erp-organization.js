@@ -4,6 +4,7 @@ let nameArr = [];
 let myEmpCode = '';
 
 let bIsSignTable = false;
+let bIsOrganiChart = false;
 let sampleContent;
 let signTable;
 let h2;
@@ -68,6 +69,9 @@ window.addEventListener('DOMContentLoaded', function(){
                     if(node.original.type === 'dept' && node.original.isAjaxOpen !== true) {
                         getOrganization(node);
                     } else if(node.original.type === 'person') {
+                        if(bIsOrganiChart == true) {
+                            getEmpDetail(node.original.id);							
+						}
                     }
                 }
             });

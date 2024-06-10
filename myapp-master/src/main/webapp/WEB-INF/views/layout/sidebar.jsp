@@ -108,6 +108,13 @@
                     <p>조직관리</p>
                 </a>
             </li>
+
+            <li>
+                <a href="/edsm/organizationChart.page">
+                    <i class="pe-7s-network"></i>
+                    <p>조직도</p>
+                </a>
+            </li>
         
         </ul>
   

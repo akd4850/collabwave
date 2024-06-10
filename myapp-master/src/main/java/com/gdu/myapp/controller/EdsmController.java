@@ -269,4 +269,12 @@ public class EdsmController {
     	
     	return "redirect:/edsm/edsmDetail.do?edsmNo=" + Integer.parseInt(request.getParameter("edsmNo"));
     }
+    
+    @GetMapping("/organizationChart.page")
+    public String organizationChart(HttpServletRequest request, Model model) {
+    	
+    	model.addAttribute("submenu", "orgChart.jsp");
+		
+		return "contents/edsm/organizationChart";
+    }
 }

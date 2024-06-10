@@ -1,5 +1,8 @@
 package com.gdu.myapp.service;
 
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 
 import com.gdu.myapp.dto.EmpDto;
@@ -17,4 +20,5 @@ public interface EmpService {
 	void loadEmpLeaveList(HttpServletRequest request, Model model);
 	int deleteEmp(String empCode);
 //	int modifyEmp(HttpServletRequest request);
+	ResponseEntity<Map<String, Object>> getEmpDetailAjax(String empCode);
 }

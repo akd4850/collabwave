@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.gdu.myapp.dto.CustomApprItemDto;
+import com.gdu.myapp.dto.EdsmApprDto;
 import com.gdu.myapp.dto.EdsmCustomApprDto;
 import com.gdu.myapp.dto.EdsmDto;
 import com.gdu.myapp.dto.EdsmFormDto;
@@ -31,4 +32,7 @@ public interface EdsmMapper {
 	List<EdsmFormDto> getSampleListAll();
 	int addApprDo(Map<String, Object> map);
 	List<EdsmCustomApprDto> getLineListAll(String empCode);
+	EdsmApprDto getApprItemLastID();
+	int getApprSeqNextval();
+	int registerEdsmLineItem(Map<String, Object> map);
 }

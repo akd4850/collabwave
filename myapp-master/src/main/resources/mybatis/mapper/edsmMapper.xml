@@ -218,5 +218,21 @@
 		  FROM	EDSM_CUSTOM_APPROVAL_T
 		 WHERE	EMP_CODE = #{empCode}	 
 	</select>
+	
+	<select id="getApprSeqNextval">
+		SELECT EDSM_SEQ.CURRVAL FROM DUAL
+	</select>
+	
+	<select id="getApprItemLastID" resultType="EdsmApprDto">
+		SELECT APPR_NO FROM (SELECT APPR_NO FROM EDSM_APPROVAL_T) WHERE ROWNUM = 1
+	</select>
+	
+	<insert id="registerEdsmLineItem" parameterType="Map">
+		INSERT INTO EDSM_APPROVAL_T 
+					(APPR_NO, EDSM_NO, EMP_CODE, APPR_SEQ, APPR_STATUS) 
+    	<foreach collection="empCodeList" item="empCode" index="index" separator=" UNION ALL ">
+			SELECT #{curApprItemSeq}+#{index}+1, #{edsmNo}, #{empCode}, #{index}+1, #{apprStatus} FROM DUAL
+        </foreach>
+	</insert>
     
 </mapper>

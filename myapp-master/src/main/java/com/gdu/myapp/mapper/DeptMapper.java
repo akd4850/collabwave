@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.gdu.myapp.dto.DeptDto;
+import com.gdu.myapp.dto.EmpDto;
 
 @Mapper
 public interface DeptMapper {
@@ -14,5 +15,5 @@ public interface DeptMapper {
 	int getDeptCount();
 	DeptDto getDeptDetail(String deptCode);
 	int insertDept(DeptDto dept);
-	List<DeptDto> getDeptMember(Map<String, Object> map);
+	List<EmpDto> getDeptMember(String deptCode);
 }

@@ -1,9 +1,7 @@
 package com.gdu.myapp.service;
 
 import java.util.List;
-import java.util.Map;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 
 import com.gdu.myapp.dto.DeptDto;
@@ -19,5 +17,5 @@ public interface DeptService {
 	void getDeptListForManage(HttpServletRequest request, Model model);
 	DeptDto getDeptDetail(String deptCode);
 	void registerDept(HttpServletRequest request, HttpServletResponse response);
-	Map<String, Object> getDeptMember(HttpServletRequest request);
+	List<EmpDto> getDeptMember(String deptCode);
 }

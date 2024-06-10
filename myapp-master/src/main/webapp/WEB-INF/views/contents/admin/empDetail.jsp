@@ -85,6 +85,15 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>직급</label>
+                        <input type="text" class="form-control" placeholder="직급" value="${emp.position.positionName}">
+                    </div>
+                </div>
+            </div>
+
             <button type="button" id="btn-update" class="btn btn-info btn-fill">수정</button>
             <button type="button" id="btn-remove" class="btn btn-info btn-fill">삭제</button>
             <button type="button" id="btn-cancel" class="btn btn-danger btn-fill">취소</button>

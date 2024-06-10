@@ -1,8 +1,5 @@
 package com.gdu.myapp.controller;
 
-import java.util.Map;
-
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -83,6 +80,7 @@ public class AdminController {
 	@GetMapping("/dept/detail.do")
   public String detailDept(@RequestParam String deptCode, Model model) {
     model.addAttribute("dept", deptService.getDeptDetail(deptCode));
+    model.addAttribute("memberList", deptService.getDeptMember(deptCode));
     model.addAttribute("submenu", "deptDetail.jsp");
     return "contents/admin/admin";
 	}
@@ -98,11 +96,7 @@ public class AdminController {
     deptService.registerDept(request, response);
   }
 	
-	@GetMapping(value="/dept/getDeptMember.do", produces="application/json")
-	public ResponseEntity<Map<String, Object>> getDeptMember(HttpServletRequest request){
-	  return ResponseEntity.ok(deptService.getDeptMember(request));
-	}
-	
+	    
 	@GetMapping("/pos/management.page")
   public String posManage(HttpServletRequest request, Model model) {
     model.addAttribute("submenu", "posManage.jsp");

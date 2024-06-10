@@ -82,7 +82,7 @@
            E.MOBILE,
            E.EMAIL
       FROM EMP_T E
-           INNER JOIN DEPT_T  D ON E.DEPT_CODE = D.DEPT_CODE
+           LEFT JOIN DEPT_T  D ON E.DEPT_CODE = D.DEPT_CODE
            INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
      WHERE E.EMP_CODE = #{empCode}
   </select>
@@ -117,7 +117,8 @@
       )
   </insert>
   
-  <update id="updateEmployee">
+  <update id="updateEmployee"
+          parameterType="EmpDto">
 	UPDATE EMP_T
 	   SET EMP_NAME = #{empName},
 	       EMP_CODE = #{empCode},

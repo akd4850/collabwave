@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -123,13 +122,8 @@ public class DeptServiceImpl implements DeptService {
 	}
 	
 	@Override
-	public Map<String, Object> getDeptMember(HttpServletRequest request) {
-	  
-	  String deptCode = request.getParameter("deptCode");
-	  
-	  Map<String, Object> map = Map.of("deptCode", deptCode);
-	  
-	  return Map.of("deptMember", deptMapper.getDeptMember(map));
+	public List<EmpDto> getDeptMember(String deptCode) {
+	  return deptMapper.getDeptMember(deptCode);
 	}
-	  
+	
 }

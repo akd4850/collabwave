@@ -166,7 +166,6 @@ public class EmpServiceImpl implements EmpService {
     model.addAttribute("beginNo", total - (page - 1) * display);
     model.addAttribute("empLeaveList", empLeaveList);
     model.addAttribute("paging", myPageUtils.getPaging(request.getContextPath() + "contents/employee/list.do", null, display));
-    
   }
   
   @Override
@@ -174,7 +173,23 @@ public class EmpServiceImpl implements EmpService {
     return empMapper.removeEmp(empCode);
   }
   
-
+  
+//  @Override
+//  public int modifyEmp(HttpServletRequest request) {
+//    
+//    String empCode = request.getParameter("empCode");
+//    String empName = MySecurityUtils.getPreventXss(request.getParameter("empName"));
+//    String password = MySecurityUtils.getSha256(request.getParameter("password"));
+//    String mobile = request.getParameter("mobile");
+//    String email = request.getParameter("email");
+//    String zipCode = request.getParameter("zipCode");
+//    String address = request.getParameter("address");
+//    String detailAddress = request.getParameter("detailAddress"); 
+//    String positionCode = request.getParameter("positionCode");
+//    String birthdayDate = request.getParameter("birthdayDate");
+//    
+//    return 0;
+//  }
 
 
 }

@@ -90,11 +90,14 @@
   </insert>
   
   <select id="getDeptMember"
-          parameterType="Map"
-          resultMap="DeptDtoMap">
+  	      resultType="EmpDto">
 	SELECT E.EMP_NAME
-      FROM EMP_T E INNER JOIN DEPT_T D
-        ON D.DEPT_CODE = #{deptCode}
+      FROM DEPT_T D RIGHT JOIN EMP_T E
+        ON D.DEPT_CODE = E.DEPT_CODE
+     <where>
+	    <if test="deptCode!='d0000'">E.DEPT_CODE = #{deptCode}</if>
+	    <if test="deptCode=='d0000'">E.DEPT_CODE IS NULL</if>
+    </where>
   </select>
 	
 </mapper>

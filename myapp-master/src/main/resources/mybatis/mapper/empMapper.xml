@@ -75,6 +75,7 @@
            E.JOIN_DATE,
            D.DEPT_NAME,
            P.POSITION_NAME,
+           E.PROFILE_FILE_NAME,
            E.ZIP_CODE,
            E.ADDRESS,
            E.DETAIL_ADDRESS,
@@ -147,6 +148,23 @@
   
   <update id="registerSign" parameterType="EmpDto">
 	UPDATE EMP_T SET SIGN_FILE_NAME = #{signFileName} WHERE EMP_CODE = #{empCode}
+  </update>
+  
+  <update id="updateInfo">
+	UPDATE EMP_T
+	   SET PHONE = #{phone},
+	       MOBILE = #{mobile},
+	       EMAIL = #{email},
+	       ZIP_CODE = #{zipCode},
+	       ADDRESS = #{address},
+		   DETAIL_ADDRESS = #{detailAddress}
+	 WHERE EMP_CODE= #{empCode}
+  </update>
+
+  <update id="updateProfile">
+	UPDATE EMP_T
+	   SET PROFILE_FILE_NAME = #{profileFileName}
+	 WHERE EMP_CODE = #{empCode}
   </update>
 
 </mapper>

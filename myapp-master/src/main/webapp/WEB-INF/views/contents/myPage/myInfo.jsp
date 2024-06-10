@@ -6,6 +6,7 @@
 <c:set var="dt" value="<%=System.currentTimeMillis()%>"/>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <style>
     h2{
@@ -42,6 +43,11 @@
     cursor: pointer;
     transition: box-shadow 0.2s;
 }
+
+#previewImg{
+    max-width: 1000px;
+    max-height: 500px;
+}
 </style>
 
 <div class="main-content">
@@ -54,42 +60,42 @@
                         <h4 class="title">내 정보</h4>
                     </div>
                     <div class="content">
-                        <form>
+                        <form class="myInfoForm">
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>이름</label>
-                                        <input type="text" class="form-control" placeholder="이름" value="${emp.empName}" disabled>
+                                        <input type="text" class="form-control" name="empName" placeholder="이름" value="${emp.empName}" disabled>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>사번</label>
-                                        <input type="text" class="form-control" placeholder="사번" value="${emp.empCode}" disabled>
+                                        <input type="text" class="form-control" name="empCode"placeholder="사번" value="${emp.empCode}" disabled>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>직급</label>
-                                        <input type="text" class="form-control" placeholder="직급" value="${emp.position.positionName}" disabled>
+                                        <input type="text" class="form-control" name="positionName" placeholder="직급" value="${emp.position.positionName}" disabled>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>부서</label>
-                                        <input type="text" class="form-control" placeholder="부서" value="${emp.dept.empName}" disabled>
+                                        <input type="text" class="form-control" name="deptName" placeholder="부서" value="${emp.dept.deptName}" disabled>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>입사일자</label>
-                                        <input type="text" class="form-control" placeholder="입사일자" value="${emp.joinDate}" disabled>
+                                        <input type="text" class="form-control" name="joinDate" placeholder="입사일자" value="${emp.joinDate}" disabled>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>생년월일</label>
-                                        <input type="text" class="form-control" placeholder="생년월일" value="${emp.birthdayDate}" disabled>
+                                        <input type="text" class="form-control" name="birthdayDate" placeholder="생년월일" value="${emp.birthdayDate}" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -98,33 +104,33 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>전화번호</label>
-                                        <input type="text" class="form-control" placeholder="전화번호" value="${emp.phone}">
+                                        <input type="text" class="form-control" name="phone" placeholder="전화번호" value="${emp.phone}">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>휴대전화</label>
-                                        <input type="text" class="form-control" placeholder="휴대전화" value="${emp.mobile}">
+                                        <input type="text" class="form-control" name="mobile" placeholder="휴대전화" value="${emp.mobile}">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>이메일</label>
-                                        <input type="text" class="form-control" placeholder="이메일" value="${emp.email}">
+                                        <input type="text" class="form-control" name="email" placeholder="이메일" value="${emp.email}">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>우편번호</label>
-                                        <input type="text" class="form-control" placeholder="우편번호" value="${emp.zipCode}">
+                                        <input type="text" class="form-control" name="zipCode" placeholder="우편번호" value="${emp.zipCode}">
                                     </div>
                                     <div class="form-group">
                                         <label>주소</label>
-                                        <input type="text" class="form-control" placeholder="주소" value="${emp.address}">
+                                        <input type="text" class="form-control" name="address" placeholder="주소" value="${emp.address}">
                                     </div>
                                     <div class="form-group">
                                         <label>상세주소</label>
-                                        <input type="text" class="form-control" placeholder="상세주소" value="${emp.detailAddress}">
+                                        <input type="text" class="form-control" name="detailAddress" placeholder="상세주소" value="${emp.detailAddress}">
                                     </div>
                                 </div>
                             </div>
@@ -145,11 +151,17 @@
                         
                         <div class="author">
                              <a href="#">
-                            <img class="avatar border-gray" src="${contextPath}/resources/img/avatar.jpg" alt="..."/>
-
-                              <h4 class="title">홍길동<br />
-                                 <small>사원</small>
-                              </h4>
+                                <c:choose>
+                                    <c:when test="${emp.profileFileName == null}">
+                                        <img class="avatar border-gray" src="${contextPath}/resources/img/new_logo.png" alt="기본 프로필" loading="lazy"/>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <img class="avatar border-gray" src="${emp.profileFileName}" alt="프로필 이미지" loading="lazy"/>
+                                    </c:otherwise>
+                                </c:choose>
+                                <h4 class="title">${emp.empName}<br/>
+                                    <small>${emp.position.positionName}</small>
+                                </h4>
                             </a>
                         </div>
                     </div>
@@ -171,12 +183,15 @@
     <div class="modal_popup">
         <h3>프로필 사진 변경</h3>
         <br>
-        <div class="uploadImg">
-            <img id="previewImg" width="350px" height="450px">
-            <div class="filebox">
-                <input type="file" id="file1" class="upload-hidden" name="file1">
+        <form class="profileForm">
+            <div class="uploadImg">
+                <img id="previewImg">
+                <div class="filebox">
+                    <input type="hidden" name="empCode" value="${emp.empCode}">
+                    <input type="file" id="file1" class="upload-hidden" name="profileFileName">
+                </div>
             </div>
-        </div>
+        </form>
         <br>
         <button type="submit" class="btn btn-info btn-fill" id="profile_modify">변경하기</button>
         <button type="button" class="btn btn-info btn-fill" id="profile_modal_close">닫기</button>
@@ -188,51 +203,55 @@
     <div class="modal_popup">
         <h3>패스워드 변경</h3>
             <br>
-            <div class="password">
-               <p>변경할 비밀번호</p>
-               <input type="password" class="form-control" id="pw" placeholder="8~15자 영문,숫자,특수문자 중 2개이상" style="width: 500px;"> 
-               <div id="msg-pw" class="signup-alert"></div>
-            </div>
-            <br>
-            <div class="passwordRe">
-                <p>변경할 비밀번호</p>
-                <input type="password" class="form-control" id="pw2" placeholder="8~15자 영문,숫자,특수문자 중 2개이상" style="width: 500px;">
-                <div id="msg-pw2" class="signup-alert"></div>
-            </div>
-            <br>
+            <form>
+                <div class="password">
+                    <p>변경할 비밀번호</p>
+                    <input type="password" class="form-control" name="password" id="pw" placeholder="8~15자 영문,숫자,특수문자 중 2개이상" style="width: 500px;" autocomplete="off"> 
+                    <div id="msg-pw" class="signup-alert"></div>
+                </div>
+                <br>
+                <div class="passwordRe">
+                    <p>변경할 비밀번호</p>
+                    <input type="password" class="form-control" name="password2" id="pw2" placeholder="8~15자 영문,숫자,특수문자 중 2개이상" style="width: 500px;" autocomplete="off">
+                    <div id="msg-pw2" class="signup-alert"></div>
+                </div>
+            </form>
+                <br>
             
             <br>
-        <button type="submit" class="btn btn-info btn-fill" id="password_modify">변경하기</button>
+        <button type="button" class="btn btn-info btn-fill" id="password_modify">변경하기</button>
         <button type="button" class="btn btn-info btn-fill" id="password_modal_close">닫기</button>
     </div>
 
 </div>
+
+
+<!-- script -->
 
 <script>
 
 /* 개인 정보 수정 */
 
 const fnModifyInfo = () => {
-    $(document).on('click', '#btn_modify', (evt) => {
-    $.ajax({
-        type: 'POST',
-        url: '${contextPath}/myPage/modifyInfo.page',
-        data: $(evt.target).serialize,
-        dataType: 'json',
-        success: (resData) => {
-            if(resData.modifyInfoCount === 1) {
-                alert('개인 정보가 수정되었습니다.');
-            } else {
-                alert('개인 정보 수정이 실패했습니다.');   
+    $(document).on('submit', '#btn_modify', (evt) => {
+        $.ajax({
+            type: 'POST',
+            url: '${contextPath}/myPage/modifyInfo.page',
+            data: $(evt.target).closest('.myInfoForm').serialize(), // form 데이터를 직렬화
+            dataType: 'json',
+            success: (resData) => {
+                if (resData.modifyInfoCount === 1) {
+                    alert('개인 정보가 수정되었습니다.');
+                } else {
+                    alert('개인 정보 수정이 실패했습니다.');   
+                }
+            },
+            error: (jqXHR) => {
+                alert(jqXHR.statusText + '(' + jqXHR.status + ')');
             }
-          }
-        ,
-        error: (jqXHR) => {
-            alert(jqXHR.statusText + '(' + jqXHR.status + ')');
-        }
-    })
-  })
-}
+        });
+    });
+};
 
 fnModifyInfo();
 
@@ -297,6 +316,31 @@ $(document).ready(function(){
 	    }
 	}
 
+    const fnModifyProfile = () => {
+    $(document).on('submit', '#profile_modify', (evt) => {
+        $.ajax({
+            type: 'POST',
+            url: '${contextPath}/myPage/modifyProfile.page',
+            data: $(evt.target).closest('.profileForm').serialize(), // form 데이터를 직렬화
+            dataType: 'json',
+            success: (resData) => {
+                if (resData.modifyProfileCount === 1) {
+                    alert('프로필 사진이 변경되었습니다.');
+                } else {
+                    alert('프로필 사진 수정에 실패했습니다.');   
+                }
+            },
+            error: (jqXHR) => {
+                alert(jqXHR.statusText + '(' + jqXHR.status + ')');
+            }
+        });
+    });
+};
+
+fnModifyProfile();    
+
+
+
 /* 비밀번호 변경 */
 
     /* 비밀번호 검증 */
@@ -350,8 +394,29 @@ let passwordConfirm = false;
 }
 
 const fnModifyPassword = () => {
-    
-}
+    $(document).on('submit', '#password_modify', (evt) => {
+        $.ajax({
+            type: 'POST',
+            url: '${contextPath}/myPage/passwordModify.page',
+            data: formData.serialize(), // form 데이터를 직렬화
+            dataType: 'json',
+            success: (resData) => {
+                if (resData.modifyPasswordCount === 1) {
+                    alert('비밀번호가 변경되었습니다.');
+                } else {
+                    alert('비밀번호 변경에 실패했습니다.');   
+                }
+            },
+            error: (jqXHR) => {
+                alert(jqXHR.statusText + '(' + jqXHR.status + ')');
+            }
+        });
+    });
+};
+
+fnModifyPassword(); 
+
+
 
 
 fnCheckPassword();
@@ -381,6 +446,7 @@ modalOpen2.addEventListener('click',function(){
 modalClose2.addEventListener('click',function(){
     modal2.style.display = 'none';
 });
+
 
 
 

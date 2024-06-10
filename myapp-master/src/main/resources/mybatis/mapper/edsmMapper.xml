@@ -411,5 +411,9 @@
     <update id="updateAppr" parameterType="Map">
 		UPDATE EDSM_APPROVAL_T SET APPR_STATUS = #{apprStatus}, APPR_COMMENT = #{comment}, APPR_DATETIME = CURRENT_DATE WHERE APPR_NO = #{apprNo}
 	</update>
+	
+	<update id="updateEdsm" parameterType="Map">
+		UPDATE EDSM_T SET EDSM_SEQ = #{edsmSeq} WHERE EDSM_NO = #{edsmNo}
+	</update>
     
 </mapper>

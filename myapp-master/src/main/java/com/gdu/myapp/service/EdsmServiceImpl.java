@@ -428,5 +428,10 @@ public class EdsmServiceImpl implements EdsmService {
     									 "apprNo", apprNo);
     	
     	edsmMapper.updateAppr(map);
+    	
+    	Map<String, Object> edsmMap = Map.of("edsmNo", edsmNo,
+											 "edsmSeq", edsmSeq + 1);
+
+    	edsmMapper.updateEdsm(edsmMap);
     }
 }

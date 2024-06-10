@@ -40,7 +40,7 @@
                 </tr>
             </tbody>
         </table>
-        <c:if test="${edsm.edsmSeq == appr.apprSeq && edsm.emp.empCode == sessionScope.emp.empCode}">
+        <c:if test="${edsm.edsmSeq == appr.apprSeq && appr.emp.empCode == sessionScope.emp.empCode}">
             <form action="${contextPath}/edsm/confirmAppr.do" method="post">
                 <div class="content">
                     <div class="form-group">

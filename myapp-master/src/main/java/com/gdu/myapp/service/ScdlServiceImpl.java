@@ -15,6 +15,7 @@ public class ScdlServiceImpl implements ScdlService {
 
     private final ScdlMapper scdlMapper;
 
+    // 스케쥴 등록하기 INSERT 
     @Override
     public int registerScheduler(HttpServletRequest request) {
         String scdlTitle = request.getParameter("scdlTitle");
@@ -50,5 +51,6 @@ public class ScdlServiceImpl implements ScdlService {
         return scdlMapper.insertScheduler(scdl);
     }
     
+    // 스케쥴 불러오기 SELECT 
     
 }

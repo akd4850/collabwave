@@ -17,7 +17,8 @@
     <result property="scdlPublicYn" column="SCDL_PUBLIC_YN" />
   </resultMap>
 
-  <insert id="insertScheduler" parameterType="ScdlDto">
+  <insert id="insertScheduler" 
+  				parameterType="ScdlDto">
     INSERT INTO SCDL_T (
         SCDL_NO,
         EMP_CODE,

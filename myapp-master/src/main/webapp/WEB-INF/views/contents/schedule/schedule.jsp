@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <c:set var="contextPath" value="<%=request.getContextPath()%>"/>
@@ -23,11 +22,9 @@
             </div>
             <div class="col-md-10">
                 <div class="card card-calendar">
-                
                     <!-- 
                     <div id="scheduleCalendar"></div>                    
                     -->
-                    
                     <div id='calendar'></div> 
                     
                 </div>
@@ -42,9 +39,52 @@
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth'
+      initialView: 'dayGridMonth', 
+	    headerToolbar: {
+	    	  left : 'prev next today',
+					center : 'title',
+					right : 'dayGridMonth timeGridWeek timeGridDay listWeek'
+	    },
+	    titleFormat : function( date ) {
+				return date.date.year + '년 ' + (parseInt(date.date.month) + 1) + '월';
+			},
+			selectable : true, // 달력 일자 드래그 설정가능
+			droppable : true, 
+			editable : true, 
+			nowIndicator: true, // 현재 시간 마크
+			locale: 'ko' // 한국어 설정
+			, 
+		      events: [
+                  	{
+                      title: '시험 결과 발표',
+                      start: '2024-06-21 13:00:00',
+                      
+                      color: 'red'
+                  	},
+                    
+                  	{
+                      title: '파이널 프로젝트 기간',
+                      start: '2024-05-14',
+                      end: '2024-06-20',
+                      
+                      color: 'blue'
+                    },
+                  	
+                  	{
+                        title: '과정 종강일',
+                        start: '2024-06-24',
+                        
+                        color: 'orange'
+                      }
+                  ]
     });
+    
     calendar.render();
+    
+	request.fail(function( jqXHR, textStatus ) {
+		  alert( "Request failed: " + textStatus );
+		});
+    
   });
 
 $(function(){
@@ -60,17 +100,26 @@ $(function(){
 			
 			var calendarEl = document.getElementById('calendar');
 			
-		    var calendar = new FullCalendar.Calendar(calendarEl, {
-		      initialView: 'dayGridMonth',
-		      headerToolbar: {
-		        left: 'prev,next today',
-		        center: 'title',
-		        right: 'dayGridMonth,timeGridWeek,timeGridDay'
-		      },
-		      events: data
-		    });
-	
+			var calendar = new FullCalendar.Calendar(calendarEl, {
+		      initialView: 'dayGridMonth'
+		      
+		      // events: data
+/* 		      events: [
+                  {
+                      title: '시험 결과 발표',
+                      start: '2024-06-03'
+                      },
+                      {
+                      title: '프로젝트 발표',
+                      start: '2024-06-10',
+                      end: '2024-06-13'
+                      }
+                  ] */
+		      
+		  });
+			
 		    calendar.render();								
+	
 	});
 	 
 	request.fail(function( jqXHR, textStatus ) {

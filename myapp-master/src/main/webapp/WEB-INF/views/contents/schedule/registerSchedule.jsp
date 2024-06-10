@@ -71,14 +71,9 @@
                       <textarea class="form-control" name="scdlContents" rows="5" placeholder="내용을 입력하세요" required></textarea>
                     </td>
                   </tr>
-                  <tr>
-                    <td class="center-align">직원 코드</td>
-                    <td colspan="2">
-                      <input type="text" class="form-control" name="empCode" placeholder="직원 코드를 입력하세요" required>
-                    </td>
-                  </tr>
                   <tr style="text-align: right">
                     <td colspan="3">
+                      <input type="hidden" name="empCode" value="${sessionScope.emp.empCode}"> 
                       <button type="submit" class="btn btn-info btn-fill">등록</button>
                       <a href="${contextPath}/schedule/mySchedule.page">
                       <button type="button" class="btn btn-info btn-fill">취소</button>
@@ -102,8 +97,8 @@
     width: auto;
   }
   .time-input:disabled {
-    background-color: #f0f0f0; /* light gray background */
-    color: #a0a0a0; /* gray text */
+    background-color: #f0f0f0; /* disabled background color */
+    color: #a0a0a0; /* disabled text color */
   }
   .checkbox-group {
     display: flex;
@@ -131,19 +126,22 @@
     timeInputs.forEach(function(input) {
       input.disabled = checkbox.checked;
       if (checkbox.checked) {
-        input.value = '00:00'; // 종일 일정 선택 시, 00:00 ~ 23:59 시간 설정 
+    	  
+        input.value = '00:00'; // 종일 일정 선택 시, 시작시간 00:00 ~ 종료시간 23:59 설정 
+        
       }
     });
   }
 
   function toggleOpenCheckbox(radio) {
     var openCheckbox = document.getElementById('open');
-    if (radio.value === 'company') {
+    if (radio.value === 'Y') { // 전사일정 선택 시 
       openCheckbox.disabled = true;
       openCheckbox.checked = true;
-    } else {
+    } else { // 개인일정 선택 시 
       openCheckbox.disabled = false;
       openCheckbox.checked = false;
     }
   }
+
 </script>

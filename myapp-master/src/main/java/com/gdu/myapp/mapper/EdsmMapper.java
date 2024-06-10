@@ -35,4 +35,6 @@ public interface EdsmMapper {
 	EdsmApprDto getApprItemLastID();
 	int getApprSeqNextval();
 	int registerEdsmLineItem(Map<String, Object> map);
+	int getDraftCount(String empCode);
+	List<EdsmDto> getDraftList(Map<String, Object> map);
 }

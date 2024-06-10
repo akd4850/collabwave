@@ -28,4 +28,7 @@ public interface EdsmService {
     ResponseEntity<Map<String, Object>> getMyLineDetail(HttpServletRequest request);
     void loadDraftList(HttpServletRequest request, Model model);
     void loadWaitList(HttpServletRequest request, Model model);
+    void loadExpectList(HttpServletRequest request, Model model);
+    void edsmDetail(HttpServletRequest request, Model model, int edsmNo);
+    ResponseEntity<Map<String, Object>> getApprList(HttpServletRequest request);
 }

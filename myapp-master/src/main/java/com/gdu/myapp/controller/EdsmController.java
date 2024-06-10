@@ -53,6 +53,15 @@ public class EdsmController {
 		
 		return "contents/edsm/edsm";
 	}
+	
+	@GetMapping("/edsmExpected.do")
+	public String edsmExpected(HttpServletRequest request, Model model) {
+
+		model.addAttribute("submenu", "edsmExpected.jsp");
+		edsmService.loadExpectList(request, model);
+		
+		return "contents/edsm/edsm";
+	}
 
 	@GetMapping("/edsmDrafting.do")
 	public String edsmDrafting(HttpServletRequest request, Model model) {
@@ -234,5 +243,22 @@ public class EdsmController {
 	public ResponseEntity<Map<String, Object>> getMyLineDetail(HttpServletRequest request) {
 		
     	return edsmService.getMyLineDetail(request);
+	}
+    
+    @GetMapping("/edsmDetail.do")
+    public String edsmDetail(HttpServletRequest request, Model model, @RequestParam int edsmNo) {
+
+    	model.addAttribute("submenu", "edsmDetail.jsp");
+    	model.addAttribute("edsmNo", edsmNo);
+        
+    	edsmService.edsmDetail(request, model, edsmNo);
+		
+		return "contents/edsm/edsm";
+    }
+    
+    @GetMapping(value="/getApprList.do", produces="application/json")
+	public ResponseEntity<Map<String, Object>> getApprList(HttpServletRequest request) {
+		
+    	return edsmService.getApprList(request);
 	}
 }

@@ -50,6 +50,7 @@
     	<association property="emp" javaType="EmpDto">
 	    	<id property="empCode" column="EMP_CODE" />
 	    	<result property="empName" column="EMP_NAME" />
+	    	<result property="signFileName" column="SIGN_FILE_NAME" />
     	</association>
     </resultMap>
     
@@ -61,6 +62,7 @@
 		<association property="emp" javaType="EmpDto">
 	    	<id property="empCode" column="EMP_CODE" />
 	    	<result property="empName" column="EMP_NAME" />
+	    	<result property="signFileName" column="SIGN_FILE_NAME" />
     	</association>
     	<association property="edsm" javaType="EdsmDto">
 	    	<id property="edsmNo" column="EDSM_NO" />
@@ -298,13 +300,13 @@
 	</select>
 	
 	<!-- 자기가 결제할 차례 문서 -->
-	<select id="getWaitCount" resultType="int">
+	<select id="getWaitCount" resultType="int" parameterType="Map">
 		 SELECT COUNT(*)
 		   FROM EDSM_APPROVAL_T A,
 		        EDSM_T B,
 		        EMP_T C
 		  WHERE A.EMP_CODE = #{empCode}
-		    AND A.APPR_STATUS = 'p0001'
+		    AND A.APPR_STATUS = #{status}
 		    AND B.EMP_CODE = C.EMP_CODE
 		    AND A.APPR_SEQ = B.EDSM_SEQ
 		    AND A.EDSM_NO = B.EDSM_NO
@@ -340,13 +342,59 @@
 				        EMP_T C,
 				        EDSM_SAMPLE_T D
 				  WHERE A.EMP_CODE = #{empCode}
-				    AND A.APPR_STATUS = 'p0001'
+				    AND A.APPR_STATUS = #{status}
 				    AND B.EMP_CODE = C.EMP_CODE
 				    AND A.APPR_SEQ = B.EDSM_SEQ
 				    AND A.EDSM_NO = B.EDSM_NO
 				    AND B.SAMPLE_DOT_CODE = D.SAMPLE_DOT_CODE
 				  ORDER BY A.APPR_SEQ)
 		  WHERE RN BETWEEN #{begin} AND #{end}
+	</select>
+	
+	<!-- 자기가 결제할 차례 문서 -->
+	<select id="getExpectedCount" resultType="int" parameterType="Map">
+		 SELECT COUNT(*)
+		   FROM EDSM_APPROVAL_T A,
+		        EDSM_T B,
+		        EMP_T C
+		  WHERE A.EMP_CODE = #{empCode}
+		    AND A.APPR_STATUS = #{status}
+		    AND B.EMP_CODE = C.EMP_CODE
+		    AND A.APPR_SEQ != B.EDSM_SEQ
+		    AND A.EDSM_NO = B.EDSM_NO
+		  ORDER BY A.APPR_SEQ
+	</select>
+    
+    <select id="getExpectedList" parameterType="Map" resultMap="EdsmApprMap">
+		 SELECT APPR_NO, EDSM_NO, EDSM_TITLE, EMP_CODE, EMP_NAME, APPR_SEQ, APPR_STATUS, APPR_COMMENT, APPR_DATETIME, EDSM_START_DATETIME, SAMPLE_TITLE
+		   FROM (SELECT ROW_NUMBER() OVER(ORDER BY A.APPR_NO) AS RN,
+				 		A.APPR_NO, A.EDSM_NO, B.EDSM_TITLE, B.EDSM_START_DATETIME, A.EMP_CODE,
+				        C.EMP_NAME, A.APPR_SEQ, A.APPR_STATUS, A.APPR_COMMENT, A.APPR_DATETIME, D.SAMPLE_TITLE
+				   FROM EDSM_APPROVAL_T A, EDSM_T B, EMP_T C, EDSM_SAMPLE_T D
+				  WHERE A.EMP_CODE = #{empCode}
+				    AND A.APPR_STATUS = #{status}
+				    AND B.EMP_CODE = C.EMP_CODE
+				    AND A.APPR_SEQ != B.EDSM_SEQ
+				    AND A.EDSM_NO = B.EDSM_NO
+				    AND B.SAMPLE_DOT_CODE = D.SAMPLE_DOT_CODE
+				  ORDER BY A.APPR_SEQ)
+		  WHERE RN BETWEEN #{begin} AND #{end}
+	</select>
+    
+    <select id="getEdsmDetail" resultMap="EdsmMap">
+		SELECT 	EDSM_NO, SAMPLE_DOT_CODE, A.EMP_CODE, ATTACH_NO, EDSM_CREATE_DATETIME, EDSM_CONTENT,
+				EDSM_START_DATETIME, EDSM_END_DATETIME, EDSM_STATUS, EDSM_EXPIRE_DATETIME,
+				EDSM_TITLE, EDSM_SEQ, EMP_NAME, SIGN_FILE_NAME
+		  FROM	EDSM_T A, EMP_T B
+		 WHERE	EDSM_NO = #{edsmNo} 
+           AND  A.EMP_CODE = B.EMP_CODE
+	</select>
+	
+	<select id="getEdsmAppr" resultMap="EdsmApprMap">
+		SELECT	APPR_NO, EDSM_NO, A.EMP_CODE, APPR_SEQ, APPR_STATUS, APPR_COMMENT, APPR_DATETIME, SIGN_FILE_NAME
+		  FROM	EDSM_APPROVAL_T A, EMP_T B
+		 WHERE	EDSM_NO = #{edsmNo}
+		   AND  A.EMP_CODE = B.EMP_CODE
 	</select>
     
 </mapper>

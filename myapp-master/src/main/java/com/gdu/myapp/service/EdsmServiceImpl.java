@@ -340,7 +340,11 @@ public class EdsmServiceImpl implements EdsmService {
     	HttpSession session = request.getSession();
 		EmpDto empDto = (EmpDto)session.getAttribute("emp");
     	
-    	int total = edsmMapper.getWaitCount(empDto.getEmpCode());
+		String status = "p0001";
+		Map<String, Object> countMap = Map.of("empCode", empDto.getEmpCode(),
+											  "status", status);
+		
+    	int total = edsmMapper.getWaitCount(countMap);
 	    int display = 10;
 	    Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
 	    int page = Integer.parseInt(opt.orElse("1"));
@@ -348,7 +352,8 @@ public class EdsmServiceImpl implements EdsmService {
 	    myPageUtils.setPaging(total, display, page);
 	    Map<String, Object> map = Map.of("begin", myPageUtils.getBegin()
 	                                   , "end", myPageUtils.getEnd()
-	                                   , "empCode", empDto.getEmpCode());
+	                                   , "empCode", empDto.getEmpCode()
+	                                   , "status", status);
 	    
 	    List<EdsmApprDto> waitList = edsmMapper.getWaitList(map);
 	    
@@ -357,5 +362,49 @@ public class EdsmServiceImpl implements EdsmService {
 	    model.addAttribute("paging", myPageUtils.getPagingNewVersion(request.getContextPath() + "/edsm/edsmWaiting.do"
 	                                                     , null
 	                                                     , display));
+    }
+    
+    @Override
+    public void loadExpectList(HttpServletRequest request, Model model) {
+
+    	HttpSession session = request.getSession();
+		EmpDto empDto = (EmpDto)session.getAttribute("emp");
+    	
+		String status = "p0001";
+		Map<String, Object> countMap = Map.of("empCode", empDto.getEmpCode(),
+											  "status", status);
+		
+    	int total = edsmMapper.getExpectedCount(countMap);
+	    int display = 10;
+	    Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
+	    int page = Integer.parseInt(opt.orElse("1"));
+	    
+	    myPageUtils.setPaging(total, display, page);
+	    Map<String, Object> map = Map.of("begin", myPageUtils.getBegin()
+	                                   , "end", myPageUtils.getEnd()
+	                                   , "empCode", empDto.getEmpCode()
+	                                   , "status", status);
+	    
+	    List<EdsmApprDto> expectList = edsmMapper.getExpectedList(map);
+	    
+	    model.addAttribute("beginNo", total - (page - 1) * display);
+	    model.addAttribute("expectList", expectList);
+	    model.addAttribute("paging", myPageUtils.getPagingNewVersion(request.getContextPath() + "/edsm/edsmWaiting.do"
+	                                                     , null
+	                                                     , display));
+    }
+    
+    @Override
+    public void edsmDetail(HttpServletRequest request, Model model, int edsmNo) {
+    	
+    	EdsmDto edsm = edsmMapper.getEdsmDetail(edsmNo);
+    	model.addAttribute("edsm", edsm);
+    }
+    
+    @Override
+    public ResponseEntity<Map<String, Object>> getApprList(HttpServletRequest request) {
+    	
+    	int edsmNo = Integer.parseInt(request.getParameter("edsmNo")); 
+    	return new ResponseEntity<>(Map.of("apprList", edsmMapper.getEdsmAppr(edsmNo)), HttpStatus.OK);
     }
 }

@@ -30,7 +30,7 @@
                     <tr>
                         <td>${pos.posCode}</td>
                         <td><a href="/admin/pos/detail.do?posCode=${pos.posCode}">${pos.posName}</a></td>
-                        <td>유저수</td>
+                        <td>이용자수</td>
                         <td>${pos.useYn}</td>
                     </tr>
                 </c:forEach>

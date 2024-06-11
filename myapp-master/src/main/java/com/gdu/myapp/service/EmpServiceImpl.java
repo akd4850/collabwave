@@ -2,6 +2,7 @@ package com.gdu.myapp.service;
 
 import java.io.PrintWriter;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -80,6 +81,35 @@ public class EmpServiceImpl implements EmpService {
 	}
 	
   @Override
+  public void loadEmpSearchList(HttpServletRequest request, Model model) {
+    
+    String query = request.getParameter("query");
+    
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("query", query);
+    
+    int total = empMapper.getSearchCount(map);
+    int display = 10;
+    
+    Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
+    int page = Integer.parseInt(opt.orElse("1"));
+    
+    myPageUtils.setPaging(total, display, page);
+    
+    map.put("begin", myPageUtils.getBegin());
+    map.put("end", myPageUtils.getEnd());
+    
+    List<EmpDto> empList = empMapper.getSearchList(map);
+    
+    model.addAttribute("beginNo", total - (page - 1) * display);
+    model.addAttribute("empList", empList);
+    model.addAttribute("paging", myPageUtils.getPaging(request.getContextPath() + "/admin/emp/search.do"
+                                                      , ""
+                                                      , 10
+                                                      , "query=" + query));
+  }
+	
+	@Override
   public void registerEmp(HttpServletRequest request, HttpServletResponse response) {
     
     // 전달된 파라미터
@@ -173,24 +203,37 @@ public class EmpServiceImpl implements EmpService {
     return empMapper.removeEmp(empCode);
   }
   
-  
-//  @Override
-//  public int modifyEmp(HttpServletRequest request) {
-//    
-//    String empCode = request.getParameter("empCode");
-//    String empName = MySecurityUtils.getPreventXss(request.getParameter("empName"));
-//    String password = MySecurityUtils.getSha256(request.getParameter("password"));
-//    String mobile = request.getParameter("mobile");
-//    String email = request.getParameter("email");
-//    String zipCode = request.getParameter("zipCode");
-//    String address = request.getParameter("address");
-//    String detailAddress = request.getParameter("detailAddress"); 
-//    String positionCode = request.getParameter("positionCode");
-//    String birthdayDate = request.getParameter("birthdayDate");
-//    
-//    return 0;
-//  }
-
+  @Override
+  public int modifyEmp(HttpServletRequest request) {
+    
+    String empCode = request.getParameter("empCode");
+    String empName = MySecurityUtils.getPreventXss(request.getParameter("empName"));
+    String password = MySecurityUtils.getSha256(request.getParameter("password"));
+    String mobile = request.getParameter("mobile");
+    String email = request.getParameter("email");
+    String zipCode = request.getParameter("zipCode");
+    String address = request.getParameter("address");
+    String detailAddress = request.getParameter("detailAddress");
+    String positionCode = request.getParameter("positionCode");
+    String birthdayDate = request.getParameter("birthdayDate");
+    
+    EmpDto emp = EmpDto.builder()
+                    .empCode(empCode)
+                    .empName(empName)
+                    .password(password)
+                    .mobile(mobile)
+                    .email(email)
+                    .zipCode(Integer.parseInt(zipCode))
+                    .address(address)
+                    .detailAddress(detailAddress)
+                    .positionCode(positionCode)
+                    .birthdayDate(LocalDate.parse(birthdayDate))
+                  .build();
+    
+    int modifyResult = empMapper.updateEmp(emp);
+    
+    return modifyResult;
+  }
 
 }
   

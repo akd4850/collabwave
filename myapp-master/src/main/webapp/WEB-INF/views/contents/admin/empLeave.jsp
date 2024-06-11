@@ -19,6 +19,7 @@
                     <th>부서</th>
                     <th>직급</th>
                     <th>연락처</th>
+                    <th>입사일자</th>
                     <th>퇴사일자</th>
                 </tr>
             </thead>
@@ -29,6 +30,7 @@
                         <td>${empL.dept.deptName}</td>
                         <td>${empL.position.positionName}</td>
                         <td>${empL.mobile}</td>
+                        <td>${empL.joinDate}</td>
                         <td>${empL.leaveDate}</td>
                     </tr>
                 </c:forEach>

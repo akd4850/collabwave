@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class PositionDto {
-	private String positionCode, positionName;
-	private char useYn;
+  private String positionCode, positionName;
+  private char useYn;
 }

@@ -16,8 +16,9 @@ public interface EmpMapper {
 	int registerSign(EmpDto empDto);
 	int insertEmployee(EmpDto employee);
 	EmpDto getEmpDetail(String empCode);
-	int updateEmployee(String empCode);
 	List<EmpDto> getEmpLeaveList(Map<String, Object> map);
 	int removeEmp(String empCode);
 	int updateEmp(EmpDto emp);
-}
+	List<EmpDto> getSearchList(Map<String, Object> map);
+	int getSearchCount(Map<String, Object> map);
+;}

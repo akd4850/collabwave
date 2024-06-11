@@ -14,5 +14,6 @@ public interface EmpService {
 	EmpDto getEmpDetail(String empCode);
 	void loadEmpLeaveList(HttpServletRequest request, Model model);
 	int deleteEmp(String empCode);
-//	int modifyEmp(HttpServletRequest request);
+  int modifyEmp(HttpServletRequest request);
+  void loadEmpSearchList(HttpServletRequest request, Model model);
 }

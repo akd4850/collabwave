@@ -49,7 +49,7 @@ public class EmpServiceImpl implements EmpService {
 				// 세션 설정
 				HttpSession session = request.getSession();
 				session.setAttribute("emp", empDto);
-				session.setMaxInactiveInterval(60 * 10);
+				//session.setMaxInactiveInterval(60 * 10);
 
 				// 쿠키(아이디 저장)
 				Optional<String> optRemember = Optional.ofNullable(request.getParameter("rememberId"));

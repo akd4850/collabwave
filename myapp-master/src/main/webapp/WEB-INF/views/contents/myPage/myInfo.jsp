@@ -65,37 +65,37 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>이름</label>
-                                        <input type="text" class="form-control" name="empName" placeholder="이름" value="${emp.empName}" disabled>
+                                        <input type="text" class="form-control" name="empName" placeholder="이름" value="${emp.empName}" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>사번</label>
-                                        <input type="text" class="form-control" name="empCode"placeholder="사번" value="${emp.empCode}" disabled>
+                                        <input type="text" class="form-control" name="empCode"placeholder="사번" value="${emp.empCode}" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>직급</label>
-                                        <input type="text" class="form-control" name="positionName" placeholder="직급" value="${emp.position.positionName}" disabled>
+                                        <input type="text" class="form-control" name="positionName" placeholder="직급" value="${emp.position.positionName}" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>부서</label>
-                                        <input type="text" class="form-control" name="deptName" placeholder="부서" value="${emp.dept.deptName}" disabled>
+                                        <input type="text" class="form-control" name="deptName" placeholder="부서" value="${emp.dept.deptName}" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>입사일자</label>
-                                        <input type="text" class="form-control" name="joinDate" placeholder="입사일자" value="${emp.joinDate}" disabled>
+                                        <input type="text" class="form-control" name="joinDate" placeholder="입사일자" value="${emp.joinDate}" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>생년월일</label>
-                                        <input type="text" class="form-control" name="birthdayDate" placeholder="생년월일" value="${emp.birthdayDate}" disabled>
+                                        <input type="text" class="form-control" name="birthdayDate" placeholder="생년월일" value="${emp.birthdayDate}" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -134,7 +134,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-info btn-fill pull-right" id="btn_modify">수정</button>
+                            <button type="button" class="btn btn-info btn-fill pull-right" id="btn_modify">수정</button>
                             <div class="clearfix"></div>
                         </form>
                     </div>
@@ -188,12 +188,14 @@
                 <img id="previewImg">
                 <div class="filebox">
                     <input type="hidden" name="empCode" value="${emp.empCode}">
+                </div>
+                <div class="filebox">
                     <input type="file" id="file1" class="upload-hidden" name="profileFileName">
                 </div>
             </div>
+            <br>
+            <button type="button" class="btn btn-info btn-fill" id="profile_modify">변경하기</button>
         </form>
-        <br>
-        <button type="submit" class="btn btn-info btn-fill" id="profile_modify">변경하기</button>
         <button type="button" class="btn btn-info btn-fill" id="profile_modal_close">닫기</button>
     </div>
 </div>
@@ -233,7 +235,7 @@
 /* 개인 정보 수정 */
 
 const fnModifyInfo = () => {
-    $(document).on('submit', '#btn_modify', (evt) => {
+    $(document).on('click', '#btn_modify', (evt) => {
         $.ajax({
             type: 'POST',
             url: '${contextPath}/myPage/modifyInfo.page',
@@ -314,32 +316,7 @@ $(document).ready(function(){
 	        }
 	        reader.readAsDataURL(input.files[0]);
 	    }
-	}
-
-    const fnModifyProfile = () => {
-    $(document).on('submit', '#profile_modify', (evt) => {
-        $.ajax({
-            type: 'POST',
-            url: '${contextPath}/myPage/modifyProfile.page',
-            data: $(evt.target).closest('.profileForm').serialize(), // form 데이터를 직렬화
-            dataType: 'json',
-            success: (resData) => {
-                if (resData.modifyProfileCount === 1) {
-                    alert('프로필 사진이 변경되었습니다.');
-                } else {
-                    alert('프로필 사진 수정에 실패했습니다.');   
-                }
-            },
-            error: (jqXHR) => {
-                alert(jqXHR.statusText + '(' + jqXHR.status + ')');
-            }
-        });
-    });
-};
-
-fnModifyProfile();    
-
-
+	}  
 
 /* 비밀번호 변경 */
 
@@ -393,28 +370,6 @@ let passwordConfirm = false;
     else return { result : false, msg : '비밀번호 입력을 확인하세요.' };
 }
 
-const fnModifyPassword = () => {
-    $(document).on('submit', '#password_modify', (evt) => {
-        $.ajax({
-            type: 'POST',
-            url: '${contextPath}/myPage/passwordModify.page',
-            data: formData.serialize(), // form 데이터를 직렬화
-            dataType: 'json',
-            success: (resData) => {
-                if (resData.modifyPasswordCount === 1) {
-                    alert('비밀번호가 변경되었습니다.');
-                } else {
-                    alert('비밀번호 변경에 실패했습니다.');   
-                }
-            },
-            error: (jqXHR) => {
-                alert(jqXHR.statusText + '(' + jqXHR.status + ')');
-            }
-        });
-    });
-};
-
-fnModifyPassword(); 
 
 
 

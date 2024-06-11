@@ -166,7 +166,8 @@
 	 WHERE EMP_CODE= #{empCode}
   </update>
 
-  <update id="updateProfile">
+  <update id="updateProfile"
+  				parameterType="Map">
 	UPDATE EMP_T
 	   SET PROFILE_FILE_NAME = #{profileFileName}
 	 WHERE EMP_CODE = #{empCode}

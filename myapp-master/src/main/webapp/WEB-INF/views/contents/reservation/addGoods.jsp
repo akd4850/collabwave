@@ -5,13 +5,20 @@
 <c:set var="contextPath" value="<%=request.getContextPath()%>"/>
 <c:set var="dt" value="<%=System.currentTimeMillis()%>"/>
 
-<div class="card">
-    <div class="header">
-        <h4 class="title">내 정보</h4>
-    </div>
-    <div class="content">
+    <div class="card">
+        <div class="content">
         <form>
             <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>구분</label>
+                        <select id="asset-type" class="form-control">
+                            <option value="">선택</option>
+                            <option value="room">사무실</option>
+                            <option value="car">차량</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>자산코드</label>
@@ -20,18 +27,27 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>이름</label>
-                        <input type="text" class="form-control" placeholder="스타렉스" value="">
+                        <label>자산명</label>
+                        <input type="text" class="form-control" placeholder="자산명" value="">
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>구분</label>
-                        <select name="cities" class="selectpicker" data-title="Single Select" data-style="btn-default btn-block" data-menu-style="dropdown-blue">
-                            <option value="">공간</option>
-                            <option value="">물품</option>
-                        </select>
-                    </div>
+            </div>
+
+            <div id="car-fields" class="conditional-input hidden">
+                <div class="form-group">
+                    <label>차량 번호</label>
+                    <input type="text" class="form-control" placeholder="차량 번호" value="">
+                </div>
+            </div>
+
+            <div id="room-fields" class="conditional-input hidden">
+                <div class="form-group">
+                    <label>위치</label>
+                    <input type="text" class="form-control" placeholder="위치" value="">
+                </div>
+                <div class="form-group">
+                    <label>보유 기자재</label>
+                    <input type="text" class="form-control" placeholder="보유 기자재" value="">
                 </div>
             </div>
 
@@ -40,3 +56,20 @@
         </form>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#asset-type').change(function() {
+            var selectedValue = $(this).val();
+            $('.conditional-input').addClass('hidden');
+            if (selectedValue === 'car') {
+                $('#car-fields').removeClass('hidden');
+            } else if (selectedValue === 'room') {
+                $('#room-fields').removeClass('hidden');
+            }
+        });
+    });
+
+
+    
+</script>

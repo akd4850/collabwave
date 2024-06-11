@@ -22,15 +22,6 @@
         <ul class="list-unstyled subtab">
             <li><a href="/reservation/curReservation.page"><b>내 예약 현황</b></a></li>
             <li><a href="/reservation/management.page"><b>자산 관리</b></a></li>
-            <li><b>예약 관리</b></li>
-            <li>
-                <ul class="list-unstyled subtab2">
-                    <li><a href="/reservation/reservation.page?goodsCode=room1">대회의실1</a></li>
-                    <li><a href="/reservation/reservation.page?goodsCode=room2">소회의실1</a></li>
-                    <li><a href="/reservation/reservation.page?goodsCode=room3">소회의실2</a></li>
-                    <li><a href="/reservation/reservation.page?goodsCode=car1">그랜저 3.0</a></li>
-                </ul>
-            </li>
         </ul>
     </div>
 </div>

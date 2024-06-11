@@ -68,13 +68,8 @@ public class EdsmServiceImpl implements EdsmService {
 	@Override
 	public void loadSampleList(HttpServletRequest request, Model model) {
 
-		// 전체 BBS 게시글 수
 	    int total = edsmMapper.getSampleCount();
-	    
-	    // 한 화면에 표시할 BBS 게시글 수
 	    int display = 10;
-	    
-	    // 표시할 페이지 번호
 	    Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
 	    int page = Integer.parseInt(opt.orElse("1"));
 	    
@@ -274,13 +269,15 @@ public class EdsmServiceImpl implements EdsmService {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime edsmStartDatetime = LocalDateTime.parse(request.getParameter("edsmStartDatetime"), formatter);
 		LocalDateTime edsmExpireDatetime = LocalDateTime.parse(request.getParameter("edsmExpireDatetime"), formatter);
+		String edsmTitle = request.getParameter("edsmTitle");
     	
     	Map<String, Object> map = Map.of("sampleDotCode", request.getParameter("sampleDotCode"),
     									 "empCode", empDto.getEmpCode(),
     									 "edsmContent", request.getParameter("edsmContent"),
     									 "edsmStartDatetime", edsmStartDatetime,
     									 "edsmExpireDatetime", edsmExpireDatetime,
-    									 "edsmStatus", "a0001");
+    									 "edsmStatus", "a0001",
+    									 "edsmTitle", edsmTitle);
     	
     	edsmMapper.addApprDo(map);
     	int nextVal = edsmMapper.getApprSeqNextval();
@@ -310,5 +307,131 @@ public class EdsmServiceImpl implements EdsmService {
     	
     	int apprNo = Integer.parseInt( request.getParameter("apprNo") );
     	return new ResponseEntity<>(Map.of("itemList", edsmMapper.getLineDetail(apprNo)), HttpStatus.OK);
+    }
+    
+    @Override
+    public void loadDraftList(HttpServletRequest request, Model model) {
+    	
+    	HttpSession session = request.getSession();
+		EmpDto empDto = (EmpDto)session.getAttribute("emp");
+    	
+    	int total = edsmMapper.getDraftCount(empDto.getEmpCode());
+	    int display = 10;
+	    Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
+	    int page = Integer.parseInt(opt.orElse("1"));
+	    
+	    myPageUtils.setPaging(total, display, page);
+	    Map<String, Object> map = Map.of("begin", myPageUtils.getBegin()
+	                                   , "end", myPageUtils.getEnd()
+	                                   , "empCode", empDto.getEmpCode());
+	    
+	    List<EdsmDto> draftList = edsmMapper.getDraftList(map);
+	    
+	    model.addAttribute("beginNo", total - (page - 1) * display);
+	    model.addAttribute("draftList", draftList);
+	    model.addAttribute("paging", myPageUtils.getPagingNewVersion(request.getContextPath() + "/edsm/edsmDrafting.do"
+	                                                     , null
+	                                                     , display));
+    }
+    
+    @Override
+    public void loadWaitList(HttpServletRequest request, Model model) {
+    	
+    	HttpSession session = request.getSession();
+		EmpDto empDto = (EmpDto)session.getAttribute("emp");
+    	
+		String status = "p0001";
+		Map<String, Object> countMap = Map.of("empCode", empDto.getEmpCode(),
+											  "status", status);
+		
+    	int total = edsmMapper.getWaitCount(countMap);
+	    int display = 10;
+	    Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
+	    int page = Integer.parseInt(opt.orElse("1"));
+	    
+	    myPageUtils.setPaging(total, display, page);
+	    Map<String, Object> map = Map.of("begin", myPageUtils.getBegin()
+	                                   , "end", myPageUtils.getEnd()
+	                                   , "empCode", empDto.getEmpCode()
+	                                   , "status", status);
+	    
+	    List<EdsmApprDto> waitList = edsmMapper.getWaitList(map);
+	    
+	    model.addAttribute("beginNo", total - (page - 1) * display);
+	    model.addAttribute("waitList", waitList);
+	    model.addAttribute("paging", myPageUtils.getPagingNewVersion(request.getContextPath() + "/edsm/edsmWaiting.do"
+	                                                     , null
+	                                                     , display));
+    }
+    
+    @Override
+    public void loadExpectList(HttpServletRequest request, Model model) {
+
+    	HttpSession session = request.getSession();
+		EmpDto empDto = (EmpDto)session.getAttribute("emp");
+    	
+		String status = "p0001";
+		Map<String, Object> countMap = Map.of("empCode", empDto.getEmpCode(),
+											  "status", status);
+		
+    	int total = edsmMapper.getExpectedCount(countMap);
+	    int display = 10;
+	    Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
+	    int page = Integer.parseInt(opt.orElse("1"));
+	    
+	    myPageUtils.setPaging(total, display, page);
+	    Map<String, Object> map = Map.of("begin", myPageUtils.getBegin()
+	                                   , "end", myPageUtils.getEnd()
+	                                   , "empCode", empDto.getEmpCode()
+	                                   , "status", status);
+	    
+	    List<EdsmApprDto> expectList = edsmMapper.getExpectedList(map);
+	    
+	    model.addAttribute("beginNo", total - (page - 1) * display);
+	    model.addAttribute("expectList", expectList);
+	    model.addAttribute("paging", myPageUtils.getPagingNewVersion(request.getContextPath() + "/edsm/edsmWaiting.do"
+	                                                     , null
+	                                                     , display));
+    }
+    
+    @Override
+    public void edsmDetail(HttpServletRequest request, Model model, int edsmNo) {
+    	
+    	model.addAttribute("edsm", edsmMapper.getEdsmDetail(edsmNo));
+    	
+    	HttpSession session = request.getSession();
+		EmpDto empDto = (EmpDto)session.getAttribute("emp");
+		Map<String, Object> map = Map.of("empCode", empDto.getEmpCode(), "edsmNo", edsmNo);
+		EdsmApprDto appr = edsmMapper.getEdsmApprByCode(map);
+    	model.addAttribute("appr", appr);
+    }
+    
+    @Override
+    public ResponseEntity<Map<String, Object>> getApprList(HttpServletRequest request) {
+    	
+    	int edsmNo = Integer.parseInt(request.getParameter("edsmNo")); 
+    	return new ResponseEntity<>(Map.of("apprList", edsmMapper.getEdsmAppr(edsmNo)), HttpStatus.OK);
+    }
+    
+    @Override
+    public void confirmAppr(HttpServletRequest request) {
+    	
+    	int apprNo = Integer.parseInt(request.getParameter("apprNo"));
+    	int apprSeq = Integer.parseInt(request.getParameter("apprSeq"));
+    	int edsmNo = Integer.parseInt(request.getParameter("edsmNo"));
+    	int edsmSeq = Integer.parseInt(request.getParameter("edsmSeq"));
+    	String apprStatus = request.getParameter("apprStatus");
+    	String comment = request.getParameter("comment");
+    	
+    	Map<String, Object> map = Map.of("comment", comment,
+    									 "apprStatus", apprStatus,
+    									 "apprNo", apprNo);
+    	
+    	edsmMapper.updateAppr(map);
+    	
+    	Map<String, Object> edsmMap = Map.of("edsmNo", edsmNo,
+											 "edsmSeq", edsmSeq + 1);
+
+    	edsmMapper.updateEdsm(edsmMap);
     }
 }

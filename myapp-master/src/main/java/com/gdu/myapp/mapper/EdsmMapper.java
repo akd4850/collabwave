@@ -35,4 +35,15 @@ public interface EdsmMapper {
 	EdsmApprDto getApprItemLastID();
 	int getApprSeqNextval();
 	int registerEdsmLineItem(Map<String, Object> map);
+	int getDraftCount(String empCode);
+	List<EdsmDto> getDraftList(Map<String, Object> map);
+	int getWaitCount(Map<String, Object> map);
+	List<EdsmApprDto> getWaitList(Map<String, Object> map);
+	int getExpectedCount(Map<String, Object> map);
+	List<EdsmApprDto> getExpectedList(Map<String, Object> map);
+	EdsmDto getEdsmDetail(int edsmNo);
+	List<EdsmApprDto> getEdsmAppr(int edsmNo);
+	EdsmApprDto getEdsmApprByCode(Map<String, Object> map);
+	int updateAppr(Map<String, Object> map);
+	int updateEdsm(Map<String, Object> map);
 }

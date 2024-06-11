@@ -84,7 +84,7 @@
 
 <script src="${contextPath}/resources/js/common.js"></script>
 
-<c:if test="${submenu == 'edsmAddLine.jsp' || submenu == 'edsmDetailLine.jsp'|| submenu == 'edsmAddAppr.jsp'}">
+<c:if test="${submenu == 'edsmAddLine.jsp' || submenu == 'edsmDetailLine.jsp'|| submenu == 'edsmAddAppr.jsp' || submenu == 'orgChart.jsp'}">
   <script src="${contextPath}/jstree/dist/jstree.min.js"></script>
   <script src="${contextPath}/resources/js/erp-organization.js?v=<%=System.currentTimeMillis() %>"></script>
 </c:if>

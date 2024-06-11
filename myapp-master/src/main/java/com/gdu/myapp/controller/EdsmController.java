@@ -45,10 +45,21 @@ public class EdsmController {
 		return "contents/edsm/edsm";
 	}
 
-	@GetMapping("/edsmWaiting.page")
-	public String edsmWaiting(Model model) {
+	@GetMapping("/edsmWaiting.do")
+	public String edsmWaiting(HttpServletRequest request, Model model) {
 
 		model.addAttribute("submenu", "edsmWaiting.jsp");
+		edsmService.loadWaitList(request, model);
+		
+		return "contents/edsm/edsm";
+	}
+	
+	@GetMapping("/edsmExpected.do")
+	public String edsmExpected(HttpServletRequest request, Model model) {
+
+		model.addAttribute("submenu", "edsmExpected.jsp");
+		edsmService.loadExpectList(request, model);
+		
 		return "contents/edsm/edsm";
 	}
 
@@ -231,4 +242,37 @@ public class EdsmController {
 		
     	return edsmService.getMyLineDetail(request);
 	}
+    
+    @GetMapping("/edsmDetail.do")
+    public String edsmDetail(HttpServletRequest request, Model model, @RequestParam int edsmNo) {
+
+    	model.addAttribute("submenu", "edsmDetail.jsp");
+    	model.addAttribute("edsmNo", edsmNo);
+        
+    	edsmService.edsmDetail(request, model, edsmNo);
+		
+		return "contents/edsm/edsm";
+    }
+    
+    @GetMapping(value="/getApprList.do", produces="application/json")
+	public ResponseEntity<Map<String, Object>> getApprList(HttpServletRequest request) {
+		
+    	return edsmService.getApprList(request);
+	}
+    
+    @PostMapping("/confirmAppr.do")
+    public String confirmAppr(HttpServletRequest request) {
+    	
+    	edsmService.confirmAppr(request);
+    	
+    	return "redirect:/edsm/edsmDetail.do?edsmNo=" + Integer.parseInt(request.getParameter("edsmNo"));
+    }
+    
+    @GetMapping("/organizationChart.page")
+    public String organizationChart(HttpServletRequest request, Model model) {
+    	
+    	model.addAttribute("submenu", "orgChart.jsp");
+		
+		return "contents/edsm/organizationChart";
+    }
 }

@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public interface EmpService {
 	void signin(HttpServletRequest request, HttpServletResponse response);
+	void signout(HttpServletRequest request, HttpServletResponse response);
 	void loadEmpList(HttpServletRequest request, Model model);
 	void registerEmp(HttpServletRequest request, HttpServletResponse response);
 	EmpDto getEmpDetail(String empCode);

@@ -50,7 +50,7 @@
                 </li>
 
                 <li>
-                    <a href="#" class="text-danger">
+                    <a href="${contextPath}/signout.do" class="text-danger">
                         <i class="pe-7s-close-circle"></i>
                         로그아웃
                     </a>

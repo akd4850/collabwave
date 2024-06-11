@@ -48,4 +48,10 @@ public class MvcController {
 
 		empService.signin(request, response);
 	}
+	
+	@GetMapping("/signout.do")
+	public void signout(HttpServletRequest request, HttpServletResponse response) {
+		
+		empService.signout(request, response);
+	}
 }

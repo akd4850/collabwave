@@ -2,6 +2,7 @@ package com.gdu.myapp.controller;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.gdu.myapp.dto.ScdlDto;
 import com.gdu.myapp.service.ScdlService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,7 +35,25 @@ public class ScheduleController {
 		model.addAttribute("submenu", "schedule.jsp");
 		return "contents/schedule/schedule";
 	}
+
+	// 일정 목록을 JSON 형식으로 반환
+	@GetMapping(value = "/getScheduleList.do", produces = "application/json")
+	@ResponseBody
+	public ResponseEntity<String> getScheduleList(HttpServletRequest request) {
+		List<ScdlDto> scheduleList = scdlService.getScheduleList(request);
+		JSONArray jsonArray = new JSONArray();
 		
+		for (ScdlDto scdl : scheduleList) {
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("title", scdl.getScdlTitle());
+			jsonObject.put("start", scdl.getStartDatetime());
+			jsonObject.put("end", scdl.getEndDatetime());
+			jsonArray.put(jsonObject);
+		}
+		
+		return ResponseEntity.ok(jsonArray.toString());
+	}
+
 	// 스케쥴 등록하기 
 	@GetMapping("/registerSchedule.page")
 	public String registerSchedule(Model model) { 
@@ -41,30 +61,22 @@ public class ScheduleController {
 		return "contents/schedule/registerSchedule";
 	}
 	
-	// 스케쥴 캘린더에 불러오기 SELECT 
-	// public List<Map<String, Object>> monthPlan() {
-	// 	List<Map<String, Object>> list = scdlService.getProductionAllPlanList();
-	/*
-	 * JSONObject jsonObj = new JSONObject(); JSONArray jsonArr = new JSONArray();
-	 * HashMap<String, Object> hash = new HashMap<String, Object>();
-	 */
-//	for(int i=0; i < list.size(); i++) {			
-//	hash.put("title", list.get(i).get("detailed_categorized_name")); //제목
-//	hash.put("start", list.get(i).get("expected_production_start_date")); //시작일자
-//	hash.put("end", list.get(i).get("expected_production_end_date")); //종료일자
-//	
-//	jsonObj = new JSONObject(hash); // 중괄호 {key:value , key:value, key:value}
-//	jsonArr.add(jsonObj); // 대괄호 안에 넣어주기[{key:value , key:value, key:value},{key:value , key:value, key:value}]
-//	}
-//// log.info("jsonArrCheck: {}", jsonArr); 
-//		return jsonArr;
-// 	} 	
-	
 	// 스케쥴 등록하기 INSERT
 	@PostMapping("/register.do") 
 	public String register(HttpServletRequest request, RedirectAttributes redirectAttributes) { 
 	    redirectAttributes.addFlashAttribute("insertCount", scdlService.registerScheduler(request));
 	    return "redirect:/schedule/mySchedule.page"; 
-	  }
+	}
 	
+	// 스케쥴 수정하기 UPDATE
+	@PostMapping("/update.do") 
+	public String editSchedule() {
+		return "";
+	}
+	
+	// 스케쥴 삭제하기 DELETE 
+	@PostMapping("/delete.do")
+	public String deleteSchedule() {
+		return "";
+	}
 }

@@ -1,15 +1,15 @@
 package com.gdu.myapp.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.gdu.myapp.dto.ScdlDto;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 public interface ScdlService {
-	
 	int registerScheduler(HttpServletRequest request); // 일정 등록 INSERT 
 	
-	// List<ScdlDto> getAllSchedules(); // 일정 불러오기 캘린더 보여주기 SELECT 
-	
+	// 일정 목록 불러오기
+	List<ScdlDto> getScheduleList(HttpServletRequest request);
 }

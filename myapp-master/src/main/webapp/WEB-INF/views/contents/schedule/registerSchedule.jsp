@@ -39,20 +39,20 @@
                       </div>
                     </td>
                   </tr>
-                  <tr>
-                    <td class="center-align">기 간</td>
-                    <td>
-                      <div class="center-content">
-                        <input type="date" id="date-input-start" name="startDate" class="date-input" required>
-                        <input type="time" id="time-input-start" name="startTime" class="time-input" required>
-                        ~
-                        <input type="date" id="date-input-end" name="endDate" class="date-input" required>
-                        <input type="time" id="time-input-end" name="endTime" class="time-input" required>
-                        <input type="checkbox" id="checkboxAllday" onclick="toggleTimeInputs()">
-                        <label for="checkboxAllday">종일</label>
-                      </div>
-                    </td>
-                  </tr>
+<tr>
+  <td class="center-align">기 간</td>
+  <td>
+    <div class="center-content">
+      <input type="date" id="date-input-start" name="startDate" class="date-input" required>
+      <input type="time" id="time-input-start" name="startTime" class="time-input" required>
+      ~
+      <input type="date" id="date-input-end" name="endDate" class="date-input" required>
+      <input type="time" id="time-input-end" name="endTime" class="time-input" required>
+      <input type="checkbox" id="checkboxAllday" onclick="toggleTimeInputs()">
+      <label for="checkboxAllday">종일</label>
+    </div>
+  </td>
+</tr>
                   <tr>
                     <td class="center-align">제 목</td>
                     <td colspan="2">
@@ -127,7 +127,8 @@
       input.disabled = checkbox.checked;
       if (checkbox.checked) {
     	  
-        input.value = '00:00'; // 종일 일정 선택 시, 시작시간 00:00 ~ 종료시간 23:59 설정 
+        // input.value = '00:00'; // 종일 일정 선택 시, 시작시간 00:00 ~ 종료시간 23:59 설정 
+        input.value = ''; // 종일 일정 선택 시, 시간값 없음 
         
       }
     });

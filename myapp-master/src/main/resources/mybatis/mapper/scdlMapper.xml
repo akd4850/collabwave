@@ -43,9 +43,9 @@
   </insert>
   
   <!-- select -->
-<!--     <select id="getAllSchedules" resultType="com.gdu.myapp.dto.ScheduleDto">
-        SELECT * FROM SCDL_T;
-    </select> -->
+  <select id="getAllSchedules" resultMap="ScldMap">
+        SELECT * FROM SCDL_T
+  </select>
   
   <!-- update -->
   

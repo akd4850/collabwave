@@ -73,7 +73,6 @@ public class EmpServiceImpl implements EmpService {
 	  
 	  List<EmpDto> empList = empMapper.getEmpList(map);
 	  
-	  // 목록 화면으로 반환할 값 (목록 + 전체 페이지 수)
 	  model.addAttribute("beginNo", total - (page - 1) * display);
 	  model.addAttribute("empList", empList);
 	  model.addAttribute("paging", myPageUtils.getPaging(request.getContextPath() + "/list.do", null, display));
@@ -112,7 +111,6 @@ public class EmpServiceImpl implements EmpService {
 	@Override
   public void registerEmp(HttpServletRequest request, HttpServletResponse response) {
     
-    // 전달된 파라미터
     String empCode = request.getParameter("empCode");
     String empName = MySecurityUtils.getPreventXss(request.getParameter("empName"));
     String password = MySecurityUtils.getSha256(request.getParameter("password"));
@@ -124,7 +122,6 @@ public class EmpServiceImpl implements EmpService {
     String positionCode = request.getParameter("positionCode");
     String birthdayDate = request.getParameter("birthdayDate");
     
-    // Mapper로 보낼 EmpDto 객체 생성
     EmpDto emp = EmpDto.builder()
                     .empCode(empCode)
                     .empName(empName)
@@ -138,10 +135,7 @@ public class EmpServiceImpl implements EmpService {
                     .birthdayDate(LocalDate.parse(birthdayDate))
                   .build();
     
-    // 직원등록
     int insertCount = empMapper.insertEmployee(emp);
-    
-    // 응답 만들기 (성공하면 /management.page 이동, 실패하면 뒤로가기)
     
     try {
       
@@ -149,13 +143,11 @@ public class EmpServiceImpl implements EmpService {
       PrintWriter out = response.getWriter();
       out.println("<script>");
       
-      // 등록 성공
       if(insertCount == 1) {
         
         out.println("alert('직원이 등록되었습니다.');");
         out.println("location.href='" + request.getContextPath() + "/admin/emp/management.page';");
         
-        // 등록 실패
       } else {
         out.println("alert('직원 등록이 실패했습니다.');");
         out.println("history.back();");
@@ -207,8 +199,7 @@ public class EmpServiceImpl implements EmpService {
   public int modifyEmp(HttpServletRequest request) {
     
     String empCode = request.getParameter("empCode");
-    String empName = MySecurityUtils.getPreventXss(request.getParameter("empName"));
-    String password = MySecurityUtils.getSha256(request.getParameter("password"));
+    String empName = request.getParameter("empName");
     String mobile = request.getParameter("mobile");
     String email = request.getParameter("email");
     String zipCode = request.getParameter("zipCode");
@@ -220,7 +211,6 @@ public class EmpServiceImpl implements EmpService {
     EmpDto emp = EmpDto.builder()
                     .empCode(empCode)
                     .empName(empName)
-                    .password(password)
                     .mobile(mobile)
                     .email(email)
                     .zipCode(Integer.parseInt(zipCode))

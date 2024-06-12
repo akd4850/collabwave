@@ -15,8 +15,16 @@
                 style="margin-left:10px"
                 onclick="location.href='/admin/emp/add.page'"
                 value="등록">
+
+            <div class="input-group">
+                <form method="GET"
+                      action= "${contextPath}/admin/emp/search.do">
+                    <input type="text" class="form-control" name="query" placeholder="사원명을 입력하세요">
+                    <button type="submit" class="btn btn-info btn-fill">검색</button>
+                </form>
+            </div>
+
         <table class="table table-hover table-striped">
-            
             <thead>
                 <tr>
                     <th>사원번호</th>

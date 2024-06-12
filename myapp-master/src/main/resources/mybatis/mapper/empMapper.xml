@@ -52,18 +52,35 @@
   <select id="getEmpList"
   	      parameterType="Map"
   	      resultMap="EmpDtoMap">
-  	SELECT E.EMP_CODE,
-           E.EMP_NAME,
-           D.DEPT_NAME,
-           P.POSITION_NAME,
-           E.MOBILE,
-           E.EMAIL,
-           E.STATUS_CODE
+  	SELECT E.EMP_CODE, E.EMP_NAME, D.DEPT_NAME, P.POSITION_NAME,
+           E.MOBILE, E.EMAIL, E.STATUS_CODE
       FROM EMP_T E
            LEFT JOIN DEPT_T D ON E.DEPT_CODE = D.DEPT_CODE
            INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
      WHERE STATUS_CODE IN ('s01', 's02')
      ORDER BY EMP_CODE ASC
+  </select>
+  
+  <select id="getSearchList"
+  	      parameterType="Map"
+  	      resultMap="EmpDtoMap">
+  	SELECT EMP_CODE, EMP_NAME, DEPT_NAME, POSITION_NAME, MOBILE, EMAIL, STATUS_CODE
+      FROM(SELECT ROW_NUMBER() OVER(ORDER BY E.EMP_CODE DESC) AS RN, E.EMP_CODE, E.EMP_NAME, D.DEPT_NAME, P.POSITION_NAME, E.MOBILE, E.EMAIL, E.STATUS_CODE
+             FROM EMP_T E LEFT JOIN DEPT_T D
+               ON E.DEPT_CODE = D.DEPT_CODE
+            INNER JOIN POSITION_T P
+               ON E.POSITION_CODE = P.POSITION_CODE
+            WHERE STATUS_CODE IN ('s01', 's02')
+              AND E.EMP_NAME LIKE CONCAT(CONCAT('%', #{query}), '%'))
+    WHERE RN BETWEEN #{begin} AND #{end}
+  </select>
+  
+  <select id="getSearchCount"
+          parameterType="Map"
+          resultType="int">
+    SELECT COUNT(*)
+      FROM EMP_T        	
+	 WHERE EMP_NAME LIKE '%' || #{query} || '%'
   </select>
   
   <select id="getEmpDetail"
@@ -118,7 +135,7 @@
       )
   </insert>
   
-  <update id="updateEmployee"
+  <update id="updateEmp"
           parameterType="EmpDto">
 	UPDATE EMP_T
 	   SET EMP_NAME = #{empName},
@@ -176,16 +193,17 @@
   <select id="getEmpLeaveList"
   	      parameterType="Map"
   	      resultMap="EmpDtoMap">
-  	SELECT EMP_T.EMP_CODE,
-  		   EMP_T.EMP_NAME,
-       	   DEPT_T.DEPT_NAME,
-       	   POSITION_T.POSITION_NAME,
-           EMP_T.MOBILE,
-           EMP_T.STATUS_CODE,
-           EMP_T.LEAVE_DATE
-      FROM EMP_T
-           INNER JOIN DEPT_T ON EMP_T.DEPT_CODE = DEPT_T.DEPT_CODE
-           INNER JOIN POSITION_T ON EMP_T.POSITION_CODE = POSITION_T.POSITION_CODE
+  	SELECT E.EMP_CODE,
+  		   E.EMP_NAME,
+       	   D.DEPT_NAME,
+       	   P.POSITION_NAME,
+           E.MOBILE,
+           E.STATUS_CODE,
+           E.JOIN_DATE,
+           E.LEAVE_DATE
+      FROM EMP_T E
+           INNER JOIN DEPT_T D ON E.DEPT_CODE = D.DEPT_CODE
+           INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
     WHERE STATUS_CODE = 's03'
     ORDER BY LEAVE_DATE DESC
   </select>

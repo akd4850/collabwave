@@ -22,4 +22,6 @@ public interface EmpMapper {
 	List<EmpDto> getEmpLeaveList(Map<String, Object> map);
 	int removeEmp(String empCode);
 	int updateEmp(EmpDto emp);
-}
+	List<EmpDto> getSearchList(Map<String, Object> map);
+	int getSearchCount(Map<String, Object> map);
+;}

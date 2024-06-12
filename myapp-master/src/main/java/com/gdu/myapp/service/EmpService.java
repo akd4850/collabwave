@@ -22,4 +22,6 @@ public interface EmpService {
 	int deleteEmp(String empCode);
 //	int modifyEmp(HttpServletRequest request);
 	ResponseEntity<Map<String, Object>> getEmpDetailAjax(String empCode);
+	int modifyEmp(HttpServletRequest request);
+	void loadEmpSearchList(HttpServletRequest request, Model model);
 }

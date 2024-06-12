@@ -1,6 +1,6 @@
 package com.gdu.myapp.dto;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,9 +13,11 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AttachDto {
 	
-	private int attach_no;
-	private String attach_org_name;
-	private String attach_save_name;
-	private Date attach_datetime;
+	private int attachNo;
+	private String attachOrgName;
+	private String attachSaveName;
+	private LocalDateTime attachDatetime;
+	private String attachUploadPath;
+	private int postNo;
 
 }

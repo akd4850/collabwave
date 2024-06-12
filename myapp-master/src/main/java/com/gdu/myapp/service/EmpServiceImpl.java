@@ -95,7 +95,7 @@ public class EmpServiceImpl implements EmpService {
     String detailAddress = request.getParameter("detailAddress");
     String positionCode = request.getParameter("positionCode");
     String birthdayDate = request.getParameter("birthdayDate");
-    
+        
     // Mapper로 보낼 EmpDto 객체 생성
     EmpDto emp = EmpDto.builder()
                     .empCode(empCode)

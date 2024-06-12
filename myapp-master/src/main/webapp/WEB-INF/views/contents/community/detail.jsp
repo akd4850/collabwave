@@ -14,7 +14,7 @@
                     <td>${post.emp.empName}</td>
                 </tr>
                 <tr>
-                    <th>작성일시</th>
+                    <th>등록일</th>
                     <td>${post.postCreateDatetime}</td>
                 </tr>
                 <tr>
@@ -23,39 +23,51 @@
                 </tr>
                 <tr>
                     <th>제목</th>
-                    <td>
-                        <input type="text" name="postTitle" id="postTitle" class="form-control" value="${post.postTitle}" 
-                            <c:if test="${sessionScope.emp.empCode != post.emp.empCode}">readonly="readonly"</c:if>>
-                    </td>
+                    <td>${post.postTitle}</td>
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <textarea name="postContent" id="postContent" class="form-control" rows="10"
-                            <c:if test="${sessionScope.emp.empCode != post.emp.empCode}">readonly="readonly"</c:if>>${post.postContent}</textarea>
+                        <textarea name="postContent" id="editor" class="form-control">
+                           ${post.postContent}
+                        </textarea>
                     </td>
                 </tr>
 				<tr>
-				    <td colspan="2">
-				        <form id="modifyForm" method="post" action="modifyPost.do"
-				            <c:if test="${!isAuthor}">style="display:none;"</c:if>>
-				            <input type="hidden" name="empCode" value="${sessionScope.emp.empCode}">
-				            <input type="hidden" name="postNo" value="${post.postNo}">
-				            <input type="hidden" name="postTitle" value="${post.postTitle}">
-				            <input type="hidden" name="postContent" value="${post.postContent}">
-				            <button type="submit" id="btn-modify" class="btn btn-info btn-fill">수정</button>
-				            <button type="button" id="btn-delete" class="btn btn-info btn-fill">삭제</button>
-				            <button onclick="history.back()" type="button" id="btn-cancel" class="btn btn-info btn-fill">취소</button>
-				        </form>
+				    <th>첨부파일</th>
+				    <td colspan="3">
+				        <c:if test="${empty attachList}">
+				            <div>첨부 없음</div>
+				        </c:if>
+				        <c:if test="${not empty attachList}">
+				            <c:forEach items="${attachList}" var="attach" >
+			                <div data-attach-no="${attach.attachNo}">
+			                  <a class="attach" href="${contextPath}/community/download?attachNo=${attach.attachNo}">${attach.attachOrgName}</a><br>
+			                </div>
+				            </c:forEach>
+				            <hr>
+				            <div>
+				                <a id="download-all" href="${contextPath}/community/downloadAll?postNo=${post.postNo}">모두 다운로드</a>
+				            </div>
+				        </c:if>
 				    </td>
 				</tr>
-                <tr>
-                    <td colspan="2">
-                    	<form id="frm-btn" method="post">
-	                    	<input type="hidden" name="postNo" value="${post.postNo}">
-	                        <button onclick="location.href = document.referrer" type="button" id="btn-cancel" class="btn btn-info btn-fill">목록보기</button>
-                    	</form>
-                    </td>
-                </tr>
+				
+				<tr>
+				    <td colspan="2">
+				        <div style="display: flex; justify-content: flex-end;">
+					        <input type="hidden" id="postNo" value="${post.postNo}">
+								<c:choose>
+								    <c:when test="${sessionEmpCode == authorEmpCode}">
+								        <button onclick="editPost()" id="btn-edit" name="btn-edit" class="btn btn-info btn-fill" style="margin-right: 5px;">편집</button>
+								    </c:when>							    
+								</c:choose>
+							<input type="hidden" name="brdCode" id="brdCode" value="${post.brd.brdCode}">		
+							<input type="hidden" id="contextPath" value="${contextPath}">
+							<button type="button" onclick="backToList()" class="btn btn-info btn-fill">목록보기</button>				        
+						</div>
+				    </td>
+				</tr>
+
             </tbody>
         </table>
     </div>
@@ -66,44 +78,78 @@
 <script src="${contextPath}/ckeditor5/script.js"></script>
 <script>
 
-let editor;
 ClassicEditor
-.create( document.querySelector( '#editor' ) )
-.then( newEditor => {
-    editor = newEditor;
-} )
-.catch( error => {
-    console.error( error );
-} );
+.create(document.querySelector("#editor"), {
+    toolbar: [], // 툴바를 비활성화하여 사용자가 편집할 수 없도록 함
+})
+.then(editor => {
+    console.log(editor);
+    // 편집기를 읽기 전용으로 설정
+    editor.isReadOnly = true;
+})
+.catch(error => {
+    console.error(error);
+});
 
-const fnEditBlog = () => {
-	$('#btn-edit-post').on('click', (evt) => {
-	  frmBtn.attr('action', '${contextPath}/community/modifyPost.do');
-	  frmBtn.submit();
-	})
+// 편집 버튼 숨기기
+document.addEventListener("DOMContentLoaded", function() {
+    var sessionEmpCode = "${sessionScope.emp.empCode}"; // 세션에서 가져온 empCode
+    var authorEmpCode = "${post.emp.empCode}"; // 작성자의 empCode
+
+    // 세션의 empCode와 작성자의 empCode를 비교하여 버튼을 숨기기
+    if (sessionEmpCode != authorEmpCode) {
+        var editButton = document.getElementById("btn-edit");
+            editButton.style.display = "none";
+    }
+});
+
+// 편집 화면으로 이동
+function editPost() {
+    var postNo = document.getElementById('postNo').value;
+    location.href = '${contextPath}/community/edit?postNo=' + postNo;
 }
 
-$(document).ready(function() {
-    $('#btn-delete').click(function() {
-        var postNo = $('input[name="postNo"]').val();
+//목록화면으로 이동
+function backToList() {
+    var destinationUrl = ''; // 목적지 URL 초기화
+    var brdCode = document.getElementById('brdCode').value;
+    var contextPath = document.getElementById('contextPath').value;
+    switch (brdCode) { // brdCode 값에 따라 목적지 URL 설정
+        case 'NOTI':
+            destinationUrl = contextPath + '/community/notice';
+            break;
+        case 'DEPT':
+            destinationUrl = contextPath + '/community/dept';
+            break;
+        case 'FREE':
+            destinationUrl = contextPath + '/community/free';
+            break;
+        case 'REFE':
+            destinationUrl = contextPath + '/community/ref';
+            break;
+        default:
+            break;
+    }
+    location.href = destinationUrl; // 목적지 URL로 이동
+}
 
-        if (confirm('정말 삭제하시겠습니까?')) {
-            $.ajax({
-                url: '${contextPath}/community/deletePost.do', // 삭제 API 엔드포인트
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({ postNo: postNo }),
-                success: function(response) {
-                    alert('글이 삭제되었습니다.');
-                    history.back(); // 이전 화면으로 이동
-                    location.reload(); // 페이지 새로고침
-                },
-                error: function(error) {
-                    alert('삭제 중 오류가 발생했습니다.');
-                }
-            });
-        }
-    });
-});
+const fnDownload = () => {
+  $('.attach').on('click', (evt) => {
+	confirm('해당 첨부 파일을 다운로드 할까요?')
+  })
+}
+
+const fnDownloadAll = () => {
+  document.getElementById('download-all').addEventListener('click', (evt) => {
+    if(!confirm('모두 다운로드 할까요?')) {
+      evt.preventDefault();
+      return;
+    }
+  })
+}
+
+// 호출
+fnDownload();
+fnDownloadAll();
 
 </script>

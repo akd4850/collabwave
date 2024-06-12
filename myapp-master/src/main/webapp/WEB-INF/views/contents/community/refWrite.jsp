@@ -17,9 +17,9 @@
     
     <form id="frm-post-register"
     	  method="POST"
+    	  enctype="multipart/form-data"
           action="${contextPath}/community/registerPost.do">
           
-        <input type="hidden" name="boardId" id="boardId" value="4"> <!-- 이 부분에 boardId 값을 설정 -->
         <input type="hidden" name="brdCode" id="brdCode" value="REFE">
         <table class="table table-hover table-striped">
             <tbody>
@@ -44,7 +44,12 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <input type="file" name="attach" id="attach">
+                        <input type="file" name="files" id="files" multiple>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                    	<div id="attach-list"></div>
                     </td>
                 </tr>
                 <tr >
@@ -57,9 +62,10 @@
                     <td colspan="2">
                       <input type="hidden" name="empCode" id="empCode" value="${sessionScope.emp.empCode}">
                       <input type="hidden" name="empName" id="empName" value="${sessionScope.emp.empName}">
+                      <input type="hidden" name="deptCode" id="deptCode" value="${emp.deptCode}">
                       <input type="hidden" name="postState" id="postState" value="1">
                       <button type="submit" class="btn btn-info btn-fill" id="submit">작성</button>
-                      <button onclick="history.back()" type="button" class="btn btn-info btn-fill" id="cancel">취소</button></a>
+                      <button onclick="history.back()" type="button" class="btn btn-info btn-fill" id="cancel">취소</button>
                     </td>
                 </tr>
             </tbody>
@@ -72,6 +78,15 @@
 <script src="${contextPath}/ckeditor5/ckeditor.js"></script>
 <script src="${contextPath}/ckeditor5/script.js"></script>
 <script>
+let editor;
+ClassicEditor
+.create( document.querySelector( '#editor' ) )
+.then( newEditor => {
+    editor = newEditor;
+} )
+.catch( error => {
+    console.error( error );
+} );
 
 // 현재 일시 구현
 function insertCurrentDate() {
@@ -93,35 +108,49 @@ function validateForm(evt) {
     }
 }
 
-// 등록
+//등록
 function register() {
+	
     document.getElementById('frm-post-register').addEventListener('submit', validateForm);
+    
+    // Update the value of postOpenYn checkbox based on its checked status
+    document.getElementById('postOpenYn').addEventListener('change', function() {
+        this.value = this.checked ? 'Y' : 'N';
+    });
 }
 
-let editor;
-
-// 에디터
-ClassicEditor
-    .create( document.querySelector( '#editor' ) )
-    .then( newEditor => {
-        editor = newEditor;
-    } )
-    .catch( error => {
-        console.error( error );
-    } );
-
-// 체크박스 
-document.getElementById('postOpenYn').addEventListener('change', function() {
-    if (this.checked) {
-        this.value = 'Y';
-    } else {
-        this.value = 'N';
+//크기 제한 스크립트 + 첨부 목록 출력 스크립트
+const fnAttachCheck = () => {
+  document.getElementById('files').addEventListener('change', (evt) => {
+    const limitPerSize = 1024 * 1024 * 10;
+    const limitTotalSize = 1024 * 1024 * 100;
+    let totalSize = 0;
+    const files = evt.target.files;
+    const attachList = document.getElementById('attach-list');
+    attachList.innerHTML = '';
+    for(let i = 0; i < files.length; i++){
+      if(files[i].size > limitPerSize){
+        alert('각 첨부 파일의 최대 크기는 10MB입니다.');
+        evt.target.value = '';
+        attachList.innerHTML = '';
+        return;
+      }
+      totalSize += files[i].size;
+      if(totalSize > limitTotalSize){
+        alert('전체 첨부 파일의 최대 크기는 100MB입니다.');
+        evt.target.value = '';
+        attachList.innerHTML = '';
+        return;
+      }
+      attachList.innerHTML += '<div>' + files[i].name + '</div>';
     }
-});
+  })
+}
 
 
 // 호출
 insertCurrentDate();
 register();
+fnAttachCheck();
 
 </script>

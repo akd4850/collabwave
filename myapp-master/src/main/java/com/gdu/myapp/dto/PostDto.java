@@ -1,6 +1,7 @@
 package com.gdu.myapp.dto;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,18 +20,22 @@ public class PostDto {
 	
 	private BoardDto brd;
 	private String brdCode;
-
-	private AttachDto attach;
-	private int attachNo;
+	
+	private DeptDto dept;
+	private String deptCode;
 	
 	private int postNo;
 	private String postTitle;
 	private String postContent;
-	private Date postCreateDatetime;
-	private Date postModifyDatetime;
+	private LocalDateTime  postCreateDatetime;
+	private LocalDateTime  postModifyDatetime;
 	private int postState;
 	private String postOpenYn;
-	private Date postOpenDatetime;
+	private LocalDateTime  postOpenDatetime;
 	private int postHit;
+	private int attachCount;
+	
+	private AttachDto attach;
+	private int attachNo;
 
 }

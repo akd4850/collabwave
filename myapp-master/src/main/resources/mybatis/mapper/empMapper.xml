@@ -173,6 +173,13 @@
 	 WHERE EMP_CODE = #{empCode}
   </update>
   
+  <update id="updatePassword"
+  				parameterType="Map">
+	UPDATE EMP_T
+	   SET PASSWORD = #{password}
+	 WHERE EMP_CODE = #{empCode}
+  </update>
+  
   <select id="getEmpLeaveList"
   	      parameterType="Map"
   	      resultMap="EmpDtoMap">

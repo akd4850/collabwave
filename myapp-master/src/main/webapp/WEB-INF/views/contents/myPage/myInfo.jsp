@@ -150,19 +150,21 @@
                     <div class="content">
                         
                         <div class="author">
-                             <a href="#">
+                            <form>
                                 <c:choose>
                                     <c:when test="${emp.profileFileName == null}">
-                                        <img class="avatar border-gray" src="${contextPath}/resources/img/new_logo.png" alt="기본 프로필" loading="lazy"/>
+                                        <img class="avatar border-gray" src="${contextPath}/resources/img/new_logo.png" alt="기본 프로필" loading="lazy" onclick="onClickUpload();"/>
                                     </c:when>
                                     <c:otherwise>
-                                        <img class="avatar border-gray" src="${emp.profileFileName}" alt="프로필 이미지" loading="lazy"/>
+                                        <img class="avatar border-gray" src="${contextPath}${sessionScope.emp.profileFileName}"  alt="프로필 이미지" loading="lazy" onclick="onClickUpload();"/>
                                     </c:otherwise>
                                 </c:choose>
+                                <input type="hidden" name="empCode" id="hiddenEmpCode" value="${sessionScope.emp.empCode}">
+                                <input type="file" id="files" class="upload-hidden" name="profileFileName" onchange="onFileUpload();">
+                            </form>
                                 <h4 class="title">${emp.empName}<br/>
                                     <small>${emp.position.positionName}</small>
                                 </h4>
-                            </a>
                         </div>
                     </div>
                     <hr>
@@ -183,7 +185,7 @@
     <div class="modal_popup">
         <h3>프로필 사진 변경</h3>
         <br>
-        <form class="profileForm">
+        <form class="profileForm" action="${contextPath}/myPage/modifyProfile.page" method="post" enctype="multipart/form-data">
             <div class="uploadImg">
                 <img id="previewImg">
                 <div class="filebox">
@@ -194,7 +196,7 @@
                 </div>
             </div>
             <br>
-            <button type="button" class="btn btn-info btn-fill" id="profile_modify">변경하기</button>
+            <button type="submit" class="btn btn-info btn-fill" id="profile_modify">변경하기</button>
         </form>
         <button type="button" class="btn btn-info btn-fill" id="profile_modal_close">닫기</button>
     </div>
@@ -205,23 +207,27 @@
     <div class="modal_popup">
         <h3>패스워드 변경</h3>
             <br>
-            <form>
+            <form action="${contextPath}/myPage/modifyPassword.page"
+                  method="post"
+                  id="frm-changepw">
+
                 <div class="password">
-                    <p>변경할 비밀번호</p>
-                    <input type="password" class="form-control" name="password" id="pw" placeholder="8~15자 영문,숫자,특수문자 중 2개이상" style="width: 500px;" autocomplete="off"> 
+                    <label for="pw">비밀번호</label>
                     <div id="msg-pw" class="signup-alert"></div>
+                    <input type="password" class="form-control" name="password" id="pw" placeholder="8~15자 영문,숫자,특수문자 중 2개이상" style="width: 500px;" autocomplete="off"> 
                 </div>
                 <br>
                 <div class="passwordRe">
-                    <p>변경할 비밀번호</p>
-                    <input type="password" class="form-control" name="password2" id="pw2" placeholder="8~15자 영문,숫자,특수문자 중 2개이상" style="width: 500px;" autocomplete="off">
+                    <label for="pw2">비밀번호 확인</label>
                     <div id="msg-pw2" class="signup-alert"></div>
+                    <input type="password" class="form-control" name="password2" id="pw2" placeholder="8~15자 영문,숫자,특수문자 중 2개이상" style="width: 500px;" autocomplete="off">
                 </div>
-            </form>
                 <br>
-            
-            <br>
-        <button type="button" class="btn btn-info btn-fill" id="password_modify">변경하기</button>
+                <input type="hidden" name="empCode" value="${emp.empCode}">
+                <button type="button" class="btn btn-info btn-fill" id="password_modify">변경하기</button>
+                <br>
+
+            </form>
         <button type="button" class="btn btn-info btn-fill" id="password_modal_close">닫기</button>
     </div>
 
@@ -318,6 +324,35 @@ $(document).ready(function(){
 	    }
 	}  
 
+    const onClickUpload = () => {
+  $('#files').click();
+}
+
+const onFileUpload = () => {
+  var formData = new FormData();
+  formData.append('profileFileName', $('#hiddenEmpCode')[0].files[0]);
+  formData.append('empCode', $('#hiddenUserNo').val());
+
+  $.ajax({
+      enctype: 'multipart/form-data',
+      processData: false,
+      contentType: false,
+      type: 'POST',
+      url: getContextPath() + '/myPage/modifyProfile.page',
+      data: formData,
+      dataType: 'json',
+      success: (resData) => {
+          if(resData.ModifyProfileCount === true) {
+              alert('Profile change sucess!');
+              location.href = getContextPath() + '/';
+          }
+      },
+      error: (jqXHR) => {
+          alert(jqXHR.statusText + '(' + jqXHR.status + ')');
+      }
+  });
+}
+
 /* 비밀번호 변경 */
 
     /* 비밀번호 검증 */
@@ -379,27 +414,16 @@ fnConfirmPassword();
 
 /* 모달창 */
 
-const modal1 = document.querySelector('#profile_modal');
-const modal2 = document.querySelector('#password_modal');
-const modalOpen1 = document.querySelector('#profile_modal_open');
-const modalOpen2 = document.querySelector('#password_modal_open');
-const modalClose1 = document.querySelector('#profile_modal_close');
-const modalClose2 = document.querySelector('#password_modal_close');
-
-/* 프로필 */
-modalOpen1.addEventListener('click',function(){
-    modal1.style.display = 'block';
-});
-modalClose1.addEventListener('click',function(){
-    modal1.style.display = 'none';
-});
+const modal = document.querySelector('#password_modal');
+const modalOpen = document.querySelector('#password_modal_open');
+const modalClose = document.querySelector('#password_modal_close');
 
 /* 패스워드 */
-modalOpen2.addEventListener('click',function(){
-    modal2.style.display = 'block';
+modalOpen.addEventListener('click',function(){
+    modal.style.display = 'block';
 });
-modalClose2.addEventListener('click',function(){
-    modal2.style.display = 'none';
+modalClose.addEventListener('click',function(){
+    modal.style.display = 'none';
 });
 
 

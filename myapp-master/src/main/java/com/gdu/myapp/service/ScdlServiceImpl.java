@@ -7,7 +7,10 @@ import com.gdu.myapp.mapper.ScdlMapper;
 import com.gdu.myapp.utils.MySecurityUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import java.sql.Timestamp;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -28,11 +31,18 @@ public class ScdlServiceImpl implements ScdlService {
         
         String startDate = request.getParameter("startDate");
         String startTime = request.getParameter("startTime");
+        
         String endDate = request.getParameter("endDate");
         String endTime = request.getParameter("endTime");
         
-        Timestamp startDatetime = Timestamp.valueOf(startDate + " " + startTime + ":00");
-        Timestamp endDatetime = Timestamp.valueOf(endDate + " " + endTime + ":00");
+        // Combine date and time to LocalDateTime
+        LocalDateTime startDatetime = LocalDateTime.parse(startDate + " " + startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        LocalDateTime endDatetime = LocalDateTime.parse(endDate + " " + endTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        
+        // Format LocalDateTime to String
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedStartDatetime = startDatetime.format(formatter);
+        String formattedEndDatetime = endDatetime.format(formatter);
         
         EmpDto emp = new EmpDto();
         emp.setEmpCode(empCode);
@@ -43,14 +53,17 @@ public class ScdlServiceImpl implements ScdlService {
                               .scdlContents(MySecurityUtils.getPreventXss(scdlContents))
                               .scdlOpenYn(scdlOpenYn)
                               .scdlPublicYn(scdlPublicYn)
-                              .startDatetime(startDatetime)
-                              .endDatetime(endDatetime)
+                              .startDatetime(formattedStartDatetime)
+                              .endDatetime(formattedEndDatetime)
                               .emp(emp)
                               .build();
         
         return scdlMapper.insertScheduler(scdl);
     }
-    
-    // 스케쥴 불러오기 SELECT 
-    
+
+    // 스케쥴 목록 가져오기 SELECT
+    @Override
+    public List<ScdlDto> getScheduleList(HttpServletRequest request) {
+        return scdlMapper.getAllSchedules();
+    }
 }

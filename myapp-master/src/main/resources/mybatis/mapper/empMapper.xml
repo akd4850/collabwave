@@ -86,19 +86,9 @@
   <select id="getEmpDetail"
   		  parameterType="Map"
   		  resultMap="EmpDtoMap">
-    SELECT E.EMP_CODE,
-           E.EMP_NAME,
-           E.PASSWORD,
-       	   E.BIRTHDAY_DATE,
-           E.JOIN_DATE,
-           D.DEPT_NAME,
-           P.POSITION_NAME,
-           E.PROFILE_FILE_NAME,
-           E.ZIP_CODE,
-           E.ADDRESS,
-           E.DETAIL_ADDRESS,
-           E.MOBILE,
-           E.EMAIL
+    SELECT E.EMP_CODE, E.EMP_NAME, E.PASSWORD, E.BIRTHDAY_DATE,
+           E.JOIN_DATE, D.DEPT_NAME, P.POSITION_NAME, E.ZIP_CODE,
+           E.ADDRESS, E.DETAIL_ADDRESS, E.MOBILE, E.EMAIL
       FROM EMP_T E
            LEFT JOIN DEPT_T  D ON E.DEPT_CODE = D.DEPT_CODE
            INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
@@ -193,14 +183,8 @@
   <select id="getEmpLeaveList"
   	      parameterType="Map"
   	      resultMap="EmpDtoMap">
-  	SELECT E.EMP_CODE,
-  		   E.EMP_NAME,
-       	   D.DEPT_NAME,
-       	   P.POSITION_NAME,
-           E.MOBILE,
-           E.STATUS_CODE,
-           E.JOIN_DATE,
-           E.LEAVE_DATE
+  	SELECT E.EMP_CODE, E.EMP_NAME, D.DEPT_NAME, P.POSITION_NAME,
+           E.MOBILE, E.STATUS_CODE, E.JOIN_DATE, E.LEAVE_DATE
       FROM EMP_T E
            INNER JOIN DEPT_T D ON E.DEPT_CODE = D.DEPT_CODE
            INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE

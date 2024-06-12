@@ -115,7 +115,6 @@ public class AdminController {
     deptService.registerDept(request, response);
   }
 	
-	    
 	@GetMapping("/pos/management.page")
   public String posManage(HttpServletRequest request, Model model) {
     model.addAttribute("submenu", "posManage.jsp");

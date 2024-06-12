@@ -159,6 +159,7 @@
                                         <img class="avatar border-gray" src="${contextPath}${sessionScope.emp.profileFileName}"  alt="프로필 이미지" loading="lazy" onclick="onClickUpload();"/>
                                     </c:otherwise>
                                 </c:choose>
+                                <p class="avatar-btn" onclick="onClickUpload();">EDIT</p> 
                                 <input type="hidden" name="empCode" id="hiddenEmpCode" value="${sessionScope.emp.empCode}">
                                 <input type="file" id="files" class="upload-hidden" name="profileFileName" onchange="onFileUpload();">
                             </form>
@@ -224,7 +225,7 @@
                 </div>
                 <br>
                 <input type="hidden" name="empCode" value="${emp.empCode}">
-                <button type="button" class="btn btn-info btn-fill" id="password_modify">변경하기</button>
+                <button type="submit" class="btn btn-info btn-fill" id="password_modify">변경하기</button>
                 <br>
 
             </form>
@@ -330,15 +331,15 @@ $(document).ready(function(){
 
 const onFileUpload = () => {
   var formData = new FormData();
-  formData.append('profileFileName', $('#hiddenEmpCode')[0].files[0]);
-  formData.append('empCode', $('#hiddenUserNo').val());
+  formData.append('profileFileName', $('#files')[0].files[0]);
+  formData.append('empCode', $('#hiddenEmpCode').val());
 
   $.ajax({
       enctype: 'multipart/form-data',
       processData: false,
       contentType: false,
       type: 'POST',
-      url: getContextPath() + '/myPage/modifyProfile.page',
+      url: '${contextPath}/myPage/modifyProfile.page',
       data: formData,
       dataType: 'json',
       success: (resData) => {

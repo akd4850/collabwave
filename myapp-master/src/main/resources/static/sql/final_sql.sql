@@ -134,7 +134,7 @@ CREATE TABLE scdl_t (
 );
 
 CREATE TABLE post_t (
-	post_no	number		NOT NULL,
+	post_no	 number		NOT NULL,
 	emp_code	varchar2(5)		NOT NULL,
 	brd_code	varchar2(5)		NOT NULL,
 	attach_no	number		NOT NULL,
@@ -143,8 +143,9 @@ CREATE TABLE post_t (
 	post_create_datetime	date		NOT NULL,
 	post_modify_datetime	date		NOT NULL,
 	post_state	number		NULL,
-	post_open_yn	char(1)		NULL,
+	post_open_yn	char(1)	 DEFAULT  'N'  NULL,
 	post_open_datetime	date		NULL
+    post_hit  number  NULL
 );
 
 CREATE TABLE cmmt_t (
@@ -161,9 +162,9 @@ CREATE TABLE cmmt_t (
 
 CREATE TABLE brd_t (
 	brd_code	varchar2(5)		NOT NULL,
-	dept_code2	varchar2(5)		NOT NULL,
+	dept_code	varchar2(5)		NOT NULL,
 	brd_name	varchar2(20)		NOT NULL,
-	cmmt_auth_yn	char(1)		NULL
+	cmmt_auth_yn	char(1)	DEFAULT 'N'	NULL
 );
 
 CREATE TABLE assetreservation_t (
@@ -396,7 +397,7 @@ REFERENCES post_t (
 );
 
 ALTER TABLE brd_t ADD CONSTRAINT FK_dept_t_TO_brd_t_1 FOREIGN KEY (
-	dept_code2
+	dept_code
 )
 REFERENCES dept_t (
 	dept_code

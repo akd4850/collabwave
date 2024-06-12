@@ -39,8 +39,8 @@ public class DeptServiceImpl implements DeptService {
 
 	@Override
 	public List<EmpDto> getBelongEmpList(String deptCode) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return deptMapper.getBelongEmpList(deptCode);
 	}
 	
 	@Override
@@ -63,7 +63,7 @@ public class DeptServiceImpl implements DeptService {
     // 목록 화면으로 반환할 값 (목록 + 전체 페이지 수)
     model.addAttribute("beginNo", total - (page - 1) * display);
     model.addAttribute("deptList", deptList);
-    model.addAttribute("paging", myPageUtils.getPaging(request.getContextPath() + "contents/admin/dept/list.do", null, display));
+    model.addAttribute("paging", myPageUtils.getPagingNewVersion(request.getContextPath() + "contents/admin/dept/list.do", null, display));
     
 	}
 	
@@ -124,6 +124,21 @@ public class DeptServiceImpl implements DeptService {
 	@Override
 	public List<EmpDto> getDeptMember(String deptCode) {
 	  return deptMapper.getDeptMember(deptCode);
+	}
+	
+	@Override
+	public void modifyDeptLeader(HttpServletRequest request) {
+	  
+	  String deptCode = request.getParameter("deptCode");
+	  String empCode = request.getParameter("empCode");
+	  
+	  DeptDto dept = DeptDto.builder()
+	                    .deptCode(deptCode)
+	                    .empCode(empCode)
+	                  .build();
+	  
+	  deptMapper.updateDeptLeader(dept);
+	  
 	}
 	
 }

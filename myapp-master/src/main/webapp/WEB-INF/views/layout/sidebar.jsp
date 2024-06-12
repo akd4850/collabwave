@@ -29,27 +29,34 @@
         <div class="user">
             <div class="info">
                 <div class="photo">
-                    <img src="${contextPath}/resources/img/avatar.jpg" />
+                    <c:choose>
+                        <c:when test="${sessionScope.emp.profileFileName == null}">
+                            <img src="${contextPath}/resources/img/new_logo.png" alt="기본 프로필" loading="lazy"/>
+                        </c:when>
+                        <c:otherwise>
+                            <img src="${sessionScope.emp.profileFileName}" alt="프로필 이미지" loading="lazy"/>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
   
                 <a data-toggle="collapse" href="#">
                     <span>
-                        김민식
+                        ${sessionScope.emp.empName}
                     </span>
                 </a>
   
                 <divid="collapseExample">
                     <ul class="nav">
                         <li class="sidebar-sub">
-                            <a href="/myPage/workLeave.page">
+                            <a href="/myPage/myInfo.page?empCode=${sessionScope.emp.empCode}">
                                 <span class="sidebar-mini"><!--MP--></span>
-                                <span class="sidebar-normal">근퇴 관리</span>
+                                <span class="sidebar-normal">내 정보</span>
                             </a>
                         </li>
                         <li class="sidebar-sub">
-                            <a href="/myPage/myInfo.page">
+                            <a href="/myPage/workLeave.page?empCode=${sessionScope.emp.empCode}">
                                 <span class="sidebar-mini"><!--MP--></span>
-                                <span class="sidebar-normal">내 정보</span>
+                                <span class="sidebar-normal">근퇴 관리</span>
                             </a>
                         </li>
                     </ul>
@@ -89,7 +96,7 @@
             </li>
         
             <li>
-                <a href="/community/notice.page">
+                <a href="/community/notice">
                     <i class="pe-7s-note2"></i>
                     <p>커뮤니티</p>
                 </a>
@@ -99,6 +106,13 @@
                 <a href="/admin/adminMain.page">
                     <i class="pe-7s-network"></i>
                     <p>조직관리</p>
+                </a>
+            </li>
+
+            <li>
+                <a href="/edsm/organizationChart.page">
+                    <i class="pe-7s-network"></i>
+                    <p>조직도</p>
                 </a>
             </li>
         

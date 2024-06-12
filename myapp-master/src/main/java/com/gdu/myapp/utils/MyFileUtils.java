@@ -40,12 +40,12 @@ public class MyFileUtils {
   }
   
   // 블로그 작성시 사용된 이미지가 저장될 경로 반환하기
-  public String getBlogImageUploadPath() {
+  public String getImageUploadPath() {
     return "/blog" + DateTimeFormatter.ofPattern("/yyyy/MM/dd").format(TODAY);
   }
   
   // 블로그 이미지가 저장된 어제 경로를 반환
-  public String getBlogImageUploadPathInYesterday() {
+  public String getImageUploadPathInYesterday() {
     return "/blog" + DateTimeFormatter.ofPattern("/yyyy/MM/dd").format(TODAY.minusDays(1));
   }
   

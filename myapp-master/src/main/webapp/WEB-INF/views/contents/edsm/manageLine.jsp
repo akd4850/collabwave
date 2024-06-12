@@ -15,7 +15,7 @@
         <input type="button"
                 class="btn btn-info btn-fill"
                 style="margin-left:10px"
-                onclick="location.href='/edsm/edsmAddLine.page'"
+                onclick="location.href='${contextPath}/edsm/edsmAddLine.page'"
                 value="${messageSource.getMessage('appr', null, locale)}${messageSource.getMessage('line', null, locale)}  
                 ${messageSource.getMessage('add', null, locale)}">
         <table class="table table-hover table-striped">
@@ -28,7 +28,7 @@
             <tbody>
                 <c:forEach items="${customApprList}" var="appr" varStatus="vs">
                     <tr>
-                        <td><a href="/edsm/edsmDetailForm.do?code=${sample.sampleDotCode}">${appr.lineName}</a></td>
+                        <td><a href="${contextPath}/edsm/edsmDetailLine.do?apprNo=${appr.customApprNo}">${appr.lineName}</a></td>
                     </tr>
                 </c:forEach>
             </tbody>

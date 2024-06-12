@@ -15,6 +15,36 @@
                 style="margin-left:10px"
                 onclick="location.href='/admin/pos/add.page'"
                 value="등록">
+
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Open modal</button>
+
+        <!-- The Modal -->
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+      
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">직급 수정</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+        
+                <!-- Modal body -->
+                <div class="modal-body">
+                Modal body..
+                </div>
+        
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">수정</button>
+                    <button type="button" class="btn btn-info" data-dismiss="modal">취소</button>
+                </div>
+        
+                </div>
+            </div>
+        </div>
+  
+                
         <table class="table table-hover table-striped">
             
             <thead>

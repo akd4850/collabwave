@@ -18,4 +18,5 @@ public interface DeptService {
 	DeptDto getDeptDetail(String deptCode);
 	void registerDept(HttpServletRequest request, HttpServletResponse response);
 	List<EmpDto> getDeptMember(String deptCode);
+	void modifyDeptLeader(HttpServletRequest request);
 }

@@ -1,4 +1,6 @@
+
 erpCalendar = {
+	
   initGoodsCalendar: function(calendarID){
     //$calendar = $('#goodsCalendar');
     $calendar = $('#' + calendarID);
@@ -7,19 +9,25 @@ erpCalendar = {
     y = today.getFullYear();
     m = today.getMonth();
     d = today.getDate();
-
+    
     $calendar.fullCalendar({
+			
+			locale: 'ko', // 한국어 설정
+			
       viewRender: function(view, element) {
         // We make sure that we activate the perfect scrollbar when the view isn't on Month
         if (view.name != 'month'){
           $(element).find('.fc-scroller').perfectScrollbar();
         }
       },
+      
+      // 캘린더 타이틀 구성요소 배치 
       header: {
         left: 'title',
-        center: 'month,agendaWeek,agendaDay',
-        right: 'prev,next,today'
+        center: 'prev, next, today',
+        right: 'month, agendaWeek, agendaDay'
   },
+  
   defaultDate: today,
   selectable: true,
   selectHelper: true,
@@ -67,8 +75,14 @@ erpCalendar = {
 
     });
   },
+  
   editable: true,
   eventLimit: true, // allow "more" link when too many events
+
+  
 });
+
+
+
 }
 }

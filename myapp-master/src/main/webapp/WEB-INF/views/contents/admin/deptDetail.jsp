@@ -77,24 +77,69 @@
             </div>
 
         <div class="container tab-pane fade" id="member">
-            <div>
-                <c:forEach items="${memberList}" var="member" varStatus="vs">
-                    <div>${member.empName}</div>    
-                </c:forEach>
-            </div>       
+            
+            <form method= "POST"
+                  action="${contextPath}/admin/dept/apppointLeader.do">
+
+
+            <button type="submit" id="btn-dept-leader" class="btn btn-outline-primary">부서장 위임</button>
+            <button type="button" id="btn-transfer" class="btn btn-outline-primary">부서이동</button>
+
+            <table class="table table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>이름</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach items="${memberList}" var="member" varStatus="vs">
+                        <tr>
+                            <th>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadio">
+                                    <label class="form-check-label" for="flexCheck">
+                                        ${member.empName}
+                                    </label>
+                                  </div>
+                            </th>
+                        </tr> 
+                    </c:forEach>
+                </tbody>
+            </table>
+        </form>
         </div>
-
-    </div>
-
+        </div>
         <button type="submit" id="btn-update" class="btn btn-info btn-fill">수정</button>
         <button type="button" id="btn-cancel" class="btn btn-danger btn-fill">취소</button>
         <div class="clearfix"></div>
     </form>
+
 </div>
 
 <script>
     document.getElementById('btn-cancel').onclick = function() { 
         history.back();
     }
+
+    const fnAppointDeptLeader = () => {
+        $('#btn-dept-leader').on('click', (evt) => {
+            $.ajax({
+                //요청
+                type: 'POST',
+                url: '${contextPath}/admin/dept/apppointLeader.do',
+                data: {deptCode: '${dept.deptCode}',
+                        empCode: '${emp.empCode}'},
+
+                //응답
+                success: (resData) => {
+                    alert('${emp.empName}님이 ${dept.deptName} 부서장으로 임명되었습니다.');
+                },
+                error: (jqXHR) => {
+                    alert(jqXHR.statusText + '(' + jqXHR.status + ')');
+                }
+            })
+        })
+    }
+
 
 </script>

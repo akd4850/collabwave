@@ -22,6 +22,8 @@
   </c:choose>
 </title>
 
+<script src="${contextPath}/resources/js/jquery.min.js" type="text/javascript"></script>
+
 <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet" />
 <link href="${contextPath}/resources/css/light-bootstrap-dashboard.css?v=1.4.1" rel="stylesheet"/>
 <link href="${contextPath}/resources/css/demo.css?v=1.4.1" rel="stylesheet" />

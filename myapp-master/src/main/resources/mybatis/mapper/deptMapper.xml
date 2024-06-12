@@ -18,6 +18,10 @@
 	    	<id property="empCode" column="EMP_CODE" />
 	    	<result property="empName" column="EMP_NAME" />
     	</association>
+    	<association property="pos" javaType="PosDto">
+	    	<id property="posCode" column="POSITION_CODE" />
+	    	<result property="posName" column="POSITION_NAME" />
+    	</association>
 	</resultMap>
 	
 	<select id="getDeptList">
@@ -31,8 +35,20 @@
 		        DEPT_UPSTAIR_CODE
 		FROM    DEPT_T
 		<where>
-	      	<if test="deptCode!='d0000'">DEPT_CODE = #{deptCode}</if>
+	      	<if test="deptCode!='d0000'">DEPT_UPSTAIR_CODE = #{deptCode}</if>
 	      	<if test="deptCode=='d0000'">DEPT_LEVEL = 0</if>
+    	</where>
+	</select>
+	
+	<select id="getBelongEmpList" resultType="EmpDto">
+		SELECT  A.EMP_CODE,
+        		A.EMP_NAME
+		FROM    EMP_T A
+		LEFT OUTER JOIN DEPT_T B
+		ON      A.DEPT_CODE = B.DEPT_CODE
+		<where>
+	      	<if test="deptCode!='d0000'">A.DEPT_CODE = #{deptCode}</if>
+	      	<if test="deptCode=='d0000'">A.DEPT_CODE IS NULL</if>
     	</where>
 	</select>
 	
@@ -90,8 +106,7 @@
       )
   </insert>
   
-  <select id="getDeptMember"
-  	      resultType="EmpDto">
+   <select id="getDeptMember">
 	SELECT E.EMP_NAME
       FROM DEPT_T D RIGHT JOIN EMP_T E
         ON D.DEPT_CODE = E.DEPT_CODE
@@ -100,5 +115,12 @@
 	    <if test="deptCode=='d0000'">E.DEPT_CODE IS NULL</if>
     </where>
   </select>
+  
+  <update id="appointDeptLeader"
+          parameterType="DeptDto">
+	UPDATE DEPT_T
+	   SET DEPT_LEADER_EMP_CODE = #{empCode}
+	 WHERE DEPT_CODE = #{deptCode}
+  </update>
 	
 </mapper>

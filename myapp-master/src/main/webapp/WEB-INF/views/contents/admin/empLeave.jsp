@@ -35,10 +35,9 @@
                     </tr>
                 </c:forEach>
             </tbody>
-            <tfoot>
-                <tr>
-                    <td>${paging}</td>
-            </tfoot>
         </table>
+        <tfoot>
+            ${paging}
+        </tfoot>
     </div>
 </div>

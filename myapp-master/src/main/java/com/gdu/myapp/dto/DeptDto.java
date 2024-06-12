@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class DeptDto {
-	private String deptCode, deptName, deptLeaderEmpCode, deptLocation, deptUpstairCode;
+	private String deptCode, deptName, deptLeaderEmpCode, deptLocation, deptUpstairCode, empCode;
 	private int deptLevel;
 	private LocalDate deptCreatedate;
 	private char useYn;

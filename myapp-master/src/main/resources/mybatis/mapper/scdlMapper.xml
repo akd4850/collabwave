@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gdu.myapp.mapper.ScdlMapper">
+
+  <resultMap type="ScdlDto" id="ScldMap">
+    <id property="scdlNo" column="SCDL_NO" />
+    <result property="emp.empCode" column="EMP_CODE" />
+    <result property="startDatetime" column="START_DATETIME" />
+    <result property="endDatetime" column="END_DATETIME" />
+    <result property="scdlTitle" column="SCDL_TITLE" />
+    <result property="scdlPlace" column="SCDL_PLACE" />
+    <result property="scdlContents" column="SCDL_CONTENTS" />
+    <result property="scdlOpenYn" column="SCDL_OPEN_YN" />
+    <result property="scdlPublicYn" column="SCDL_PUBLIC_YN" />
+  </resultMap>
+
+  <insert id="insertScheduler" 
+  				parameterType="ScdlDto">
+    INSERT INTO SCDL_T (
+        SCDL_NO,
+        EMP_CODE,
+        START_DATETIME,
+        END_DATETIME,
+        SCDL_TITLE,
+        SCDL_PLACE,
+        SCDL_CONTENTS,
+        SCDL_OPEN_YN,
+        SCDL_PUBLIC_YN
+    ) VALUES (
+        SCDL_SEQ.NEXTVAL,
+        #{emp.empCode},
+        #{startDatetime},
+        #{endDatetime},
+        #{scdlTitle},
+        #{scdlPlace},
+        #{scdlContents},
+        #{scdlOpenYn},
+        #{scdlPublicYn}
+    )
+  </insert>
+  
+  <!-- select -->
+<!--     <select id="getAllSchedules" resultType="com.gdu.myapp.dto.ScheduleDto">
+        SELECT * FROM SCDL_T;
+    </select> -->
+  
+  <!-- update -->
+  
+  <!-- delete -->
+
+</mapper>

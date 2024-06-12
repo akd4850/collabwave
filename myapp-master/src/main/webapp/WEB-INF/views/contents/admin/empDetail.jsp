@@ -100,6 +100,7 @@
             </div>
             
             <div>
+            <input type="hidden" name="empCode" value="${emp.empCode}">
             <button type="submit" id="btn-modify" class="btn btn-info btn-fill">수정</button>
             <button type="button" id="btn-remove" class="btn btn-info btn-fill">삭제</button>
             <button type="button" id="btn-cancel" class="btn btn-danger btn-fill">취소</button>

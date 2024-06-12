@@ -74,11 +74,17 @@
                             <div class="card card-hidden">
                                 <div class="header text-center">
                                     ${messageSource.getMessage("login", null, locale)}
+                                    <input type="hidden" name="url" value="${url}">
                                 </div>
                                 <div class="content">
                                     <div class="form-group">
                                         <label>${messageSource.getMessage("empCode", null, locale)}</label>
-                                        <input type="text" name="empCode" placeholder='${messageSource.getMessage("empCode", null, locale)}' class="form-control">
+                                        <c:if test="${cookie.empCode.value != 'undefined_cookie'}">
+                                            <input type="text" name="empCode" placeholder='${messageSource.getMessage("empCode", null, locale)}' class="form-control" value="${cookie.empCode.value}">
+                                        </c:if>
+                                        <c:if test="${cookie.empCode.value == 'undefined_cookie'}">
+                                            <input type="text" name="empCode" placeholder='${messageSource.getMessage("empCode", null, locale)}' class="form-control">
+                                        </c:if>
                                     </div>
                                     <div class="form-group">
                                         <label>${messageSource.getMessage("password", null, locale)}</label>
@@ -86,8 +92,9 @@
                                     </div>
                                     <div class="form-group">
 										<div class="checkbox">
-			  							  	<input id="checkbox30" type="checkbox">
-			  							  	<label for="checkbox30">
+                                            <c:if test="${cookie.empCode.value != 'undefined_cookie'}"><input type="checkbox" id="checkbox" name="rememberId" checked></c:if>
+                                            <c:if test="${cookie.empCode.value == 'undefined_cookie'}"><input type="checkbox" id="checkbox" name="rememberId"></c:if>
+			  							  	<label for="checkbox">
                                                 ${messageSource.getMessage("empCode", null, locale)} ${messageSource.getMessage("save", null, locale)}
 			  							  	</label>
 			  						  	</div>

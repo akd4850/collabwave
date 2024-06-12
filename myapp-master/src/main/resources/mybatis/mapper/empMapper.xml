@@ -162,6 +162,24 @@
 	UPDATE EMP_T SET SIGN_FILE_NAME = #{signFileName} WHERE EMP_CODE = #{empCode}
   </update>
   
+  <update id="updateInfo">
+	UPDATE EMP_T
+	   SET PHONE = #{phone},
+	       MOBILE = #{mobile},
+	       EMAIL = #{email},
+	       ZIP_CODE = #{zipCode},
+	       ADDRESS = #{address},
+		   DETAIL_ADDRESS = #{detailAddress}
+	 WHERE EMP_CODE= #{empCode}
+  </update>
+
+  <update id="updateProfile"
+  				parameterType="Map">
+	UPDATE EMP_T
+	   SET PROFILE_FILE_NAME = #{profileFileName}
+	 WHERE EMP_CODE = #{empCode}
+  </update>
+  
   <select id="getEmpLeaveList"
   	      parameterType="Map"
   	      resultMap="EmpDtoMap">
@@ -173,5 +191,6 @@
     WHERE STATUS_CODE = 's03'
     ORDER BY LEAVE_DATE DESC
   </select>
+  
 
 </mapper>

@@ -33,12 +33,32 @@
 <div id="eventPopup" class="event-popup">
     <div class="event-popup-content">
         <span id="closePopup" class="close">&times;</span>
-        <h4 id="popupTitle"></h4>
+        <h4>일정 정보</h4>
+        <p id="popupTitle"></p>
         <p id="popupStart"></p>
         <p id="popupEnd"></p>
         <p id="popupContents"></p>
-        <input type="hidden" id="popupScdlNo" >
+        <input type="hidden" id="popupScdlNo">
+        <button id="editScheduleBtn">수정</button>
         <button id="deleteScheduleBtn">삭제</button>
+    </div>
+</div>
+
+<!-- 일정 수정 팝업 -->
+<div id="editPopup" class="event-popup">
+    <div class="event-popup-content">
+        <span id="closeEditPopup" class="close">&times;</span>
+        <h4>일정 수정</h4>
+        <input type="hidden" id="editScdlNo">
+        <label>제목:</label>
+        <input type="text" id="editTitle"><br>
+        <label>시작일:</label>
+        <input type="datetime-local" id="editStart"><br>
+        <label>종료일:</label>
+        <input type="datetime-local" id="editEnd"><br>
+        <label>내용:</label>
+        <textarea id="editContents"></textarea><br>
+        <button id="saveEditBtn">저장</button>
     </div>
 </div>
 
@@ -163,7 +183,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('popupEnd').innerText = '일정종료 : ' + (end && end.isValid() ? end.format(endFormat) : 'Invalid date');
                 document.getElementById('popupContents').innerText = '내용 : ' + info.event.extendedProps.contents;
 
-                selectedEventId = info.event.extendedProps.scdlNo
+                selectedEventId = info.event.extendedProps.scdlNo;
                 console.log("Selected Event ID: " + selectedEventId); // 디버그용 로그
                 eventPopup.style.display = 'block';
             }
@@ -206,6 +226,79 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     }
+    
+    var editPopup = document.getElementById('editPopup');
+    var closeEditPopup = document.getElementById('closeEditPopup');
+    var editScheduleBtn = document.getElementById('editScheduleBtn');
+    var saveEditBtn = document.getElementById('saveEditBtn');
+
+    closeEditPopup.onclick = function() {
+        editPopup.style.display = 'none';
+    }
+
+    editScheduleBtn.onclick = function() {
+        document.getElementById('editScdlNo').value = selectedEventId;
+        document.getElementById('editTitle').value = document.getElementById('popupTitle').innerText;
+        
+        // Format the date properly before assigning to input elements
+        var startText = document.getElementById('popupStart').innerText.replace('일정시작 : ', '');
+        var endText = document.getElementById('popupEnd').innerText.replace('일정종료 : ', '');
+        
+        var startDate = moment(startText, 'YYYY년 MM월 DD일 HH시mm분').toDate();
+        var endDate = moment(endText, 'YYYY년 MM월 DD일 HH시mm분').toDate();
+
+        document.getElementById('editStart').value = startDate.toISOString().slice(0, -1);
+        document.getElementById('editEnd').value = endDate.toISOString().slice(0, -1);
+        
+        document.getElementById('editContents').value = document.getElementById('popupContents').innerText.replace('내용 : ', '');
+        
+        editPopup.style.display = 'block';
+    }
+
+    saveEditBtn.onclick = function() {
+    	
+        var scdlNo = document.getElementById('editScdlNo').value;
+        var title = document.getElementById('editTitle').value;
+        var start = document.getElementById('editStart').value;
+        var end = document.getElementById('editEnd').value;
+        var contents = document.getElementById('editContents').value;
+
+        fetch('${contextPath}/schedule/update.do', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+            
+            	scdlNo: scdlNo,
+              scdlTitle: title,
+              startDatetime: start,
+              endDatetime: end,
+              scdlContents: contents
+            
+            })
+        })
+        
+        .then(response => response.text())
+        
+        .then(data => {
+        	
+            if (data === 'success') {
+                alert('일정이 수정되었습니다.');
+                calendar.refetchEvents();
+                editPopup.style.display = 'none';
+                eventPopup.style.display = 'none';
+            } else {
+            		console.log(scdlNo);
+                alert('일정 수정에 실패했습니다.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('일정 수정 중 오류가 발생했습니다.');
+        });
+    }
 });
+
 
 </script>

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -32,7 +33,6 @@ public class ScheduleController {
         model.addAttribute("submenu", "schedule.jsp");
         return "contents/schedule/schedule";
     }
-
     // 일정 목록을 JSON 형식으로 반환
     @GetMapping(value = "/getScheduleList.do", produces = "application/json")
     @ResponseBody
@@ -57,28 +57,29 @@ public class ScheduleController {
         
         return ResponseEntity.ok(jsonArray.toString());
     }
-
     // 일정 등록하기 
     @GetMapping("/registerSchedule.page")
     public String registerSchedule(Model model) { 
         model.addAttribute("submenu", "registerSchedule.jsp");
         return "contents/schedule/registerSchedule";
     }
-    
     // 일정 등록하기 POST INSERT
     @PostMapping("/register.do") 
     public String register(HttpServletRequest request, RedirectAttributes redirectAttributes) { 
         redirectAttributes.addFlashAttribute("insertCount", scdlService.registerScheduler(request));
         return "redirect:/schedule/mySchedule.page"; 
     }
-    
     // 일정 수정하기 UPDATE
     @PostMapping("/update.do") 
-    public String editSchedule() {
-        // Implement update logic here
-        return "";
+    @ResponseBody
+    public ResponseEntity<String> editSchedule(@RequestBody ScdlDto scdl) {
+        int result = scdlService.updateSchedule(scdl);
+        if (result > 0) {
+            return ResponseEntity.ok("success");
+        } else {
+            return ResponseEntity.status(500).body("error");
+        }
     }
-    
     // 일정 삭제하기 DELETE
     @PostMapping("/delete.do")
     @ResponseBody

@@ -63,16 +63,17 @@ public class ScdlServiceImpl implements ScdlService {
 
         return scdlMapper.insertScheduler(scdl);
     }
-
     // 일정 목록 가져오기 SELECT
     @Override
     public List<ScdlDto> getScheduleList(HttpServletRequest request) {
         return scdlMapper.getAllSchedules();
     }
-
     // 일정 수정하기 
-
-    // 일정 삭제하기
+    @Override
+    public int updateSchedule(ScdlDto scdl) {
+        return scdlMapper.updateScheduler(scdl);
+    }
+    // 일정 삭제하기 DELETE 
     @Override
     public int deleteSchedule(int scdlNo) {
         return scdlMapper.deleteScheduler(scdlNo);

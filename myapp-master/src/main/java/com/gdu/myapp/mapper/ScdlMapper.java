@@ -6,13 +6,13 @@ import java.util.List;
 
 @Mapper
 public interface ScdlMapper {
-	int insertScheduler(ScdlDto scdl); // 스케쥴 신규 작성 
-	
-	// List 로 스케쥴 불러오기 
+	// 일정 신규 작성 
+	int insertScheduler(ScdlDto scdl); 
+	// List 로 일정 불러오기 
 	List<ScdlDto> getAllSchedules();
-
-	// 스케쥴 수정하기 
+	// 일정 수정 
 	
-	// 스케쥴 삭제하기 
+	// 일정 삭제
+	int deleteScheduler(int scdlNo);
 	
 }

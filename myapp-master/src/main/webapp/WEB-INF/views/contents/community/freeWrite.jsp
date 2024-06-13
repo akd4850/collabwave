@@ -9,7 +9,6 @@
 .ck-editor__editable {
   min-height: 500px;
 }
-
 </style>
 
 <div class="card">
@@ -17,9 +16,9 @@
     
     <form id="frm-post-register"
     	  method="POST"
+    	  enctype="multipart/form-data"
           action="${contextPath}/community/registerPost.do">
         
-        <input type="hidden" name="boardId" id="boardId" value="2"> <!-- 이 부분에 boardId 값을 설정 -->
         <input type="hidden" name="brdCode" id="brdCode" value="FREE">
         <table class="table table-hover table-striped">
             <tbody>
@@ -44,17 +43,14 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <input type="file" name="attach" id="attach">
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
                       <input type="hidden" id="postOpenYn" name="postOpenYn" value="N">
                       <input type="hidden" name="empCode" id="empCode" value="${sessionScope.emp.empCode}">
                       <input type="hidden" name="empName" id="empName" value="${sessionScope.emp.empName}">
+                      <input type="hidden" name="deptCode" id="deptCode" value="${sessionScope.emp.deptCode}">
                       <input type="hidden" name="postState" id="postState" value="1">
+					  <input type="file" name="files" id="files" style="display: none;">
                       <button type="submit" class="btn btn-info btn-fill" id="submit">작성</button>
-                      <button onclick="history.back()" type="button" class="btn btn-info btn-fill" id="cancel">취소</button></a>
+                      <button onclick="history.back()" type="button" class="btn btn-info btn-fill" id="cancel">취소</button>
                     </td>
                 </tr>
             </tbody>
@@ -67,6 +63,15 @@
 <script src="${contextPath}/ckeditor5/ckeditor.js"></script>
 <script src="${contextPath}/ckeditor5/script.js"></script>
 <script>
+let editor;
+ClassicEditor
+.create( document.querySelector( '#editor' ) )
+.then( newEditor => {
+    editor = newEditor;
+} )
+.catch( error => {
+    console.error( error );
+} );
 
 // 현재 일시 구현
 function insertCurrentDate() {
@@ -88,22 +93,18 @@ function validateForm(evt) {
     }
 }
 
-// 등록
+
+    
+//등록
 function register() {
+	
     document.getElementById('frm-post-register').addEventListener('submit', validateForm);
+    
+    // Update the value of postOpenYn checkbox based on its checked status
+    document.getElementById('postOpenYn').addEventListener('change', function() {
+        this.value = this.checked ? 'Y' : 'N';
+    });
 }
-
-let editor;
-
-// 에디터
-ClassicEditor
-    .create( document.querySelector( '#editor' ) )
-    .then( newEditor => {
-        editor = newEditor;
-    } )
-    .catch( error => {
-        console.error( error );
-    } );
 
 
 // 호출

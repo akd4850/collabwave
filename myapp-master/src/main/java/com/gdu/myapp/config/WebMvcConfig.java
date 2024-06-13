@@ -1,5 +1,6 @@
 package com.gdu.myapp.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
@@ -14,6 +15,8 @@ import com.gdu.myapp.interceptor.RequiredSignoutInterceptor;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
+	@Value("${service.file.uploadurl}")
+	public String UP_DIR;
 
 	private final RequiredSigninInterceptor requiredSigninInterceptor;
 	private final RequiredSignoutInterceptor requiredSignoutInterceptor;
@@ -24,14 +27,20 @@ public class WebMvcConfig implements WebMvcConfigurer {
 		this.requiredSignoutInterceptor = requiredSignoutInterceptor;
 	}
 
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/resources/**").addResourceLocations("classpath:/static/");
-		registry.addResourceHandler("/upload/**").addResourceLocations("file:///upload/");
-		registry.addResourceHandler("/blog/**").addResourceLocations("file:///blog/");
-		registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
-		registry.addResourceHandler("/jstree/").addResourceLocations("classpath:/static/jstree/");
-		registry.addResourceHandler("/ckeditor5/").addResourceLocations("classpath:/static/ckeditor5/");
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    	registry.addResourceHandler("/resources/**")
+        .addResourceLocations("classpath:/static/");
+	    registry.addResourceHandler("/upload/**")
+        .addResourceLocations("file://" + UP_DIR);
+	    registry.addResourceHandler("/blog/**")
+        .addResourceLocations("file:///blog/");
+    	registry.addResourceHandler("/static/**")
+		.addResourceLocations("classpath:/static/");
+    	registry.addResourceHandler("/jstree/")
+		.addResourceLocations("classpath:/static/jstree/");
+    	registry.addResourceHandler("/ckeditor5/")
+		.addResourceLocations("classpath:/static/ckeditor5/");
 	}
 
 	@Override

@@ -12,8 +12,10 @@ import lombok.NoArgsConstructor;
 public class BoardDto {
 	
 	private String brdCode;
-	private String deptCode;
 	private String brdName;
 	private String cmmtAuthYn;
+
+	private DeptDto dept;
+	private String deptCode;
 
 }

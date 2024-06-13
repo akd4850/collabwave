@@ -35,7 +35,7 @@
   <select id="getEmpByMap"
           parameterType="Map"
           resultType="EmpDto">
-    SELECT EMP_CODE, DEPT_CODE, POSITION_CODE, PASSWORD, EMP_NAME, PHONE,
+    SELECT EMP_CODE, DEPT_CODE, POSITION_CODE, PASSWORD, EMP_NAME, PHONE, DEPT_CODE,
     	   MOBILE, EMAIL, ZIP_CODE, ADDRESS, DETAIL_ADDRESS, BIRTHDAY_DATE,
     	   JOIN_DATE, SIGN_FILE_NAME, PASSWORD_MODIFY_DATETIME, STATUS_CODE, LEAVE_DATE
       FROM EMP_T
@@ -52,8 +52,13 @@
   <select id="getEmpList"
   	      parameterType="Map"
   	      resultMap="EmpDtoMap">
-  	SELECT E.EMP_CODE, E.EMP_NAME, D.DEPT_NAME, P.POSITION_NAME,
-           E.MOBILE, E.EMAIL, E.STATUS_CODE
+  	SELECT E.EMP_CODE,
+           E.EMP_NAME,
+           D.DEPT_NAME,
+           P.POSITION_NAME,
+           E.MOBILE,
+           E.EMAIL,
+           E.STATUS_CODE,
       FROM EMP_T E
            LEFT JOIN DEPT_T D ON E.DEPT_CODE = D.DEPT_CODE
            INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
@@ -61,34 +66,22 @@
      ORDER BY EMP_CODE ASC
   </select>
   
-  <select id="getSearchList"
-  	      parameterType="Map"
-  	      resultMap="EmpDtoMap">
-  	SELECT EMP_CODE, EMP_NAME, DEPT_NAME, POSITION_NAME, MOBILE, EMAIL, STATUS_CODE
-      FROM(SELECT ROW_NUMBER() OVER(ORDER BY E.EMP_CODE DESC) AS RN, E.EMP_CODE, E.EMP_NAME, D.DEPT_NAME, P.POSITION_NAME, E.MOBILE, E.EMAIL, E.STATUS_CODE
-             FROM EMP_T E LEFT JOIN DEPT_T D
-               ON E.DEPT_CODE = D.DEPT_CODE
-            INNER JOIN POSITION_T P
-               ON E.POSITION_CODE = P.POSITION_CODE
-            WHERE STATUS_CODE IN ('s01', 's02')
-              AND E.EMP_NAME LIKE CONCAT(CONCAT('%', #{query}), '%'))
-    WHERE RN BETWEEN #{begin} AND #{end}
-  </select>
-  
-  <select id="getSearchCount"
-          parameterType="Map"
-          resultType="int">
-    SELECT COUNT(*)
-      FROM EMP_T        	
-	 WHERE EMP_NAME LIKE '%' || #{query} || '%'
-  </select>
-  
   <select id="getEmpDetail"
   		  parameterType="Map"
   		  resultMap="EmpDtoMap">
-    SELECT E.EMP_CODE, E.EMP_NAME, E.PASSWORD, E.BIRTHDAY_DATE,
-           E.JOIN_DATE, D.DEPT_NAME, P.POSITION_NAME, E.ZIP_CODE,
-           E.ADDRESS, E.DETAIL_ADDRESS, E.MOBILE, E.EMAIL
+    SELECT E.EMP_CODE,
+           E.EMP_NAME,
+           E.PASSWORD,
+       	   E.BIRTHDAY_DATE,
+           E.JOIN_DATE,
+           D.DEPT_NAME,
+           P.POSITION_NAME,
+           E.PROFILE_FILE_NAME,
+           E.ZIP_CODE,
+           E.ADDRESS,
+           E.DETAIL_ADDRESS,
+           E.MOBILE,
+           E.EMAIL
       FROM EMP_T E
            LEFT JOIN DEPT_T  D ON E.DEPT_CODE = D.DEPT_CODE
            INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
@@ -125,7 +118,7 @@
       )
   </insert>
   
-  <update id="updateEmp"
+  <update id="updateEmployee"
           parameterType="EmpDto">
 	UPDATE EMP_T
 	   SET EMP_NAME = #{empName},
@@ -173,28 +166,25 @@
 	 WHERE EMP_CODE= #{empCode}
   </update>
 
-  <update id="updateProfile"
-  				parameterType="Map">
+  <update id="updateProfile">
 	UPDATE EMP_T
 	   SET PROFILE_FILE_NAME = #{profileFileName}
-	 WHERE EMP_CODE = #{empCode}
-  </update>
-  
-  <update id="updatePassword"
-  				parameterType="Map">
-	UPDATE EMP_T
-	   SET PASSWORD = #{password}
 	 WHERE EMP_CODE = #{empCode}
   </update>
   
   <select id="getEmpLeaveList"
   	      parameterType="Map"
   	      resultMap="EmpDtoMap">
-  	SELECT E.EMP_CODE, E.EMP_NAME, D.DEPT_NAME, P.POSITION_NAME,
-           E.MOBILE, E.STATUS_CODE, E.JOIN_DATE, E.LEAVE_DATE
-      FROM EMP_T E
-           INNER JOIN DEPT_T D ON E.DEPT_CODE = D.DEPT_CODE
-           INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
+  	SELECT EMP_T.EMP_CODE,
+  		   EMP_T.EMP_NAME,
+       	   DEPT_T.DEPT_NAME,
+       	   POSITION_T.POSITION_NAME,
+           EMP_T.MOBILE,
+           EMP_T.STATUS_CODE,
+           EMP_T.LEAVE_DATE
+      FROM EMP_T
+           INNER JOIN DEPT_T ON EMP_T.DEPT_CODE = DEPT_T.DEPT_CODE
+           INNER JOIN POSITION_T ON EMP_T.POSITION_CODE = POSITION_T.POSITION_CODE
     WHERE STATUS_CODE = 's03'
     ORDER BY LEAVE_DATE DESC
   </select>

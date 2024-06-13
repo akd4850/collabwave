@@ -5,5 +5,48 @@
 
 <mapper namespace="com.gdu.myapp.mapper.ReservationMapper">
 	
+<resultMap type="AssetDto" id="AssetMap">
+        <id property="assetCode" column="ASSET_CODE"/>
+        <result property="assetName" column="ASSET_NAME"/>
+        <result property="assetType" column="ASSET_TYPE"/>
+        <result property="useYn" column="USE_YN"/>
+        <result property="assetSubname" column="ASSET_SUBNAME"/>
+        <result property="subasset" column="SUBASSET"/>
+   </resultMap>	
+
+<insert id="addAsset"
+		parameterType="AssetDto">
+	INSERT INTO ASSETMANAGE_T (
+	  ASSET_CODE
+	, ASSET_NAME
+	, ASSET_TYPE
+	, USE_YN
+	, ASSET_SUBNAME
+	, SUBASSET
+	) VALUES (
+	  #{assetCode}
+	, #{assetName}
+	, #{assetType}
+	, 'N'
+	, #{assetSubname}
+	, #{subasset}
+	)
+</insert>
+
+<select id="getAssetCount"
+          parameterType="int">
+    SELECT COUNT(*)
+      FROM ASSETMANAGE_T        
+</select>
+  
+<select id="getAssetList"
+          parameterType="Map"
+          resultMap="AssetMap">
+    SELECT ASSET_CODE, ASSET_NAME, ASSET_TYPE, ASSET_SUBNAME, SUBASSET
+      FROM ASSETMANAGE_T
+     ORDER BY ASSET_CODE ASC
+</select>
+
+
 
 </mapper>

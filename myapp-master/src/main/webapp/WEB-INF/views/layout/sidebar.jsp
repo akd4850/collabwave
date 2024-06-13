@@ -34,7 +34,7 @@
                             <img src="${contextPath}/resources/img/new_logo.png" alt="기본 프로필" loading="lazy"/>
                         </c:when>
                         <c:otherwise>
-                            <img src="${sessionScope.emp.profileFileName}" alt="프로필 이미지" loading="lazy"/>
+                            <img src="${contextPath}${sessionScope.emp.profileFileName}" alt="프로필 이미지" loading="lazy"/>
                         </c:otherwise>
                     </c:choose>
                 </div>
@@ -82,7 +82,7 @@
             </li>
         
             <li>
-                <a href="/reservation/management.page"">
+                <a href="/reservation/curReservation.page">
                     <i class="pe-7s-note"></i>
                     <p>예약관리</p>
                 </a>

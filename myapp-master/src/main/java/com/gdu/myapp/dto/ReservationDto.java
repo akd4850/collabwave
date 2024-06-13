@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ReservationDto {
 	private int reservationNumber;
-	private String empCode, assetCode, reason, assetName, assetType, assetSubName, subAsset ;
+	private String empCode, assetCode, reason;
 	private Date startDatetime, endDatetime;
-	private char useYn;
+	private AssetDto asset;
 	private EmpDto emp;
 }

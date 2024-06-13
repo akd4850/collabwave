@@ -7,25 +7,22 @@
 
 <div class="card">
     <div class="header">
-       예약 현황
+       내 예약 현황
     </div>
     <div class="content table-responsive table-full-width">
-        <input type="button"
-                class="btn btn-info btn-fill"
-                style="margin-left:10px"
-                onclick="location.href='/reservation/reservationAsset.page'"
-                value="예약 하기">
         <table class="table table-hover table-striped">
             <thead>
                 <th>자산</th>
                 <th>내용</th>
                 <th>예약 시간</th>
+                <th>취소</th>
             </thead>
             <tbody>
                 <tr>
                     <td>대회의실1</td>
                     <td>회의실 예약</td>
                     <td>2024.05.22 17:30 ~ 2024.05.23 18:30</td>
+                    <td><button type="submit" class="btn btn-info btn-fill">취소</button></td>
                 </tr>
             </tbody>
         </table>

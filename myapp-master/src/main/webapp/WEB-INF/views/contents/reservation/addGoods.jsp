@@ -7,7 +7,7 @@
 
     <div class="card">
         <div class="content">
-        <form>
+        <form >
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">

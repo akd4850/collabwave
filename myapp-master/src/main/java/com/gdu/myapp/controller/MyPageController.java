@@ -44,18 +44,14 @@ public class MyPageController {
 	    return ResponseEntity.ok(Map.of("modifyInfoCount", myPageService.modifyInfo(request)));
 	  }
 	
-	@PostMapping("/modifyProfile.page")
-	  public String modifyProfile(String empCode,  MultipartFile profileFileName, Model model) {
-		
-		return "redirect:/myPage/myInfo.page?empCode="+empCode;
-	}
+	
 	@PostMapping("/modifyProfile.page")
     public ResponseEntity<Map<String, Object>> modifyProfile(MultipartHttpServletRequest multipartRequest) {
     	return new ResponseEntity<Map<String,Object>>( Map.of("ModifyProfileCount", myPageService.modifyProfile(multipartRequest)), HttpStatus.OK );
     }
 	
-	@PostMapping("/changePassword.do")
-	public void changePassword(HttpServletRequest request, HttpServletResponse response) {
+	@PostMapping("/modifyPassword.page")
+	public void modifyPassword(HttpServletRequest request, HttpServletResponse response) {
 
 		myPageService.modifyPassword(request, response);
 	}

@@ -43,6 +43,13 @@ public class AdminController {
     return "contents/admin/admin";
   }
 	
+	@GetMapping("/admin/emp/list.do")
+	public String empPaging(HttpServletRequest request, Model model) {
+	  model.addAttribute("submenu", "empManage.jsp");
+    empService.loadEmpList(request, model);
+    return "contents/admin/admin";
+	}
+	
 	@GetMapping("/emp/search.do")
 	public String searchEmp(HttpServletRequest request, Model model) {
 	  empService.loadEmpSearchList(request, model);
@@ -104,16 +111,21 @@ public class AdminController {
     return "contents/admin/admin";
 	}
 	
-	 @GetMapping("/dept/add.page")
-	  public String addDept(Model model) {
-	    model.addAttribute("submenu", "deptAdd.jsp");
-	    return "contents/admin/admin";
-	  }
+	@GetMapping("/dept/add.page")
+	public String addDept(Model model) {
+	  model.addAttribute("submenu", "deptAdd.jsp");
+	  return "contents/admin/admin";
+	}
 	
 	@PostMapping("/dept/add.do")
   public void registerDept(HttpServletRequest request, HttpServletResponse response) {
     deptService.registerDept(request, response);
   }
+	
+	@PostMapping("/dept/appointLeader.do")
+	public void modifyDeptLeader(HttpServletRequest request) {
+	  deptService.modifyDeptLeader(request);
+	}
 	
 	@GetMapping("/pos/management.page")
   public String posManage(HttpServletRequest request, Model model) {
@@ -121,6 +133,7 @@ public class AdminController {
     posService.loadPosList(request, model);
     return "contents/admin/admin";
 	}
+	
 	
 	@GetMapping(value="/detailAjax.do", produces="application/json")
 	public ResponseEntity<Map<String, Object>> detailEmpAjax(@RequestParam String empCode, Model model) {

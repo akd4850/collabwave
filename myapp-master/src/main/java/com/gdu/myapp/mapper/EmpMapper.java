@@ -19,6 +19,7 @@ public interface EmpMapper {
 	int updateEmployee(String empCode);
 	int updateInfo(EmpDto emp);
 	int updateProfile(Map<String, Object> map);
+	int updateProfile(EmpDto emp);
 	List<EmpDto> getEmpLeaveList(Map<String, Object> map);
 	int removeEmp(String empCode);
 	int updateEmp(EmpDto emp);

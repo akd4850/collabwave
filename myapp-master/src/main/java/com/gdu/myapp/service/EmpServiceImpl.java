@@ -75,6 +75,45 @@ public class EmpServiceImpl implements EmpService {
 	}
 
 	@Override
+	public void signout(HttpServletRequest request, HttpServletResponse response) {
+
+		try {
+			HttpSession session = request.getSession();
+
+			// 세션에 저장된 모든 정보 초기화
+			session.invalidate();
+
+			response.sendRedirect(request.getContextPath() + "/");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public String getRedirectURLAfterSignin(HttpServletRequest request) {
+
+		// Sign In 페이지 이전의 주소가 저장되어 있는 Request Header 의 referer 값 확인
+		String referer = request.getHeader("referer");
+
+		// referer 로 돌아가면 안 되는 예외 상황 (아이디/비밀번호 찾기 화면, 가입 화면 등)
+		String[] excludeURLs = { "/findId.page", "/findPw.page", "/signup.page", "/upload/edit.do" };
+
+		// Sign In 이후 이동할 url
+		String url = referer;
+		if (referer != null) {
+			for (String excludeURL : excludeURLs) {
+				if (referer.contains(excludeURL)) {
+					url = request.getContextPath() + "/main.page";
+					break;
+				}
+			}
+		} else {
+			url = request.getContextPath() + "/main.page";
+		}
+		return url;
+	}
+
+	@Override
 	public void loadEmpList(HttpServletRequest request, Model model) {
 
 		int total = empMapper.getEmpCount();
@@ -92,7 +131,8 @@ public class EmpServiceImpl implements EmpService {
 
 		model.addAttribute("beginNo", total - (page - 1) * display);
 		model.addAttribute("empList", empList);
-		model.addAttribute("paging", myPageUtils.getPaging(request.getContextPath() + "/list.do", null, display));
+		model.addAttribute("paging",
+				myPageUtils.getPagingNewVersion(request.getContextPath() + "/admin/emp/list.do", null, display));
 
 	}
 
@@ -193,7 +233,7 @@ public class EmpServiceImpl implements EmpService {
 		model.addAttribute("beginNo", total - (page - 1) * display);
 		model.addAttribute("empLeaveList", empLeaveList);
 		model.addAttribute("paging",
-				myPageUtils.getPaging(request.getContextPath() + "contents/employee/list.do", null, display));
+				myPageUtils.getPagingNewVersion(request.getContextPath() + "admin/emp/leaverlist.do", null, display));
 	}
 
 	@Override
@@ -221,52 +261,12 @@ public class EmpServiceImpl implements EmpService {
 		int modifyResult = empMapper.updateEmp(emp);
 
 		return modifyResult;
-	}
 
-	@Override
-	public void signout(HttpServletRequest request, HttpServletResponse response) {
-
-		try {
-			HttpSession session = request.getSession();
-
-			// 세션에 저장된 모든 정보 초기화
-			session.invalidate();
-
-			response.sendRedirect(request.getContextPath() + "/");
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public String getRedirectURLAfterSignin(HttpServletRequest request) {
-
-		// Sign In 페이지 이전의 주소가 저장되어 있는 Request Header 의 referer 값 확인
-		String referer = request.getHeader("referer");
-
-		// referer 로 돌아가면 안 되는 예외 상황 (아이디/비밀번호 찾기 화면, 가입 화면 등)
-		String[] excludeURLs = { "/findId.page", "/findPw.page", "/signup.page", "/upload/edit.do" };
-
-		// Sign In 이후 이동할 url
-		String url = referer;
-		if (referer != null) {
-			for (String excludeURL : excludeURLs) {
-				if (referer.contains(excludeURL)) {
-					url = request.getContextPath() + "/main.page";
-					break;
-				}
-			}
-		} else {
-			url = request.getContextPath() + "/main.page";
-		}
-
-		return url;
 	}
 
 	@Override
 	public ResponseEntity<Map<String, Object>> getEmpDetailAjax(String empCode) {
-
 		return new ResponseEntity<>(Map.of("emp", empMapper.getEmpDetail(empCode)), HttpStatus.OK);
 	}
+
 }

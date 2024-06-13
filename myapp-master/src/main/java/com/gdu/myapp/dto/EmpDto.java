@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class EmpDto {
-	private String empCode, positionCode, password, 
+	private String empCode, positionCode, password, deptCode,
 			empName, phone, mobile, email, address, detailAddress, 
 			signFileName, profileFileName, statusCode, deptCode;
 	private int zipCode;

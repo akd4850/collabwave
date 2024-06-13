@@ -11,17 +11,25 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 public interface EmpService {
+  
+  // 로그인
 	void signin(HttpServletRequest request, HttpServletResponse response);
 	void signout(HttpServletRequest request, HttpServletResponse response);
-	void loadEmpList(HttpServletRequest request, Model model);
-	void registerEmp(HttpServletRequest request, HttpServletResponse response);
-	EmpDto getEmpDetail(String empCode);
-//	int editEmployee(EmpDto emp);
 	String getRedirectURLAfterSignin(HttpServletRequest request);
+	
+	// 조회
+	void loadEmpList(HttpServletRequest request, Model model);
+	EmpDto getEmpDetail(String empCode);
 	void loadEmpLeaveList(HttpServletRequest request, Model model);
-	int deleteEmp(String empCode);
 //	int modifyEmp(HttpServletRequest request);
 	ResponseEntity<Map<String, Object>> getEmpDetailAjax(String empCode);
-	int modifyEmp(HttpServletRequest request);
 	void loadEmpSearchList(HttpServletRequest request, Model model);
+	
+	// 등록,수정,삭제
+	void registerEmp(HttpServletRequest request, HttpServletResponse response);
+	int modifyEmp(HttpServletRequest request);
+	int deleteEmp(String empCode);
+	
+	// int editEmployee(EmpDto emp);
+
 }

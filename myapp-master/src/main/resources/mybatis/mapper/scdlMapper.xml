@@ -40,16 +40,30 @@
   </insert>
   
   <!-- select -->
-  <select id="getAllSchedules" resultMap="ScldMap">
+  <select id="getAllSchedules" 
+  				resultMap="ScldMap">
         SELECT * FROM SCDL_T
   </select>
   
   <!-- update -->
-  
-  
+	<update id="updateScheduler" 
+					parameterType="ScdlDto">
+    UPDATE SCDL_T
+    SET 
+        SCDL_TITLE = #{scdlTitle},
+        START_DATETIME = #{startDatetime},
+        END_DATETIME = #{endDatetime},
+        SCDL_CONTENTS = #{scdlContents}
+        
+    WHERE SCDL_NO = #{scdlNo}
+	</update>
+	
   <!-- delete -->
-	<delete id="deleteScheduler" parameterType="int">
-  	  DELETE FROM SCDL_T WHERE SCDL_NO = #{scdlNo}
+	<delete id="deleteScheduler" 
+					parameterType="int">
+  	  DELETE 
+  	  	FROM SCDL_T 
+  	   WHERE SCDL_NO = #{scdlNo}
 	</delete>
 
 </mapper>

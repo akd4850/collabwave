@@ -10,8 +10,8 @@ public interface ScdlMapper {
 	int insertScheduler(ScdlDto scdl); 
 	// List 로 일정 불러오기 
 	List<ScdlDto> getAllSchedules();
-	// 일정 수정 
-	
+	// 일정 수정
+	int updateScheduler(ScdlDto scdl);
 	// 일정 삭제
 	int deleteScheduler(int scdlNo);
 	

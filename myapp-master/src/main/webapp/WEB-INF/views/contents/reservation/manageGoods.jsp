@@ -18,43 +18,56 @@
         <table class="table table-hover table-striped">
             <thead>
                 <tr>
-                    <th>코드</th>
-                    <th>이름</th>
                     <th>타입</th>
+                    <th>구분</th>
+                    <th>이름</th>
+                    <th>보조</th>
                     <th>수정</th>
                     <th>삭제</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>room1</td>
-                    <td>대회의실1</td>
-                    <td>장소</td>
-                    <td><button type="submit" class="btn btn-info btn-fill">수정</button></td>
-                    <td><button type="submit" class="btn btn-info btn-fill">삭제</button></td>
-                </tr>
-                <tr>
-                    <td>room2</td>
-                    <td>소회의실1</td>
-                    <td>장소</td>
-                    <td><button type="submit" class="btn btn-info btn-fill">수정</button></td>
-                    <td><button type="submit" class="btn btn-info btn-fill">삭제</button></td>
-                </tr>
-                <tr>
-                    <td>room3</td>
-                    <td>소회의실2</td>
-                    <td>장소</td>
-                    <td><button type="submit" class="btn btn-info btn-fill">수정</button></td>
-                    <td><button type="submit" class="btn btn-info btn-fill">삭제</button></td>
-                </tr>
-                <tr>
-                    <td>car1</td>
-                    <td>그랜져 3.0</td>
-                    <td>물품</td>
-                    <td><button type="submit" class="btn btn-info btn-fill">수정</button></td>
-                    <td><button type="submit" class="btn btn-info btn-fill">삭제</button></td>
-                </tr>
+            <tbody class="asset-list">
+              
             </tbody>
         </table>
+
     </div>
 </div>
+
+<script>
+
+    var page = 1;
+    var totalPage = 0;
+    
+    const fnGetAssetList = () => {
+      
+      $.ajax({
+          type: 'GET',
+          url: '${contextPath}/reservation/getAssetList.do',
+          data: 'page=' + page,
+          dataType: 'json',
+        success: (resData) => {
+            totalPage = resData.totalPage;
+            console.log(resData);
+            $('.asset-list').empty();
+          $.each(resData.assetList, (i, asset) => {
+            let str = '<tr>';
+                str += '<td>' + asset.assetType + '</td>';
+                str += '<td>' + asset.assetSubname + '</td>';
+                str += '<td>' + asset.assetName + '</td>';
+                str += '<td>' + (asset.subasset ? asset.subasset : '') + '</td>';
+                str += '<td><button type="submit" class="btn btn-info btn-fill">수정</button></td>';
+                str += '<td><button type="submit" class="btn btn-info btn-fill">삭제</button></td>';
+                str += '</tr>';
+                $('.asset-list').append(str);
+          })
+        },
+        error: (jqXHR) => {
+            alert(jqXHR.statusText + '(' + jqXHR.status + ')');
+        }
+      });
+      
+    }
+
+    fnGetAssetList();
+        </script>

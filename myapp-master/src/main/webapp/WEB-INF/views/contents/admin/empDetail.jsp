@@ -10,6 +10,11 @@
     <div class="header">
         <h4 class="title">직원 수정</h4>
     </div>
+
+    <form id = "frm-emp-modify"
+          method = "POST"
+          action = "${contextPath}/admin/emp/modify.do">
+
     <div class="content">
         <form>
             <div class="row">
@@ -93,13 +98,16 @@
                     </div>
                 </div>
             </div>
-
-            <button type="button" id="btn-update" class="btn btn-info btn-fill">수정</button>
+            
+            <div>
+            <input type="hidden" name="empCode" value="${emp.empCode}">
+            <button type="submit" id="btn-modify" class="btn btn-info btn-fill">수정</button>
             <button type="button" id="btn-remove" class="btn btn-info btn-fill">삭제</button>
             <button type="button" id="btn-cancel" class="btn btn-danger btn-fill">취소</button>
+            </div>
             <div class="clearfix"></div>
-        </form>
-    </div>
+        </div>
+    </form>
 </div>
 
 <script>
@@ -129,7 +137,16 @@
         })
     }
 
+    const fnModifyEmpInfo = (evt) => {
+        doucment.getElementById('frm-emp-modify').addEventListener('submit', (evt) => {
+        
+        })
+    }
+        
+
     fnDeleteEmployee();
+    fnModifyEmpInfo();
+
 
 
 </script>

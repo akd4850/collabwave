@@ -10,6 +10,7 @@
     <id property="posCode" column="POSITION_CODE" />
 	 <result property="posName" column="POSITION_NAME" />
 	 <result property="useYn" column="USE_YN" />
+	 <result property="users" column="USERS" />
 	 <association property="emp" javaType="EmpDto">
 	   <id property="empCode" column="EMP_CODE" />
 	   <result property="empName" column="EMP_NAME" />
@@ -19,7 +20,7 @@
 
   <select id="getPosByMap"
           resultMap="PosDtoMap">
-	SELECT P.POSITION_CODE, P.POSITION_NAME, P.USE_YN
+    SELECT P.POSITION_CODE, P.POSITION_NAME, P.USE_YN, COUNT(E.EMP_CODE) AS USERS
       FROM POSITION_T P LEFT JOIN EMP_T E
         ON P.POSITION_CODE = E.POSITION_CODE
   GROUP BY P.POSITION_CODE, P.POSITION_NAME, P.USE_YN

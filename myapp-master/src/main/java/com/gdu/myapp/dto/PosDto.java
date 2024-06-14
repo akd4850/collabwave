@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class PosDto {
   private String posCode, posName, useYn;
   private EmpDto emp;
+  private int users;
 }

@@ -17,7 +17,7 @@
             <h4 class="title">일정 등록</h4>
           </div>
           <div class="content table-responsive table-full-width">
-            <form id="frm-scdl-register" method="POST" action="${contextPath}/schedule/register.do">
+            <form id="frm-scdl-register" method="POST" action="${contextPath}/schedule/register.do" onsubmit="adjustEndDate()">
               <table class="table table-hover table-striped">
                 <tbody>
                   <tr>
@@ -43,13 +43,16 @@
                     <td class="center-align">기 간</td>
                     <td>
                       <div class="center-content">
-                        <input type="date" id="date-input-start" name="startDate" class="date-input" required>
-                        <input type="time" id="time-input-start" name="startTime" class="time-input" required>
+                        <input type="date" id="date-input-start" name="startDate" class="date-input" required onchange="checkDates()">
                         ~
-                        <input type="date" id="date-input-end" name="endDate" class="date-input" required>
-                        <input type="time" id="time-input-end" name="endTime" class="time-input" required>
-                        <input type="checkbox" id="checkboxAllday" onclick="toggleTimeInputs()">
-                        <label for="checkboxAllday">종일</label>
+                        <input type="date" id="date-input-end" name="endDate" class="date-input" required onchange="checkDates()">
+                        <div id="time-inputs" style="display: none;">
+                          <input type="time" id="time-input-start" name="startTime" class="time-input">
+                          ~
+                          <input type="time" id="time-input-end" name="endTime" class="time-input">
+                          <input type="checkbox" id="checkboxAllday" onclick="toggleTimeInputs()">
+                          <label for="checkboxAllday">종일</label>
+                        </div>
                       </div>
                     </td>
                   </tr>
@@ -57,12 +60,6 @@
                     <td class="center-align">제 목</td>
                     <td colspan="2">
                       <input type="text" class="form-control" name="scdlTitle" placeholder="제목을 입력하세요" required>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="center-align">장 소</td>
-                    <td colspan="2">
-                      <input type="text" class="form-control" name="scdlPlace" placeholder="장소를 입력하세요" required>
                     </td>
                   </tr>
                   <tr>
@@ -125,23 +122,44 @@
     
     timeInputs.forEach(function(input) {
       input.disabled = checkbox.checked;
-      if (checkbox.checked) {
-    	  
-        input.value = '00:00'; // 종일 일정 선택 시, 시작시간 00:00 ~ 종료시간 23:59 설정 
-        
+      if (checkbox.checked) { // 종일 일정 선택 시
+        input.value = ''; // 시간 input 없음 
       }
     });
   }
 
   function toggleOpenCheckbox(radio) {
     var openCheckbox = document.getElementById('open');
-    if (radio.value === 'Y') { // 전사일정 선택 시 
+    if (radio.value === 'Y') { // 전사 일정 선택 시 
       openCheckbox.disabled = true;
       openCheckbox.checked = true;
-    } else { // 개인일정 선택 시 
+    } else { // 개인 일정 선택 시 
       openCheckbox.disabled = false;
       openCheckbox.checked = false;
     }
   }
 
+  function checkDates() {
+    var startDate = document.getElementById('date-input-start').value;
+    var endDate = document.getElementById('date-input-end').value;
+    var timeInputsDiv = document.getElementById('time-inputs');
+    
+    if (startDate === endDate) {
+      timeInputsDiv.style.display = 'block';
+    } else {
+      timeInputsDiv.style.display = 'none';
+    }
+  }
+
+  function adjustEndDate() {
+	  
+    var startDate = document.getElementById('date-input-start').value;
+    var endDateInput = document.getElementById('date-input-end');
+    var endDate = new Date(endDateInput.value);
+    if (startDate !== endDateInput.value) {
+      endDate.setDate(endDate.getDate() + 1);
+      endDateInput.value = endDate.toISOString().split('T')[0];
+    }
+    
+  }
 </script>

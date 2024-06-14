@@ -11,7 +11,6 @@
     <result property="startDatetime" column="START_DATETIME" />
     <result property="endDatetime" column="END_DATETIME" />
     <result property="scdlTitle" column="SCDL_TITLE" />
-    <result property="scdlPlace" column="SCDL_PLACE" />
     <result property="scdlContents" column="SCDL_CONTENTS" />
     <result property="scdlOpenYn" column="SCDL_OPEN_YN" />
     <result property="scdlPublicYn" column="SCDL_PUBLIC_YN" />
@@ -25,7 +24,6 @@
         START_DATETIME,
         END_DATETIME,
         SCDL_TITLE,
-        SCDL_PLACE,
         SCDL_CONTENTS,
         SCDL_OPEN_YN,
         SCDL_PUBLIC_YN
@@ -35,7 +33,6 @@
         #{startDatetime},
         #{endDatetime},
         #{scdlTitle},
-        #{scdlPlace},
         #{scdlContents},
         #{scdlOpenYn},
         #{scdlPublicYn}
@@ -43,12 +40,30 @@
   </insert>
   
   <!-- select -->
-<!--     <select id="getAllSchedules" resultType="com.gdu.myapp.dto.ScheduleDto">
-        SELECT * FROM SCDL_T;
-    </select> -->
+  <select id="getAllSchedules" 
+  				resultMap="ScldMap">
+        SELECT * FROM SCDL_T
+  </select>
   
   <!-- update -->
-  
+	<update id="updateScheduler" 
+					parameterType="ScdlDto">
+    UPDATE SCDL_T
+    SET 
+        SCDL_TITLE = #{scdlTitle},
+        START_DATETIME = #{startDatetime},
+        END_DATETIME = #{endDatetime},
+        SCDL_CONTENTS = #{scdlContents}
+        
+    WHERE SCDL_NO = #{scdlNo}
+	</update>
+	
   <!-- delete -->
+	<delete id="deleteScheduler" 
+					parameterType="int">
+  	  DELETE 
+  	  	FROM SCDL_T 
+  	   WHERE SCDL_NO = #{scdlNo}
+	</delete>
 
 </mapper>

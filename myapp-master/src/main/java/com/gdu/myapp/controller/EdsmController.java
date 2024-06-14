@@ -13,11 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.gdu.myapp.dto.EmpDto;
 import com.gdu.myapp.service.EdsmService;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 @RequestMapping("/edsm")
 @Controller
@@ -63,12 +61,14 @@ public class EdsmController {
 		return "contents/edsm/edsm";
 	}
 
-	@GetMapping("/edsmDrafting.page")
-	public String edsmDrafting(Model model) {
+    @GetMapping("/edsmDrafting.do")
+    public String edsmDrafting(HttpServletRequest request, Model model) {
 
-		model.addAttribute("submenu", "edsmDrafting.jsp");
-		return "contents/edsm/edsm";
-	}
+        model.addAttribute("submenu", "edsmDrafting.jsp");
+        edsmService.loadDraftList(request, model);
+        
+        return "contents/edsm/edsm";
+    }
 
 	@GetMapping("/edsmForm.do")
 	public String edsmForm(Model model, Locale locale, HttpServletRequest request) {

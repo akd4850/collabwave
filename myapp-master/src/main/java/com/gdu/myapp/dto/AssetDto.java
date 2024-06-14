@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-public class PositionDto {
-  private String positionCode, positionName;
-  private char useYn;
+public class AssetDto {
+	private String assetCode, assetName, assetType, assetSubname, subasset;
+	private char useYn;
 }

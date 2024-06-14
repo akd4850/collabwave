@@ -18,8 +18,12 @@ public interface EmpMapper {
 	EmpDto getEmpDetail(String empCode);
 	int updateEmployee(String empCode);
 	int updateInfo(EmpDto emp);
+	int updateProfile(Map<String, Object> map);
 	int updateProfile(EmpDto emp);
 	List<EmpDto> getEmpLeaveList(Map<String, Object> map);
 	int removeEmp(String empCode);
 	int updateEmp(EmpDto emp);
+	List<EmpDto> getSearchList(Map<String, Object> map);
+	int getSearchCount(Map<String, Object> map);
+	int updatePassword(EmpDto emp);
 }

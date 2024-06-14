@@ -6,7 +6,6 @@
 
 <!-- fullcalendar css -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.css">
-
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 <!-- fullcalendar 언어 설정관련 script -->
@@ -22,11 +21,7 @@
             </div>
             <div class="col-md-10">
                 <div class="card card-calendar">
-                    <!-- 
-                    <div id="scheduleCalendar"></div>                    
-                    -->
                     <div id='calendar'></div> 
-                    
                 </div>
             </div>
         </div>
@@ -34,189 +29,276 @@
 </div>
 <jsp:include page="../../layout/footer.jsp"/>
 
+<!-- 이벤트 팝업 -->
+<div id="eventPopup" class="event-popup">
+    <div class="event-popup-content">
+        <span id="closePopup" class="close">&times;</span>
+        <h4>일정 정보</h4>
+        <p id="popupTitle"></p>
+        <p id="popupStart"></p>
+        <p id="popupEnd"></p>
+        <p id="popupContents"></p>
+        <input type="hidden" id="popupScdlNo">
+        <button id="editScheduleBtn">수정</button>
+        <button id="deleteScheduleBtn">삭제</button>
+    </div>
+</div>
+
+<!-- 일정 수정 팝업 -->
+<div id="editPopup" class="event-popup">
+    <div class="event-popup-content">
+        <span id="closeEditPopup" class="close">&times;</span>
+        <h4>일정 수정</h4>
+        <input type="hidden" id="editScdlNo">
+        <label>제목:</label>
+        <input type="text" id="editTitle"><br>
+        <label>시작일:</label>
+        <input type="datetime-local" id="editStart"><br>
+        <label>종료일:</label>
+        <input type="datetime-local" id="editEnd"><br>
+        <label>내용:</label>
+        <textarea id="editContents"></textarea><br>
+        <button id="saveEditBtn">저장</button>
+    </div>
+</div>
+
+<style>
+.fc-col-header-cell-cushion, .fc-daygrid-day-number {
+    text-decoration: none;
+}
+
+.fc-scrollgrid-sync-inner > .fc-col-header-cell-cushion,
+.fc-day-mon .fc-daygrid-day-number,
+.fc-day-tue .fc-daygrid-day-number,
+.fc-day-wed .fc-daygrid-day-number,
+.fc-day-thu .fc-daygrid-day-number,
+.fc-day-fri .fc-daygrid-day-number {
+    color: black;
+}
+
+.fc-day-sun .fc-col-header-cell-cushion,
+.fc-day-sun a {
+    color : red;
+}
+
+.fc-day-sat .fc-col-header-cell-cushion,
+.fc-day-sat a {
+    color : blue;
+}
+
+/* no-click 클래스에 포인터 이벤트 차단 */
+.fc-event.no-click {
+    pointer-events: none;
+}
+
+.event-popup {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.event-popup-content {
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+</style>
+
 <script>
 
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth', 
-	    headerToolbar: {
-	    	  left : 'prev next today',
-					center : 'title',
-					right : 'dayGridMonth timeGridWeek timeGridDay listWeek'
-	    },
-	    titleFormat : function( date ) {
-				return date.date.year + '년 ' + (parseInt(date.date.month) + 1) + '월';
-			},
-			selectable : true, // 달력 일자 드래그 설정가능
-			droppable : true, 
-			editable : true, 
-			nowIndicator: true, // 현재 시간 마크
-			locale: 'ko' // 한국어 설정
-			, 
-		      events: [
-                  	{
-                      title: '시험 결과 발표',
-                      start: '2024-06-21 13:00:00',
-                      
-                      color: 'red'
-                  	},
-                    
-                  	{
-                      title: '파이널 프로젝트 기간',
-                      start: '2024-05-14',
-                      end: '2024-06-20',
-                      
-                      color: 'blue'
-                    },
-                  	
-                  	{
-                        title: '과정 종강일',
-                        start: '2024-06-24',
-                        
-                        color: 'orange'
-                      }
-                  ]
-    });
-    
-    calendar.render();
-    
-	request.fail(function( jqXHR, textStatus ) {
-		  alert( "Request failed: " + textStatus );
-		});
-    
-  });
+    var eventPopup = document.getElementById('eventPopup');
+    var closePopup = document.getElementById('closePopup');
+    var deleteScheduleBtn = document.getElementById('deleteScheduleBtn');
+    var selectedEventId;
 
-$(function(){
-	
-	var request = $.ajax({
-	  url: "/schedule/mySchedule.page",
-	  method: "GET",
-	  dataType: "json"
-	});
-	 
-	request.done(function( data ) {
-		console.log(data);
-			
-			var calendarEl = document.getElementById('calendar');
-			
-			var calendar = new FullCalendar.Calendar(calendarEl, {
-		      initialView: 'dayGridMonth'
-		      
-		      // events: data
-/* 		      events: [
-                  {
-                      title: '시험 결과 발표',
-                      start: '2024-06-03'
-                      },
-                      {
-                      title: '프로젝트 발표',
-                      start: '2024-06-10',
-                      end: '2024-06-13'
-                      }
-                  ] */
-		      
-		  });
-			
-		    calendar.render();								
-	
-	});
-	 
-	request.fail(function( jqXHR, textStatus ) {
-	  alert( "Request failed: " + textStatus );
-	});
+    closePopup.onclick = function() {
+        eventPopup.style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        if (event.target == eventPopup) {
+            eventPopup.style.display = 'none';
+        }
+    }
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        googleCalendarApiKey: "AIzaSyDR6YAOuphCrCL2diTCS6ZM4LBSb4vIhXY",
+        eventSources: [ 
+            {
+                googleCalendarId: 'ko.south_korea#holiday@group.v.calendar.google.com',
+                color: 'red',
+                textColor: 'white',
+                className: 'no-click'
+            },
+            {
+                url: '${contextPath}/schedule/getScheduleList.do',
+                method: 'GET',
+                failure: function() {
+                    alert('일정을 가져오는데 실패했습니다.');
+                }
+            }
+        ],
+        
+        initialView: 'dayGridMonth',
+        
+        headerToolbar: {
+            left: 'prev next today',
+            center: 'title',
+            right: 'dayGridMonth timeGridWeek timeGridDay listWeek'
+        },
+        
+        nowIndicator: true,
+        locale: 'ko',
+        
+        eventClick: function(info) {
+            if (!info.event.classNames.includes('no-click')) {
+                var start = moment(info.event.start);
+                var end = info.event.end ? moment(info.event.end) : null;
+
+                var startFormat = start.isValid() ? (start.format('YYYY-MM-DD HH:mm') === 'Invalid date' || start.format('HH:mm') === '00:00' ? 'YYYY년 MM월 DD일' : 'YYYY년 MM월 DD일 HH시mm분') : 'Invalid date';
+                var endFormat = end && end.isValid() ? (end.format('YYYY-MM-DD HH:mm') === 'Invalid date' || end.format('HH:mm') === '00:00' ? 'YYYY년 MM월 DD일' : 'YYYY년 MM월 DD일 HH시mm분') : 'Invalid date';
+
+                if (start.isValid() && end && end.isValid() && start.format('YYYY-MM-DD') !== end.format('YYYY-MM-DD')) {
+                    end.subtract(1, 'days');
+                }
+                
+                document.getElementById('popupScdlNo').innerText = info.event.extendedProps.scdlNo;
+                document.getElementById('popupTitle').innerText = info.event.title;
+                document.getElementById('popupStart').innerText = '일정시작 : ' + (start.isValid() ? start.format(startFormat) : 'Invalid date');
+                document.getElementById('popupEnd').innerText = '일정종료 : ' + (end && end.isValid() ? end.format(endFormat) : 'Invalid date');
+                document.getElementById('popupContents').innerText = '내용 : ' + info.event.extendedProps.contents;
+
+                selectedEventId = info.event.extendedProps.scdlNo;
+                console.log("Selected Event ID: " + selectedEventId); // 디버그용 로그
+                eventPopup.style.display = 'block';
+            }
+        },
+        
+        eventDidMount: function(info) {
+            if (info.event.source.googleCalendarId) {
+                info.el.classList.add('no-click');
+            }
+        }
+    });
+
+    calendar.render();
+
+    deleteScheduleBtn.onclick = function() {
+        if (confirm("일정을 삭제하겠습니까?")) {
+            var scdlNo = encodeURIComponent(selectedEventId);
+            console.log("Deleting Schedule ID: " + scdlNo); // 디버그용 로그
+
+            fetch('${contextPath}/schedule/delete.do', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'scdlNo=' + scdlNo
+            })
+            .then(response => response.text())
+            .then(data => {
+                if (data === 'success') {
+                    alert('일정이 삭제되었습니다.');
+                    calendar.refetchEvents();
+                    eventPopup.style.display = 'none';
+                } else {
+                    alert('일정 삭제에 실패했습니다.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('일정 삭제 중 오류가 발생했습니다.');
+            });
+        }
+    }
+    
+    var editPopup = document.getElementById('editPopup');
+    var closeEditPopup = document.getElementById('closeEditPopup');
+    var editScheduleBtn = document.getElementById('editScheduleBtn');
+    var saveEditBtn = document.getElementById('saveEditBtn');
+
+    closeEditPopup.onclick = function() {
+        editPopup.style.display = 'none';
+    }
+
+    editScheduleBtn.onclick = function() {
+        document.getElementById('editScdlNo').value = selectedEventId;
+        document.getElementById('editTitle').value = document.getElementById('popupTitle').innerText;
+        
+        // Format the date properly before assigning to input elements
+        var startText = document.getElementById('popupStart').innerText.replace('일정시작 : ', '');
+        var endText = document.getElementById('popupEnd').innerText.replace('일정종료 : ', '');
+        
+        var startDate = moment(startText, 'YYYY년 MM월 DD일 HH시mm분').toDate();
+        var endDate = moment(endText, 'YYYY년 MM월 DD일 HH시mm분').toDate();
+
+        document.getElementById('editStart').value = startDate.toISOString().slice(0, -1);
+        document.getElementById('editEnd').value = endDate.toISOString().slice(0, -1);
+        
+        document.getElementById('editContents').value = document.getElementById('popupContents').innerText.replace('내용 : ', '');
+        
+        editPopup.style.display = 'block';
+    }
+
+    saveEditBtn.onclick = function() {
+    	
+        var scdlNo = document.getElementById('editScdlNo').value;
+        var title = document.getElementById('editTitle').value;
+        var start = document.getElementById('editStart').value;
+        var end = document.getElementById('editEnd').value;
+        var contents = document.getElementById('editContents').value;
+
+        fetch('${contextPath}/schedule/update.do', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+            
+            	scdlNo: scdlNo,
+              scdlTitle: title,
+              startDatetime: start,
+              endDatetime: end,
+              scdlContents: contents
+            
+            })
+        })
+        
+        .then(response => response.text())
+        
+        .then(data => {
+        	
+            if (data === 'success') {
+                alert('일정이 수정되었습니다.');
+                calendar.refetchEvents();
+                editPopup.style.display = 'none';
+                eventPopup.style.display = 'none';
+            } else {
+            		console.log(scdlNo);
+                alert('일정 수정에 실패했습니다.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('일정 수정 중 오류가 발생했습니다.');
+        });
+    }
 });
+
 
 </script>
-
-<!-- <script type="text/javascript">
-
-document.addEventListener('DOMContentLoaded', function() { 
-
-	$(function () {
-		
-	var calendarEl = document.getElementById('calendar'); // calendar
-	var calendar = new FullCalendar.Calendar(calendarEl, {
-		
-		initialView : 'dayGridMonth', // 초기 로드 될때 보이는 캘린더 화면(기본 설정: 달)
-	
-		headerToolbar : { // 헤더에 표시할 툴 바
-			start : 'prev next today',
-			center : 'title',
-			end : 'dayGridMonth timeGridWeek timeGridDay listWeek'
-		},
-		
-		titleFormat : function( date ) {
-			
-			return date.date.year + '년 ' + (parseInt(date.date.month) + 1) + '월';
-			
-		},
-		
-		//initialDate: '2021-07-15', // 초기 날짜 설정 (설정하지 않으면 오늘 날짜가 보인다.)
-		selectable : true, // 달력 일자 드래그 설정가능
-		droppable : true,
-		editable : true,
-		nowIndicator: true, // 현재 시간 마크
-		locale: 'ko' // 한국어 설정
-		
-		// , events: data // JSON 형식으로 불러오기 
-		
-	});
-	calendar.render();
-});
-
-});
-
-</script> -->
-
-<!-- <script type="text/javascript">
-document.addEventListener('DOMContentLoaded', function () {
-	
-    //$(function () {
-    	
-/*         var request = $.ajax({
-            url: "/schedule/schedule", // Controller 에 맞게 변경하기
-            method: "GET", 
-            dataType: "json" // json 형식으로 데이터 불러오기 
-        }); */
-
-        request.done(function (data) {
-            console.log(data); // log 로 데이터 찍어주기 
-
-            var calendarEl = document.getElementById('calendar'); // 
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-            	
-                // initialDate: '2024-06-07', // 캘린더 초기값 지정, 없으면 오늘 날짜 
-                initialView : 'dayGridMonth',
-                headerToolbar: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-                },
-                editable: true,
-                droppable: true, // this allows things to be dropped onto the calendar
-                drop: function (arg) {
-                    // is the "remove after drop" checkbox checked?
-                    if (document.getElementById('drop-remove').checked) {
-                        // if so, remove the element from the "Draggable Events" list
-                        arg.draggedEl.parentNode.removeChild(arg.draggedEl);
-                    }
-                },
-                /**
-                 * data 로 값이 넘어온다. log 값 전달.
-                 */
-		         		locale: 'ko', // 한국어 설정
-
-                // events: data // 이벤트 불러오기 
-            });
-
-            calendar.render();
-        });
-
-        request.fail(function( jqXHR, textStatus ) {
-            alert( "Request failed: " + textStatus );
-        });
-    //});
-
-});
-</script> -->

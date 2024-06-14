@@ -16,14 +16,17 @@
 
         <div class="collapse navbar-collapse">
 
+            <!--
             <form class="navbar-form navbar-left navbar-search-form" role="search">
                 <div class="input-group">
                     <input type="text" value="" class="form-control" placeholder="검색">
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
             </form>
+            -->
 
             <ul class="nav navbar-nav navbar-right">
+                <!--
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-bell-o"></i>
@@ -38,7 +41,9 @@
                         <li><a href="#">Notification 2</a></li>
                     </ul>
                 </li>
+                -->
 
+                <!--
                 <li>
                     <a href="${contextPath}/">
                         <span class="text-primary">
@@ -48,9 +53,10 @@
                         <span> - 09분 30초</span>
                     </a>
                 </li>
+                -->
 
                 <li>
-                    <a href="#" class="text-danger">
+                    <a href="${contextPath}/signout.do" class="text-danger">
                         <i class="pe-7s-close-circle"></i>
                         로그아웃
                     </a>
@@ -59,3 +65,21 @@
         </div>
     </div>
 </nav>
+
+<!--
+<script>
+    window.addEventListener('DOMContentLoaded', function() {
+        $.ajax({
+            type: 'GET',
+            url: fnGetContextPath() + '/getRemainTime.do',
+            contentType: "application/json; charset=utf-8;",
+            success: (resData) => {
+                // 남은 시간 초 계산
+                let expire = Math.floor((resData.createTime + resData.intervalTime)/ 1000);
+                let now = Math.floor(+ new Date() / 1000);
+                console.log(expire - now);
+            }
+        });
+	});
+</script>
+-->

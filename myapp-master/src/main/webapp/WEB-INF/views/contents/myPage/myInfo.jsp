@@ -48,6 +48,13 @@
     max-width: 1000px;
     max-height: 500px;
 }
+
+#files{
+    display: none;
+}
+
+
+
 </style>
 
 <div class="main-content">
@@ -65,37 +72,37 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>이름</label>
-                                        <input type="text" class="form-control" name="empName" placeholder="이름" value="${emp.empName}" disabled>
+                                        <input type="text" class="form-control" name="empName" placeholder="이름" value="${emp.empName}" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>사번</label>
-                                        <input type="text" class="form-control" name="empCode"placeholder="사번" value="${emp.empCode}" disabled>
+                                        <input type="text" class="form-control" name="empCode"placeholder="사번" value="${emp.empCode}" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>직급</label>
-                                        <input type="text" class="form-control" name="positionName" placeholder="직급" value="${emp.position.positionName}" disabled>
+                                        <input type="text" class="form-control" name="positionName" placeholder="직급" value="${emp.position.positionName}" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>부서</label>
-                                        <input type="text" class="form-control" name="deptName" placeholder="부서" value="${emp.dept.deptName}" disabled>
+                                        <input type="text" class="form-control" name="deptName" placeholder="부서" value="${emp.dept.deptName}" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>입사일자</label>
-                                        <input type="text" class="form-control" name="joinDate" placeholder="입사일자" value="${emp.joinDate}" disabled>
+                                        <input type="text" class="form-control" name="joinDate" placeholder="입사일자" value="${emp.joinDate}" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>생년월일</label>
-                                        <input type="text" class="form-control" name="birthdayDate" placeholder="생년월일" value="${emp.birthdayDate}" disabled>
+                                        <input type="text" class="form-control" name="birthdayDate" placeholder="생년월일" value="${emp.birthdayDate}" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -134,14 +141,14 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-info btn-fill pull-right" id="btn_modify">수정</button>
+                            <button type="button" class="btn btn-info btn-fill pull-right" id="btn_modify">수정</button>
                             <div class="clearfix"></div>
                         </form>
                     </div>
                 </div>
             </div>
 
-            <!-- 프로필, 비밀번호 변경 -->
+            <!-- 프로필 변경 -->
             <div class="col-md-4">
                 <div class="card card-user">
                     <div class="image">
@@ -150,24 +157,26 @@
                     <div class="content">
                         
                         <div class="author">
-                             <a href="#">
+                            <form>
                                 <c:choose>
                                     <c:when test="${emp.profileFileName == null}">
-                                        <img class="avatar border-gray" src="${contextPath}/resources/img/new_logo.png" alt="기본 프로필" loading="lazy"/>
+                                        <img class="avatar border-gray" src="${contextPath}/resources/img/new_logo.png" alt="기본 프로필" loading="lazy" onclick="onClickUpload();"/>
                                     </c:when>
                                     <c:otherwise>
-                                        <img class="avatar border-gray" src="${emp.profileFileName}" alt="프로필 이미지" loading="lazy"/>
+                                        <img class="avatar border-gray" src="${contextPath}${sessionScope.emp.profileFileName}"  alt="프로필 이미지" loading="lazy" onclick="onClickUpload();"/>
                                     </c:otherwise>
-                                </c:choose>
+                                </c:choose> 
+                                <input type="hidden" name="empCode" id="hiddenEmpCode" value="${sessionScope.emp.empCode}">
+                                <input type="file" id="files" class="upload-hidden" name="profileFileName" onchange="onFileUpload();">
+                            </form>
                                 <h4 class="title">${emp.empName}<br/>
                                     <small>${emp.position.positionName}</small>
                                 </h4>
-                            </a>
                         </div>
                     </div>
                     <hr>
                     <div class="text-center">
-                        <input type="button" class="btn btn-info btn-fill" id="profile_modal_open" value="프로필 변경"/><br/><br/>
+                        <br>
                         <input type="button" class="btn btn-info btn-fill" id="password_modal_open" value="비밀번호 변경"/><br/>&nbsp;
                     </div>
                 </div>
@@ -178,48 +187,32 @@
 </div>
 
 <!--모달창-->
-<!--프로필 모달-->
-<div class="modal" id="profile_modal">
-    <div class="modal_popup">
-        <h3>프로필 사진 변경</h3>
-        <br>
-        <form class="profileForm">
-            <div class="uploadImg">
-                <img id="previewImg">
-                <div class="filebox">
-                    <input type="hidden" name="empCode" value="${emp.empCode}">
-                    <input type="file" id="file1" class="upload-hidden" name="profileFileName">
-                </div>
-            </div>
-        </form>
-        <br>
-        <button type="submit" class="btn btn-info btn-fill" id="profile_modify">변경하기</button>
-        <button type="button" class="btn btn-info btn-fill" id="profile_modal_close">닫기</button>
-    </div>
-</div>
-
 <!--패스워드 모달-->
 <div class="modal" id="password_modal">
     <div class="modal_popup">
         <h3>패스워드 변경</h3>
             <br>
-            <form>
+            <form action="${contextPath}/myPage/modifyPassword.page"
+                  method="post"
+                  id="frm-changepw">
+
                 <div class="password">
-                    <p>변경할 비밀번호</p>
-                    <input type="password" class="form-control" name="password" id="pw" placeholder="8~15자 영문,숫자,특수문자 중 2개이상" style="width: 500px;" autocomplete="off"> 
+                    <label for="pw">비밀번호</label>
                     <div id="msg-pw" class="signup-alert"></div>
+                    <input type="password" class="form-control" name="password" id="pw" placeholder="8~15자 영문,숫자,특수문자 중 2개이상" style="width: 500px;" autocomplete="off"> 
                 </div>
                 <br>
                 <div class="passwordRe">
-                    <p>변경할 비밀번호</p>
-                    <input type="password" class="form-control" name="password2" id="pw2" placeholder="8~15자 영문,숫자,특수문자 중 2개이상" style="width: 500px;" autocomplete="off">
+                    <label for="pw2">비밀번호 확인</label>
                     <div id="msg-pw2" class="signup-alert"></div>
+                    <input type="password" class="form-control" name="password2" id="pw2" placeholder="8~15자 영문,숫자,특수문자 중 2개이상" style="width: 500px;" autocomplete="off">
                 </div>
-            </form>
                 <br>
-            
-            <br>
-        <button type="button" class="btn btn-info btn-fill" id="password_modify">변경하기</button>
+                <input type="hidden" name="empCode" value="${emp.empCode}">
+                <button type="submit" class="btn btn-info btn-fill" id="password_modify">변경하기</button>
+                <br>
+
+            </form>
         <button type="button" class="btn btn-info btn-fill" id="password_modal_close">닫기</button>
     </div>
 
@@ -233,7 +226,7 @@
 /* 개인 정보 수정 */
 
 const fnModifyInfo = () => {
-    $(document).on('submit', '#btn_modify', (evt) => {
+    $(document).on('click', '#btn_modify', (evt) => {
         $.ajax({
             type: 'POST',
             url: '${contextPath}/myPage/modifyInfo.page',
@@ -314,32 +307,39 @@ $(document).ready(function(){
 	        }
 	        reader.readAsDataURL(input.files[0]);
 	    }
-	}
+	}  
 
-    const fnModifyProfile = () => {
-    $(document).on('submit', '#profile_modify', (evt) => {
-        $.ajax({
-            type: 'POST',
-            url: '${contextPath}/myPage/modifyProfile.page',
-            data: $(evt.target).closest('.profileForm').serialize(), // form 데이터를 직렬화
-            dataType: 'json',
-            success: (resData) => {
-                if (resData.modifyProfileCount === 1) {
-                    alert('프로필 사진이 변경되었습니다.');
-                } else {
-                    alert('프로필 사진 수정에 실패했습니다.');   
-                }
-            },
-            error: (jqXHR) => {
-                alert(jqXHR.statusText + '(' + jqXHR.status + ')');
-            }
-        });
-    });
-};
+    const onClickUpload = () => {
+  $('#files').click();
+}
 
-fnModifyProfile();    
+const onFileUpload = () => {
+  var formData = new FormData();
+  formData.append('profileFileName', $('#files')[0].files[0]);
+  formData.append('empCode', $('#hiddenEmpCode').val());
 
-
+  $.ajax({
+      enctype: 'multipart/form-data',
+      processData: false,
+      contentType: false,
+      type: 'POST',
+      url: '${contextPath}/myPage/modifyProfile.page',
+      data: formData,
+      dataType: 'json',
+      success: (resData) => {
+          if(resData.ModifyProfileCount === true) {
+              alert('프로필 사진이 변경되었습니다.');
+              location.href = '${contextPath}/myPage/myInfo.page?empCode=';
+          }
+          else if(resData.ModifyProfileCount === false) {
+             alert('프로필 사진 변경에 실패했습니다.')
+          }
+      },
+      error: (jqXHR) => {
+          alert(jqXHR.statusText + '(' + jqXHR.status + ')');
+      }
+  });
+}
 
 /* 비밀번호 변경 */
 
@@ -393,28 +393,6 @@ let passwordConfirm = false;
     else return { result : false, msg : '비밀번호 입력을 확인하세요.' };
 }
 
-const fnModifyPassword = () => {
-    $(document).on('submit', '#password_modify', (evt) => {
-        $.ajax({
-            type: 'POST',
-            url: '${contextPath}/myPage/passwordModify.page',
-            data: formData.serialize(), // form 데이터를 직렬화
-            dataType: 'json',
-            success: (resData) => {
-                if (resData.modifyPasswordCount === 1) {
-                    alert('비밀번호가 변경되었습니다.');
-                } else {
-                    alert('비밀번호 변경에 실패했습니다.');   
-                }
-            },
-            error: (jqXHR) => {
-                alert(jqXHR.statusText + '(' + jqXHR.status + ')');
-            }
-        });
-    });
-};
-
-fnModifyPassword(); 
 
 
 
@@ -424,27 +402,16 @@ fnConfirmPassword();
 
 /* 모달창 */
 
-const modal1 = document.querySelector('#profile_modal');
-const modal2 = document.querySelector('#password_modal');
-const modalOpen1 = document.querySelector('#profile_modal_open');
-const modalOpen2 = document.querySelector('#password_modal_open');
-const modalClose1 = document.querySelector('#profile_modal_close');
-const modalClose2 = document.querySelector('#password_modal_close');
-
-/* 프로필 */
-modalOpen1.addEventListener('click',function(){
-    modal1.style.display = 'block';
-});
-modalClose1.addEventListener('click',function(){
-    modal1.style.display = 'none';
-});
+const modal = document.querySelector('#password_modal');
+const modalOpen = document.querySelector('#password_modal_open');
+const modalClose = document.querySelector('#password_modal_close');
 
 /* 패스워드 */
-modalOpen2.addEventListener('click',function(){
-    modal2.style.display = 'block';
+modalOpen.addEventListener('click',function(){
+    modal.style.display = 'block';
 });
-modalClose2.addEventListener('click',function(){
-    modal2.style.display = 'none';
+modalClose.addEventListener('click',function(){
+    modal.style.display = 'none';
 });
 
 

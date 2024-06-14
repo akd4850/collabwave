@@ -1,6 +1,7 @@
 package com.gdu.myapp.service;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -133,12 +134,14 @@ public class EdsmServiceImpl implements EdsmService {
 	        }
 	        
 	        String originalFilename = multipartFile.getOriginalFilename();
-	        String filesystemName = myFileUtils.getFilesystemName(originalFilename);
+	        String filesystemName = myFileUtils.getFilesystemName(originalFilename);	        
+	        String path = uploadPath + "/" + filesystemName;
 	        File file = new File(dir, filesystemName);
-	        String path = "/upload" + uploadPath + "/" + filesystemName;
+	        Path rPath = Path.of(file.getAbsolutePath());
+	        path = path.replace("/c:", "");
 	        
 	        try {
-	        	multipartFile.transferTo(file);
+	        	multipartFile.transferTo(rPath);
 	        	
 	        	HttpSession session = multipartRequest.getSession();
 	    		EmpDto empDto = (EmpDto)session.getAttribute("emp");

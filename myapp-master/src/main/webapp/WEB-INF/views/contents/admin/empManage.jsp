@@ -10,13 +10,29 @@
         직원 관리
     </div>
     <div class="content table-responsive table-full-width">
+        <table>
+        <tr>
+            <td>
         <input type="button"
                 class="btn btn-info btn-fill"
                 style="margin-left:10px"
                 onclick="location.href='/admin/emp/add.page'"
                 value="등록">
+            </td>
+
+           
+                <form method="GET"
+                      action= "${contextPath}/admin/emp/search.do">
+                    
+                    <td><input type="text" class="form-control" name="query" placeholder="사원명을 입력하세요"></td>
+                    <td><button type="submit" class="btn btn-info btn-fill">검색</button></td>
+                    </tr>
+                </form>
+            </tr>
+            </table>
+        
+
         <table class="table table-hover table-striped">
-            
             <thead>
                 <tr>
                     <th>사원번호</th>
@@ -39,10 +55,9 @@
                     </tr>
                 </c:forEach>
             </tbody>
-            <tfoot>
-                <tr>
-                    <td>${paging}</td>
-            </tfoot>
         </table>
+        <tfoot>
+            ${paging}
+        </tfoot>
     </div>
 </div>

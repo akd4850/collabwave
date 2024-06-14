@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.gdu.myapp.dto.EmpDto;
 import com.gdu.myapp.service.DeptService;
 import com.gdu.myapp.service.EmpService;
 import com.gdu.myapp.service.PosService;
@@ -42,6 +43,20 @@ public class AdminController {
     return "contents/admin/admin";
   }
 	
+	@GetMapping("/admin/emp/list.do")
+	public String empPaging(HttpServletRequest request, Model model) {
+	  model.addAttribute("submenu", "empManage.jsp");
+    empService.loadEmpList(request, model);
+    return "contents/admin/admin";
+	}
+	
+	@GetMapping("/emp/search.do")
+	public String searchEmp(HttpServletRequest request, Model model) {
+	  empService.loadEmpSearchList(request, model);
+	  model.addAttribute("submenu", "empManage.jsp");
+	  return "contents/admin/admin";
+	}
+	
 	@GetMapping("/emp/add.page")
 	public String addEmployee(Model model) {
 		model.addAttribute("submenu", "empAdd.jsp");
@@ -67,6 +82,14 @@ public class AdminController {
 	  return "contents/admin/admin";
 	}
 	
+	@PostMapping("/emp/modify.do")
+	public String modify(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+	  int modifyCount = empService.modifyEmp(request);
+	  redirectAttributes.addAttribute("empCode", request.getParameter("empCode"))
+	                    .addFlashAttribute("modifyResult", modifyCount == 1 ? "직원정보가 수정되었습니다." : "직원정보 수정이 실패했습니다.");
+	  return "redirect:/admin/emp/detail.do?empCode={empCode}";
+	}
+	
 	@PostMapping("/emp/delete.do")
 	public String deleteEmp(@RequestParam String empCode, RedirectAttributes redirectAttributes) {
 	  redirectAttributes.addFlashAttribute("removeEmpCount", empService.deleteEmp(empCode));
@@ -88,24 +111,29 @@ public class AdminController {
     return "contents/admin/admin";
 	}
 	
-	 @GetMapping("/dept/add.page")
-	  public String addDept(Model model) {
-	    model.addAttribute("submenu", "deptAdd.jsp");
-	    return "contents/admin/admin";
-	  }
+	@GetMapping("/dept/add.page")
+	public String addDept(Model model) {
+	  model.addAttribute("submenu", "deptAdd.jsp");
+	  return "contents/admin/admin";
+	}
 	
 	@PostMapping("/dept/add.do")
   public void registerDept(HttpServletRequest request, HttpServletResponse response) {
     deptService.registerDept(request, response);
   }
 	
-	    
+	@PostMapping("/dept/appointLeader.do")
+	public void modifyDeptLeader(HttpServletRequest request) {
+	  deptService.modifyDeptLeader(request);
+	}
+	
 	@GetMapping("/pos/management.page")
   public String posManage(HttpServletRequest request, Model model) {
     model.addAttribute("submenu", "posManage.jsp");
     posService.loadPosList(request, model);
     return "contents/admin/admin";
 	}
+	
 	
 	@GetMapping(value="/detailAjax.do", produces="application/json")
 	public ResponseEntity<Map<String, Object>> detailEmpAjax(@RequestParam String empCode, Model model) {

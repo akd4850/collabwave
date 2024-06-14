@@ -129,16 +129,26 @@ public class DeptServiceImpl implements DeptService {
 	@Override
 	public void modifyDeptLeader(HttpServletRequest request) {
 	  
-	  String deptCode = request.getParameter("deptCode");
-	  String empCode = request.getParameter("empCode");
-	  
-	  DeptDto dept = DeptDto.builder()
-	                    .deptCode(deptCode)
-	                    .empCode(empCode)
-	                  .build();
-	  
-	  deptMapper.updateDeptLeader(dept);
-	  
+	  try {
+      
+	    String deptCode = request.getParameter("deptCode");
+	    String empCode = request.getParameter("modifyEmpCode");
+	    
+	    DeptDto dept = DeptDto.builder()
+	        .deptCode(deptCode)
+	        .empCode(empCode)
+	        .build();
+	    
+	    deptMapper.appointDeptLeader(dept);
+	    
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+	}
+	
+	@Override
+	public List<DeptDto> getDeptListForTransfer(String deptCode) {
+	  return deptMapper.getDeptListForTransfer(deptCode);
 	}
 	
 }

@@ -62,8 +62,7 @@
   </select>
   
   <select id="getSearchList"
-  	      parameterType="Map"
-  	      resultMap="EmpDtoMap">
+  	      resultType="EmpDto">
   	SELECT EMP_CODE, EMP_NAME, DEPT_NAME, POSITION_NAME, MOBILE, EMAIL, STATUS_CODE
       FROM(SELECT ROW_NUMBER() OVER(ORDER BY E.EMP_CODE DESC) AS RN, E.EMP_CODE, E.EMP_NAME, D.DEPT_NAME, P.POSITION_NAME, E.MOBILE, E.EMAIL, E.STATUS_CODE
              FROM EMP_T E LEFT JOIN DEPT_T D
@@ -192,5 +191,12 @@
     ORDER BY LEAVE_DATE DESC
   </select>
   
-
+  <update id="empDeptTransfer">
+	UPDATE EMP_T
+	   SET DEPT_CODE = #{deptCode}
+	 WHERE EMP_CODE = #{empCode}
+	   AND EMP_CODE NOT IN (SELECT DEPT_LEADER_EMP_CODE
+	                          FROM DEPT_T)	
+  </update>
+  
 </mapper>

@@ -40,15 +40,43 @@
                         <input type="text" class="form-control" placeholder="사번" value="${emp.empCode}">
                     </div>
                 </div>
+             
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>직급</label>
+                        <input type="text" class="form-control" placeholder="직급" value="${emp.position.positionName}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>부서</label>
                         <input type="text" class="form-control" placeholder="부서" value="${emp.dept.deptName}">
                     </div>
                 </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>입사일자</label>
+                        <input type="text" class="form-control" placeholder="입사일자" value="${emp.joinDate}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>생년월일</label>
+                        <input type="text" class="form-control" placeholder="생년월일" value="${emp.birthdayDate}">
+                    </div>
+                </div>
             </div>
 
             <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>내선번호</label>
+                        <input type="text" class="form-control" placeholder="내선번호" value="${emp.phone}">
+                    </div>
+                </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>휴대전화</label>
@@ -59,12 +87,6 @@
                     <div class="form-group">
                         <label>이메일</label>
                         <input type="text" class="form-control" placeholder="이메일" value="${emp.email}">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>생년월일</label>
-                        <input type="text" class="form-control" placeholder="생년월일" value="${emp.birthdayDate}">
                     </div>
                 </div>
             </div>
@@ -90,15 +112,7 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>직급</label>
-                        <input type="text" class="form-control" placeholder="직급" value="${emp.position.positionName}">
-                    </div>
-                </div>
-            </div>
-            
+                
             <div>
             <input type="hidden" name="empCode" value="${emp.empCode}">
             <button type="submit" id="btn-modify" class="btn btn-info btn-fill">수정</button>
@@ -119,6 +133,7 @@
         $('#btn-remove').on('click', (evt) => {
             if(confirm('${emp.empName}님을 삭제(퇴사처리)하시겠습니까?')){
                 $.ajax({
+                    
                     //요청
                     type: 'POST',
                     url: '${contextPath}/admin/emp/delete.do',

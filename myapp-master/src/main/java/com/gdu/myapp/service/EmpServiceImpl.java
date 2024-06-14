@@ -195,7 +195,7 @@ public class EmpServiceImpl implements EmpService {
                   .build();
     
     int insertCount = empMapper.insertEmployee(emp);
-    
+     
     try {
       
       response.setContentType("text/html; charset=UTF-8");
@@ -289,5 +289,20 @@ public class EmpServiceImpl implements EmpService {
 	public ResponseEntity<Map<String, Object>> getEmpDetailAjax(String empCode) {
 		return new ResponseEntity<>(Map.of("emp", empMapper.getEmpDetail(empCode)), HttpStatus.OK);
 	}
+	
+	@Override
+	public int empDeptTransfer(HttpServletRequest request) {
+	  
+	  String empCode = request.getParameter("transferEmpCode");
+	  String deptCode = request.getParameter("transferDeptCode");
+	  
+	  EmpDto emp = EmpDto.builder()
+	                  .empCode(empCode)
+	                  .deptCode(deptCode)
+	                .build();
+	  
+	  return empMapper.empDeptTransfer(emp);
+	}
+	  
 	
 }

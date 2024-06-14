@@ -45,8 +45,24 @@ public class PosServiceImpl implements PosService {
     
     model.addAttribute("beginNo", total - (page - 1) * display);
     model.addAttribute("posList", posList);
-    model.addAttribute("paging", myPageUtils.getPaging(request.getContextPath() + "contents/admin/pos/list.do", null, display));
+    model.addAttribute("paging", myPageUtils.getPagingNewVersion(request.getContextPath() + "contents/admin/pos/list.do", null, display));
 
+  }
+  
+  @Override
+  public int registerPosition(HttpServletRequest request) {
+    
+    String posCode = request.getParameter("posCode");
+    String posName = request.getParameter("posName");
+    
+    PosDto pos = PosDto.builder()
+                   .posCode(posCode)
+                   .posName(posName)
+                 .build();
+    
+    int insertCount = posMapper.insertPosition(pos);
+    
+    return insertCount;
   }
 
 }

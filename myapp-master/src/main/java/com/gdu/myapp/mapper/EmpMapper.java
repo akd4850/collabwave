@@ -24,4 +24,5 @@ public interface EmpMapper {
 	int updateEmp(EmpDto emp);
 	List<EmpDto> getSearchList(Map<String, Object> map);
 	int getSearchCount(Map<String, Object> map);
+	int empDeptTransfer(EmpDto emp);
 }

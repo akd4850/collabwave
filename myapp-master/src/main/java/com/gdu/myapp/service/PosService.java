@@ -7,5 +7,6 @@ import jakarta.servlet.http.HttpServletRequest;
 public interface PosService {
   
   void loadPosList(HttpServletRequest request, Model model);
+  int registerPosition(HttpServletRequest request);
   
 }

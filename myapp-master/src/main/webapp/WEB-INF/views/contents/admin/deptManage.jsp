@@ -31,15 +31,13 @@
                     <tr>
                         <td>${dept.deptCode}</td>
                         <td><a href="/admin/dept/detail.do?deptCode=${dept.deptCode}">${dept.deptName}</a></td>
-                        <td>${dept.deptLeaderEmpCode}</td>
+                        <td>${dept.emp.empName}</td>
                         <td>${dept.deptLocation}</td>
                         <td>${dept.deptCreatedate}</td>
                     </tr>
                 </c:forEach>
             </tbody>
         </table>
-        <tfoot>
-            ${paging}
-        </tfoot>
+        ${paging}
     </div>
 </div>

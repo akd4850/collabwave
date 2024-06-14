@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gdu.myapp.mapper.AttendanceMapper">
+	
+	<resultMap type="AttendanceDto" id="AttendanceDtoMap">
+	    <id property="attendanceNo" column="ATTENDANCE_NO" />
+	    <result property="gotoworkDatetime" column="GOTOWORK_DATETIME" />
+	    <result property="offworkDatetime" column="OFFWORK_DATETIME" />
+	    <association property="emp" javaType="EmpDto">
+	    	<id property="empCode" column="EMP_CODE" />
+    	</association>
+	</resultMap>
+	
+	<select id="getAttendanceToday" resultMap="AttendanceDtoMap">
+		SELECT  A.ATTENDANCE_NO, A.GOTOWORK_DATETIME, A.OFFWORK_DATETIME, B.EMP_CODE
+		  FROM  ATTENDANCE_T A, EMP_T B
+		 WHERE  A.EMP_CODE = #{empCode}
+		   AND  A.EMP_CODE = B.EMP_CODE 
+		   AND  TO_DATE(A.GOTOWORK_DATETIME) = TO_DATE(CURRENT_DATE)
+	</select>
+	
+	<insert id="gotowork">
+		INSERT INTO ATTENDANCE_T (ATTENDANCE_NO, GOTOWORK_DATETIME, EMP_CODE) VALUES 
+			(ATTENDANCE_SEQ.NEXTVAL, CURRENT_DATE, #{empCode})
+	</insert>
+	
+	<insert id="offwork">
+		UPDATE ATTENDANCE_T SET OFFWORK_DATETIME = CURRENT_DATE WHERE EMP_CODE = #{empCode} AND TO_DATE(GOTOWORK_DATETIME) = TO_DATE(CURRENT_DATE)
+	</insert>
+	
+</mapper>

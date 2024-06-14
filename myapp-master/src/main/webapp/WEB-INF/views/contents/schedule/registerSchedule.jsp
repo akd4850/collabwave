@@ -4,7 +4,35 @@
 <c:set var="contextPath" value="<%=request.getContextPath()%>"/>
 <c:set var="dt" value="<%=System.currentTimeMillis()%>"/>
 
+<style>
+  .time-input {
+    display: inline-block;
+    width: auto;
+  }
+  .time-input:disabled {
+    background-color: #f0f0f0; /* disabled background color */
+    color: #a0a0a0; /* disabled text color */
+  }
+  .checkbox-group {
+    display: flex;
+  }
+  .checkbox-group div {
+    display: flex;
+  }
+  .checkbox-group input[type="checkbox"] {
+    margin-right: 5px;
+  }
+  tr {
+    height: 90px;
+  }
+  .center-align {
+    text-align: center;
+    vertical-align: middle;
+  }
+</style>
+
 <jsp:include page="../../layout/header.jsp" />
+
 <div class="main-content">
   <div class="container-fluid">
     <div class="row">
@@ -36,6 +64,8 @@
                           <input type="checkbox" id="open" name="scdlOpenYn" value="Y">
                           <label for="open">공개</label>
                         </div>
+                        <!-- Hidden input for scdlColor -->
+                        <input type="hidden" id="scdlColor" name="scdlColor" value="green">
                       </div>
                     </td>
                   </tr>
@@ -86,34 +116,8 @@
     </div>
   </div>
 </div>
-<jsp:include page="../../layout/footer.jsp" />
 
-<style>
-  .time-input {
-    display: inline-block;
-    width: auto;
-  }
-  .time-input:disabled {
-    background-color: #f0f0f0; /* disabled background color */
-    color: #a0a0a0; /* disabled text color */
-  }
-  .checkbox-group {
-    display: flex;
-  }
-  .checkbox-group div {
-    display: flex;
-  }
-  .checkbox-group input[type="checkbox"] {
-    margin-right: 5px;
-  }
-  tr {
-    height: 90px;
-  }
-  .center-align {
-    text-align: center;
-    vertical-align: middle;
-  }
-</style>
+<jsp:include page="../../layout/footer.jsp" />
 
 <script>
   function toggleTimeInputs() {
@@ -130,12 +134,15 @@
 
   function toggleOpenCheckbox(radio) {
     var openCheckbox = document.getElementById('open');
+    var scdlColorInput = document.getElementById('scdlColor');
     if (radio.value === 'Y') { // 전사 일정 선택 시 
       openCheckbox.disabled = true;
       openCheckbox.checked = true;
+      scdlColorInput.value = 'blue'; // Set scdlColor to blue for 전사일정
     } else { // 개인 일정 선택 시 
       openCheckbox.disabled = false;
       openCheckbox.checked = false;
+      scdlColorInput.value = 'green'; // Set scdlColor to green for 개인일정
     }
   }
 
@@ -152,7 +159,6 @@
   }
 
   function adjustEndDate() {
-	  
     var startDate = document.getElementById('date-input-start').value;
     var endDateInput = document.getElementById('date-input-end');
     var endDate = new Date(endDateInput.value);
@@ -160,6 +166,5 @@
       endDate.setDate(endDate.getDate() + 1);
       endDateInput.value = endDate.toISOString().split('T')[0];
     }
-    
   }
 </script>

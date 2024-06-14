@@ -17,11 +17,12 @@
                     <div class="content">
                         <div class="author">
                              <a href="#">
-                            <img class="avatar border-gray" src="${contextPath}/resources/img/avatar.jpg" alt="..."/>
+                            <img class="avatar border-gray" src="${contextPath}${sessionScope.emp.profileFileName}" alt="..."/>
 
-                              <h4 class="title">김민식<br />
-                                 <small>사원</small>
-                                 <small>${str.login}</small>
+                              <h4 class="title">
+                                ${sessionScope.emp.empName}<br />
+                                <small>${sessionScope.emp.dept.deptName}</small><br>
+                                 <small>${sessionScope.emp.position.positionName}</small>
                               </h4>
                             </a>
                         </div>

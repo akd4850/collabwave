@@ -1,6 +1,5 @@
 package com.gdu.myapp.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.core.io.Resource;
@@ -19,7 +18,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gdu.myapp.dto.AttachDto;
-import com.gdu.myapp.dto.CommentDto;
 import com.gdu.myapp.service.PostService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -94,23 +92,43 @@ public class CommunityController {
 	
   // 상세 화면
 	@GetMapping("/detail")
-  public String detail(@RequestParam int postNo, Model model, HttpServletRequest request) {
+  public String detail(@RequestParam int postNo,
+  											Model model
+  											//HttpServletRequest request
+  											) {
   	
-    postService.getPost(request, model, postNo);
-    model.addAttribute("submenu", "detail.jsp");
-    
+		model.addAttribute("submenu", "detail.jsp");
+		model.addAttribute("postNo", postNo);
+		
+    postService.getPost(model, postNo);
+       
     return "contents/community/community";
   }
 	
 	//댓글이 있는 자유게시판 상세 화면
-	@GetMapping("/detailFree") // 수정된 부분
-	public String freeDetail(@RequestParam int postNo, Model model, HttpServletRequest request) {
+	@GetMapping("/detailFree")
+	public String freeDetail(@RequestParam int postNo, 
+	                         @RequestParam(defaultValue = "1") int page, 
+	                         Model model,
+	                         HttpServletRequest request) {
+		
+	    model.addAttribute("submenu", "detailFree.jsp");
+	    model.addAttribute("postNo", postNo);
+	    
+	    postService.getPost(//request, 
+	    										model, postNo);
 	
-	   model.addAttribute("submenu", "detailFree.jsp");
-	   model.addAttribute("postNo", postNo);
-	   postService.getPost(request, model, postNo);
-	   
-	   return "contents/community/community";
+	    // 댓글 개수 가져오기
+	    int commentCount = postService.getCommentCount(postNo);
+	    model.addAttribute("commentCount", commentCount);
+	    
+	    // 댓글 목록 및 페이징 정보 가져오기
+	    Map<String, Object> commentData = postService.getCommentList(request, page, postNo);
+	    	    
+	    model.addAttribute("commentList", commentData.get("commentList"));
+	    model.addAttribute("paging", commentData.get("paging"));
+	
+	    return "contents/community/community";
 	}
 	
 	//등록
@@ -141,16 +159,16 @@ public class CommunityController {
 
 	// 목록 보기
   @GetMapping("/list")
-  public String list(int postNo, HttpServletRequest request, Model model) {
-		postService.getPost(request, model, postNo);
+  public String list(int postNo, Model model) {
+		postService.getPost(model, postNo);
     return "contents/community/community";
   }
   
   // 수정 화면으로 이동 
   @GetMapping("/edit")
-  public String edit(@RequestParam int postNo, Model model, HttpServletRequest request) {
+  public String edit(@RequestParam int postNo, Model model) {
     	model.addAttribute("submenu", "edit.jsp");
-  		postService.getPost(request, model, postNo);
+  		postService.getPost( model, postNo);
       return "contents/community/community";
   }
   
@@ -231,9 +249,14 @@ public class CommunityController {
 
   // 댓글 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
   // 댓글 목록
-  @GetMapping(value="/commentlist.do", produces="application/json")
-  public ResponseEntity<Map<String, Object>> getCommentList(HttpServletRequest request) {
-    return postService.getCommentList(request);
+  @GetMapping("/detailFree/commentList.do")
+  @ResponseBody
+  public ResponseEntity<Map<String, Object>> getCommentList(@RequestParam int postNo,
+                                                            HttpServletRequest request,
+                                                            @RequestParam(defaultValue = "1") int page) {
+
+      Map<String, Object> commentData = postService.getCommentList(request, page, postNo);
+      return ResponseEntity.ok(commentData);
   }
 	
 	// 댓글 등록

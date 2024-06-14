@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function() {
 }
 </style>
 
-<form id="frm-blog-modify"
+<form id="frm-post-modify"
       method="POST"
       action="${contextPath}/community/modifyPost.do">
 
@@ -56,6 +56,13 @@ document.addEventListener("DOMContentLoaded", function() {
                         <textarea name="postContent" id="editor" >${post.postContent}</textarea>
                     </td>
                 </tr>
+				<tr  id="ifFree" class="ifFree" >
+				    <th>중요공지여부</th>
+				    <td  id="notFree" class="notFree">
+				      <input type="checkbox" id="postOpenYn" name="postOpenYn" value="Y" ${post.postOpenYn == 'Y' ? 'checked' : ''}>
+				      <input type="hidden" name="postOpenYn" value="N">
+				    </td>
+				</tr>
 
                 <tr>
                     <td colspan="2">
@@ -77,10 +84,9 @@ document.addEventListener("DOMContentLoaded", function() {
                     </td>
                 </tr>
                 
-              <div id="notFree" class="notFree">
-			    <tr>
+			    <tr  id="ifFree" class="ifFree">
 			        <th>첨부파일</th>
-			        <td colspan="3">
+			        <td colspan="3"  id="ifFree" class="ifFree">
 			            <div id="attach-list">
 			                <c:if test="${empty attachList}">
 			                    <div>첨부 없음</div>
@@ -91,8 +97,8 @@ document.addEventListener("DOMContentLoaded", function() {
 			            </div>
 			        </td>
 			    </tr>
-				<tr>
-				    <td colspan="4">
+				<tr  id="ifFree" class="ifFree">
+				    <td colspan="4"  id="ifFree" class="ifFree">
 				        <c:if test="${sessionScope.emp.empCode == post.emp.empCode}">
 				            <div style="display: flex; align-items: center;">
 				                <input type="file" name="files" id="files" multiple style="margin-right: 500px;">
@@ -101,10 +107,10 @@ document.addEventListener("DOMContentLoaded", function() {
 				        </c:if>
 				    </td>
 				</tr>
-                <tr>
-                    <td colspan="4" id="new-attach-list"></td>
+                <tr  id="ifFree" class="ifFree">
+                    <td colspan="4" id="new-attach-list"  id="notFree" class="notFree"></td>
                 </tr>
-			</div>	
+
                 
             </tbody>
         </table>
@@ -119,10 +125,21 @@ document.addEventListener("DOMContentLoaded", function() {
 document.addEventListener("DOMContentLoaded", function() {
 	//자유게시판 첨부기능 숨기기
 	var brdCode = document.getElementById('brdCode');
-	console.log('========brdCode: ' + brdCode);
+	console.log(typeof brdCode); // "object"
+	console.log(brdCode instanceof HTMLElement); // true
+	console.log(brdCode.tagName); // e.g., "INPUT"	console.log('========brdCode: ' + brdCode);
+	var brdCodeValue = brdCode.value;
+	console.log(brdCodeValue);
+
 	if (brdCode === 'FREE') {
-	    document.getElementById('notFree').style.display = 'none';
+	    document.getElementByClassName('ifFree').style.display = 'none';
 	}
+});
+
+// 중요공지여부수정
+document.getElementById('frm-post-modify').addEventListener('submit', function(event) {
+    var checkbox = document.getElementById('postOpenYnCheckbox');
+    checkbox.value = checkbox.checked ? 'Y' : 'N';
 });
 
 // 취소 상세보기로 돌아가기
@@ -279,6 +296,7 @@ function backToList() {
 }
 
 // 함수 호출
+modify();
 fnAttachList();
 fnRemoveAttach();
 fnAddAttach();

@@ -53,7 +53,7 @@
                     </td>
                 </tr>
                 <tr >
-                	<th>상단노출여부</th>
+                	<th>중요공지여부</th>
                 	<td>
 	                    <input type="checkbox" id="postOpenYn" name="postOpenYn" value="${postOpenYn}">
                 	</td>

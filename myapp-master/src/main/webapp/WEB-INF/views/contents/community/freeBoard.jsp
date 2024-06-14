@@ -11,6 +11,10 @@
         font-size: 16px; /* 글꼴 크기 조정 */
         padding: 10px; /* 패딩 조정 */
     }
+    
+  .postTitleCell {
+    padding-left: 10px; /* Adjust the spacing as needed */
+  }
 </style>
 
 <div class="card">
@@ -35,7 +39,7 @@
             <tbody>
                 <c:forEach items="${postList}" var="post" varStatus="vs">
 	                <tr>
-	                    <td><a href="/community/detailFree?postNo=${post.postNo}">${post.postTitle}</a></td>
+	                    <td class="postTitleCell"><a href="/community/detailFree?postNo=${post.postNo}">${post.postTitle}</a></td>
 	                    <td>${post.emp.empName}</td>
 	                    <td>${post.postCreateDatetime}</td>
 	                    <td>${post.postHit}</td>

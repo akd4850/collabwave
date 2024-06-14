@@ -37,7 +37,7 @@ public interface PostMapper {
   int modifyComment(CommentDto comment);
   int deleteComment(int cmmtNo);
   // 댓글 목록
-  List<CommentDto> getCommentList();
+  List<CommentDto> getCommentList(Map<String, Object> paramMap);
 	int getCommentCount(int postNo);
 	
 	// 첨부파일

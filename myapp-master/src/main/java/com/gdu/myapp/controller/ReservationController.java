@@ -52,7 +52,6 @@ public class ReservationController {
 	
 	@GetMapping("/reservationAsset.page")
 	public String reservationAsset(Model model) {
-		
 		model.addAttribute("submenu", "reservationAsset.jsp");
 		return "contents/reservation/reservation";
 	}
@@ -70,7 +69,7 @@ public class ReservationController {
 	  	redirectAttributes
 	  	.addAttribute("empCode", request.getParameter("empCode"))
 	  	.addFlashAttribute("addAssetResult", addAssetResultCount == 1 ? "추가되었습니다.": "추가되지 않았습니다.");
-		return "redirect:/reservation/management.page?";
+		return "redirect:/reservation/management.page";
 	}
 	
 	@GetMapping(value="/getAssetList.do", produces="application/json")
@@ -84,7 +83,7 @@ public class ReservationController {
 	  	redirectAttributes
 	  	.addAttribute("empCode", request.getParameter("empCode"))
 	  	.addFlashAttribute("addAssetResult", addReservationCount == 1 ? "예약되었습니다.": "예약되지 않았습니다.");
-		return "redirect:/reservation/management.page?";
+		return "redirect:/reservation/curReservation.page";
 	}
 	
 	

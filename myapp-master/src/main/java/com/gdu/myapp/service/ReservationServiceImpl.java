@@ -67,8 +67,10 @@ public class ReservationServiceImpl implements ReservationService {
 		int reservationNumber = Integer.parseInt(request.getParameter("reservationNumber"));
 		String empCode = request.getParameter("empCode");
 		String assetCode = request.getParameter("assetCode");
-		Date startDatetime = request.getParameter("startDtaetime");
-		Date endDatetime = request.getParameter("endDatetime");
+		/*Date startDatetime = request.getParameter("startDtaetime");
+		Date endDatetime = request.getParameter("endDatetime");*/
+		Date startDatetime = Date.valueOf(request.getParameter("startDtaetime"));
+		Date endDatetime = Date.valueOf(request.getParameter("endDatetime"));
 		String reason = request.getParameter("reason");
 		
 		ReservationDto reser = ReservationDto.builder()

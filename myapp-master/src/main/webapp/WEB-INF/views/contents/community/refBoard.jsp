@@ -26,6 +26,7 @@
         <table class="table table-hover table-striped">
             <thead>
                 <tr>
+                    <th></th>
                     <th>글 제목</th>
                     <th>작성자</th>
                     <th>등록일</th>
@@ -33,18 +34,21 @@
                 </tr>
             </thead>
             <tbody>
-                <c:forEach items="${postList}" var="post" varStatus="vs">
-	                <tr>
-	                    <td><a href="/community/detail?postNo=${post.postNo}">${post.postTitle}</a></td>
-	                    <td>${post.emp.empName}</td>
-	                    <td>${post.postCreateDatetime}</td>
-	                    <td>${post.postHit}</td>
-	                </tr>
-                </c:forEach>
+			    <c:forEach items="${postList}" var="post" varStatus="vs">
+			        <tr>
+			            <td id="postOpenYnContainer_${vs.index}">
+			                <span id="postOpenYn_${vs.index}">${post.postOpenYn}</span>
+			            </td>
+			            <td><a href="/community/detail?postNo=${post.postNo}">${post.postTitle}</a></td>
+			            <td>${post.emp.empName}</td>
+			            <td>${post.postCreateDatetime}</td>
+			            <td>${post.postHit}</td>
+			        </tr>
+			    </c:forEach>
                 
 				<form action="${contextPath}/community/ref/search" method="get">
 				    <tr>
-				        <td colspan="4">
+				        <td colspan="5">
 				            <div style="display: flex; justify-content: flex-end; align-items: center;">
 				                <input type="text" id="search" name="query" class="form-control search-input" placeholder="검색어를 입력해주세요" style="width: 400px; margin-right: 10px;">
 				                <input type="hidden" name="brdCode" id="brdCode" value="REFE">
@@ -62,3 +66,21 @@
     <div>${paging}</div>
     
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var totalPosts = ${postList.size()}; // Assuming you have a way to get the total number of posts
+    for (var i = 0; i < totalPosts; i++) {
+        var container = document.getElementById('postOpenYnContainer_' + i);
+        var spanElement = document.getElementById('postOpenYn_' + i);
+        var postOpenYn = spanElement.textContent.trim();
+
+        if (postOpenYn === 'Y') {
+            spanElement.textContent = '중요';
+            spanElement.style.color = 'red'; // Set text color to red
+        } else {
+            container.removeChild(spanElement); // Remove the span element if 'Y' is not present
+        }
+    }
+});
+</script>

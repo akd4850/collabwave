@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -295,20 +296,15 @@ public class PostServiceImpl implements PostService {
   
   // 상세보기 번호로 가져오기
   @Override
-  public void getPost(HttpServletRequest request, Model model, int postNo) { 	
+  public void getPost(Model model, int postNo) { 	
     postMapper.updateHit(postNo);
     PostDto post = postMapper.getPostByNo(postNo);
     model.addAttribute("post", post);
-    model.addAttribute("postbrdCode", post.getBrdCode());
+    model.addAttribute("brdCode", post.getBrdCode());
     model.addAttribute("postEmpCode", post.getEmpCode());
     model.addAttribute("attachList", postMapper.getAttachList(postNo));
   }
   
-  @Override
-  public void getPost(int postNo, Model model) {
-  	// TODO Auto-generated method stub
-  	
-  }
  
 	// 게시글 수정
   @Override
@@ -318,12 +314,14 @@ public class PostServiceImpl implements PostService {
     String postContent = request.getParameter("postContent");
     int postNo = Integer.parseInt(request.getParameter("postNo"));
     String brdCode = request.getParameter("brdCode");
+    String postOpenYn = request.getParameter("postOpenYn");
     
     PostDto post = PostDto.builder()
         .postTitle(postTitle)
         .postContent(postContent)
         .postNo(postNo)
         .brdCode(brdCode)
+        .postOpenYn(postOpenYn)
         .build();
 
     int modifyCount = postMapper.updatePost(post);
@@ -382,9 +380,60 @@ public class PostServiceImpl implements PostService {
   
   // 댓글 목록
   @Override
-  public ResponseEntity<Map<String, Object>> getCommentList(HttpServletRequest request) {
+  public Map<String, Object> getCommentList(HttpServletRequest request, int page, int postNo) {
   	
-  	return new ResponseEntity<>(Map .of("commentList", postMapper.getCommentList()), HttpStatus.OK);
+    	page = (page < 1) ? 1 : page;
+
+      // 전체 댓글 개수
+      int total = postMapper.getCommentCount(postNo);
+      System.out.println("========Total comments: " + total);
+
+      // 한 페이지에 표시할 댓글 개수
+      int display = 10;
+      
+      // 페이징 처리
+      myPageUtils.setPaging(total, display, page);
+      System.out.println("========Begin: " + myPageUtils.getBegin() + ", End: " + myPageUtils.getEnd());
+
+      
+//      // 목록을 가져올 때 사용할 Map 생성
+//      Map<String, Object> paramMap = Map.of(
+//          "postNo", postNo,
+//          "begin", myPageUtils.getBegin(),
+//          "end", myPageUtils.getEnd()
+//      );
+//      
+//      System.out.println("=======Fetched comments: " + paramMap);
+//            
+//      // 결과 (목록, 페이징) 반환
+//      return Map.of(
+//          "commentList", postMapper.getCommentList(paramMap),
+//          "paging", myPageUtils.getAsyncPaging()
+//      );
+      
+      // 목록을 가져올 때 사용할 Map 생성
+      Map<String, Object> paramMap = Map.of(
+          "postNo", postNo,
+          "begin", myPageUtils.getBegin(),
+          "end", myPageUtils.getEnd()
+      );
+            
+      // 결과 (목록, 페이징) 반환
+      Map<String, Object> result = new HashMap<>();
+      List<CommentDto> comments = postMapper.getCommentList(paramMap);
+      System.out.println("=======Fetched comments: " + comments.size());
+
+      result.put("commentList", comments);
+      result.put("paging", myPageUtils.getAsyncPaging());
+      
+      return result;
+  }
+
+  
+  // 댓글 개수
+  @Override
+  public int getCommentCount(int postNo) {
+  	return postMapper.getCommentCount(postNo);
   }
    
   // 댓글 등록

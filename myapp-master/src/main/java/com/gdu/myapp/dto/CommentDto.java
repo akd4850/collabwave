@@ -1,6 +1,5 @@
 package com.gdu.myapp.dto;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
@@ -20,10 +19,14 @@ public class CommentDto {
 	private int cmmtStatus;
 	private LocalDateTime cmmtCreateDatetime;
 	private LocalDateTime cmmtModifyDatetime;
+	
+	private PostDto post;
 	private int postNo;
 	
 	private EmpDto emp;
 	private String empCode;
 	private String empName;
+	
+  private int commentCount;
 
 }

@@ -1,23 +1,21 @@
 package com.gdu.myapp.service;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-
-import com.gdu.myapp.dto.CommentDto;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 public interface PostService {
 	
 	// 게시글ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-	void getPost(int postNo, Model model);
-	void getPost(HttpServletRequest request, Model model, int postNo);
+	void getPost(Model model, int postNo);
+	//void getPost(HttpServletRequest request, Model model, int postNo);
   void getNoticeList(HttpServletRequest request, Model model);
   void getFreeList(HttpServletRequest request, Model model);
   void getDeptList(HttpServletRequest request, Model model);
@@ -30,7 +28,9 @@ public interface PostService {
   void postSearchList(HttpServletRequest request, Model model);
 	
 	// 댓글ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-  ResponseEntity<Map<String, Object>> getCommentList(HttpServletRequest request);
+  Map<String, Object> getCommentList(HttpServletRequest request, int page, int postNo);
+  
+  int getCommentCount(int postNo);
   int registerComment(HttpServletRequest request);
   int modifyComment(HttpServletRequest request);
   int removeComment(int commentNo);

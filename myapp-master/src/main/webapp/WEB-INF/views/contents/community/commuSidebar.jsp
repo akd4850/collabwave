@@ -47,12 +47,12 @@
             <form>
                 <div class="form-group">
                 	<h6>커뮤니티 이름</h6>
-                	<input type="text" id="community-name" name="community-name" class="form-control search-input" style="width: 400px;">
+                	<input type="text" id="brdName" name="brdName" class="form-control search-input" style="width: 400px;">
                 </div>
                 <hr>
                 <div class="form-group">
                 	<h6>커뮤니티 코드</h6>
-                	<input type="text" id="community-code" name="community-code" class="form-control search-input" style="width: 400px;">
+                	<input type="text" id="brdCode" name="brdCode" class="form-control search-input" style="width: 400px;">
                 </div>
                 <hr>
                 <div class="form-group">

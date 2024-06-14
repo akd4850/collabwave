@@ -47,6 +47,7 @@ public class MyPageController {
 	
 	@PostMapping("/modifyProfile.page")
     public ResponseEntity<Map<String, Object>> modifyProfile(MultipartHttpServletRequest multipartRequest) {
+		
     	return new ResponseEntity<Map<String,Object>>( Map.of("ModifyProfileCount", myPageService.modifyProfile(multipartRequest)), HttpStatus.OK );
     }
 	

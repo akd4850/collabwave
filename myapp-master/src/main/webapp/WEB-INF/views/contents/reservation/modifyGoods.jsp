@@ -9,7 +9,7 @@
         <div class="content">
         <form id="frm-addAsset"
               method="POST"
-              action="${contextPath}/reservation/addAsset.page">
+              action="${contextPath}/reservation/modifyAsset.page">
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
@@ -21,6 +21,9 @@
                         </select>
                     </div>
                 </div>
+
+                <!-- 입력했던 값 불러오기 blogEdit 참조-->
+
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>자산코드</label>

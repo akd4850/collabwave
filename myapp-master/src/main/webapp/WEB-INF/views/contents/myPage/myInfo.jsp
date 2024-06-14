@@ -48,6 +48,13 @@
     max-width: 1000px;
     max-height: 500px;
 }
+
+#files{
+    display: none;
+}
+
+
+
 </style>
 
 <div class="main-content">
@@ -141,7 +148,7 @@
                 </div>
             </div>
 
-            <!-- 프로필, 비밀번호 변경 -->
+            <!-- 프로필 변경 -->
             <div class="col-md-4">
                 <div class="card card-user">
                     <div class="image">
@@ -158,8 +165,7 @@
                                     <c:otherwise>
                                         <img class="avatar border-gray" src="${contextPath}${sessionScope.emp.profileFileName}"  alt="프로필 이미지" loading="lazy" onclick="onClickUpload();"/>
                                     </c:otherwise>
-                                </c:choose>
-                                <p class="avatar-btn" onclick="onClickUpload();">EDIT</p> 
+                                </c:choose> 
                                 <input type="hidden" name="empCode" id="hiddenEmpCode" value="${sessionScope.emp.empCode}">
                                 <input type="file" id="files" class="upload-hidden" name="profileFileName" onchange="onFileUpload();">
                             </form>
@@ -170,7 +176,7 @@
                     </div>
                     <hr>
                     <div class="text-center">
-                        <input type="button" class="btn btn-info btn-fill" id="profile_modal_open" value="프로필 변경"/><br/><br/>
+                        <br>
                         <input type="button" class="btn btn-info btn-fill" id="password_modal_open" value="비밀번호 변경"/><br/>&nbsp;
                     </div>
                 </div>
@@ -181,28 +187,6 @@
 </div>
 
 <!--모달창-->
-<!--프로필 모달-->
-<div class="modal" id="profile_modal">
-    <div class="modal_popup">
-        <h3>프로필 사진 변경</h3>
-        <br>
-        <form class="profileForm" action="${contextPath}/myPage/modifyProfile.page" method="post" enctype="multipart/form-data">
-            <div class="uploadImg">
-                <img id="previewImg">
-                <div class="filebox">
-                    <input type="hidden" name="empCode" value="${emp.empCode}">
-                </div>
-                <div class="filebox">
-                    <input type="file" id="file1" class="upload-hidden" name="profileFileName">
-                </div>
-            </div>
-            <br>
-            <button type="submit" class="btn btn-info btn-fill" id="profile_modify">변경하기</button>
-        </form>
-        <button type="button" class="btn btn-info btn-fill" id="profile_modal_close">닫기</button>
-    </div>
-</div>
-
 <!--패스워드 모달-->
 <div class="modal" id="password_modal">
     <div class="modal_popup">
@@ -344,8 +328,11 @@ const onFileUpload = () => {
       dataType: 'json',
       success: (resData) => {
           if(resData.ModifyProfileCount === true) {
-              alert('Profile change sucess!');
-              location.href = getContextPath() + '/';
+              alert('프로필 사진이 변경되었습니다.');
+              location.href = '${contextPath}/myPage/myInfo.page?empCode=';
+          }
+          else if(resData.ModifyProfileCount === false) {
+             alert('프로필 사진 변경에 실패했습니다.')
           }
       },
       error: (jqXHR) => {

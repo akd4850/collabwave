@@ -2,6 +2,7 @@ package com.gdu.myapp.service;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.nio.file.Path;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -60,39 +61,36 @@ public class MyPageServiceImpl implements MyPageService {
 	
 	@Override
 	public boolean modifyProfile(MultipartHttpServletRequest multipartHttpServletRequest) {
-        MultipartFile multipartFile = multipartHttpServletRequest.getFile("profilePhoto");
+      
+		MultipartFile multipartFile = multipartHttpServletRequest.getFile("profileFileName");
 		
-        if(multipartFile == null) {
-            return false;
-        }
+		if(multipartFile != null) {
+			String uploadPath = myFileUtils.getUploadPath();
+			File dir = new File(uploadPath);
+	        if(!dir.exists()) {
+	          dir.mkdirs();
+	        }
         
-        String uploadPath = myFileUtils.getUploadPath();
-        File dir = new File(uploadPath);
-        if(!dir.exists()) {
-            dir.mkdirs();
-        }
-        
-        String originalFileName = multipartFile.getOriginalFilename();
-        String fileSystemName = myFileUtils.getFilesystemName(originalFileName);
-        File file = new File(dir, fileSystemName);
-        
-        try {
-            multipartFile.transferTo(file);
-            
-            empMapper.updateProfile(
-                        Map.of("uploadPath", uploadPath + "/" + fileSystemName, 
-                               "userNo", multipartHttpServletRequest.getParameter("userNo"))
-                    );
-        } catch(Exception e) {
+	        String originalFilename = multipartFile.getOriginalFilename();
+	        String filesystemName = myFileUtils.getFilesystemName(originalFilename);	        
+	        String path = uploadPath + "/" + filesystemName;
+	        File file = new File(dir, filesystemName);
+	        Path rPath = Path.of(file.getAbsolutePath());
+	        path = path.replace("/c:", "");
+	        
+	        try {
+	        	multipartFile.transferTo(rPath);
+	        	
+	        	HttpSession session = multipartHttpServletRequest.getSession();
+	    		EmpDto empDto = (EmpDto)session.getAttribute("emp");
+	    		empDto.setProfileFileName(path);
+	    		
+	    		empMapper.updateProfile(empDto);
+	        } catch(Exception e) {
             e.printStackTrace();
             return false;
-        }
-
-        HttpSession session = multipartHttpServletRequest.getSession();
-        EmpDto emp = (EmpDto) session.getAttribute("emp");
-        emp.setProfileFileName(uploadPath + "/" + fileSystemName);
-        session.setAttribute("emp", emp);
-        
+	        }
+		}
         return true;
 	}
 	

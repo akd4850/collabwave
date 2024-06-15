@@ -11,57 +11,6 @@
 <!-- fullcalendar 언어 설정관련 script -->
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/locales-all.js"></script>
 
-<jsp:include page="../../layout/header.jsp"/>
-
-<div class="main-content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-2">
-                <jsp:include page="./scheduleSidebar.jsp"/>
-            </div>
-            <div class="col-md-10">
-                <div class="card card-calendar">
-                    <div id='calendar'></div> 
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<jsp:include page="../../layout/footer.jsp"/>
-
-<!-- 이벤트 팝업 -->
-<div id="eventPopup" class="event-popup">
-    <div class="event-popup-content">
-        <span id="closePopup" class="close">&times;</span>
-        <h4>일정 정보</h4>
-        <p id="popupTitle"></p>
-        <p id="popupStart"></p>
-        <p id="popupEnd"></p>
-        <p id="popupContents"></p>
-        <input type="hidden" id="popupScdlNo">
-        <button id="editScheduleBtn">수정</button>
-        <button id="deleteScheduleBtn">삭제</button>
-    </div>
-</div>
-
-<!-- 일정 수정 팝업 -->
-<div id="editPopup" class="event-popup">
-    <div class="event-popup-content">
-        <span id="closeEditPopup" class="close">&times;</span>
-        <h4>일정 수정</h4>
-        <input type="hidden" id="editScdlNo">
-        <label>제목:</label>
-        <input type="text" id="editTitle"><br>
-        <label>시작일:</label>
-        <input type="datetime-local" id="editStart"><br>
-        <label>종료일:</label>
-        <input type="datetime-local" id="editEnd"><br>
-        <label>내용:</label>
-        <textarea id="editContents"></textarea><br>
-        <button id="saveEditBtn">저장</button>
-    </div>
-</div>
-
 <style>
 .fc-col-header-cell-cushion, .fc-daygrid-day-number {
     text-decoration: none;
@@ -117,6 +66,58 @@
 }
 </style>
 
+<jsp:include page="../../layout/header.jsp"/>
+
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2">
+                <jsp:include page="./scheduleSidebar.jsp"/>
+            </div>
+            <div class="col-md-10">
+                <div class="card card-calendar">
+                    <div id='calendar'></div> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 이벤트 팝업 -->
+<div id="eventPopup" class="event-popup">
+    <div class="event-popup-content">
+        <span id="closePopup" class="close">&times;</span>
+        <h4>일정 정보</h4>
+        <p id="popupTitle"></p>
+        <p id="popupStart"></p>
+        <p id="popupEnd"></p>
+        <p id="popupContents"></p>
+        <input type="hidden" id="popupScdlNo">
+        <button id="editScheduleBtn">수정</button>
+        <button id="deleteScheduleBtn">삭제</button>
+    </div>
+</div>
+
+<!-- 일정 수정 팝업 -->
+<div id="editPopup" class="event-popup">
+    <div class="event-popup-content">
+        <span id="closeEditPopup" class="close">&times;</span>
+        <h4>일정 수정</h4>
+        <input type="hidden" id="editScdlNo">
+        <label>제목:</label>
+        <input type="text" id="editTitle"><br>
+        <label>시작일:</label>
+        <input type="datetime-local" id="editStart"><br>
+        <label>종료일:</label>
+        <input type="datetime-local" id="editEnd"><br>
+        <label>내용:</label>
+        <textarea id="editContents"></textarea><br>
+        <button id="saveEditBtn">저장</button>
+    </div>
+</div>
+
+<jsp:include page="../../layout/footer.jsp"/>
+
 <script>
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -148,9 +149,11 @@ document.addEventListener('DOMContentLoaded', function() {
             {
                 url: '${contextPath}/schedule/getScheduleList.do',
                 method: 'GET',
+                
                 failure: function() {
                     alert('일정을 가져오는데 실패했습니다.');
                 }
+                
             }
         ],
         
@@ -271,9 +274,13 @@ document.addEventListener('DOMContentLoaded', function() {
             body: JSON.stringify({
             
             	scdlNo: scdlNo,
+            	
               scdlTitle: title,
+              
               startDatetime: start,
+              
               endDatetime: end,
+              
               scdlContents: contents
             
             })

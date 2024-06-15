@@ -6,3 +6,8 @@ const fnGetContextPath = ()=>{
     //return url.substring(begin, end);
     return 'http://' + location.host;
 }
+
+const fnExplodeDatetime = (value) => {
+	let result = value.split("T");
+	return result;
+}

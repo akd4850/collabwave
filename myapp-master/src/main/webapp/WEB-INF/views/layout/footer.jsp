@@ -82,7 +82,7 @@
 
 <script src="${contextPath}/resources/js/erp-modal.js"></script>
 
-<script src="${contextPath}/resources/js/common.js"></script>
+<script src="${contextPath}/resources/js/common.js?v=<%=System.currentTimeMillis() %>"></script>
 
 <c:if test="${submenu == 'edsmAddLine.jsp' || submenu == 'edsmDetailLine.jsp'|| submenu == 'edsmAddAppr.jsp' || submenu == 'orgChart.jsp'}">
   <script src="${contextPath}/jstree/dist/jstree.min.js"></script>

@@ -27,13 +27,19 @@ public class ScheduleController {
 
     private final ScdlService scdlService;
 
-    // 일정 캘린더에 불러오기 
+    // 일정 페이지 보여주기 
     @GetMapping("/mySchedule.page")  
     public String schedule(Model model) {
         model.addAttribute("submenu", "schedule.jsp");
         return "contents/schedule/schedule";
     }
-    // 일정 목록을 JSON 형식으로 반환
+    // 일정 등록 페이지 보여주기 
+    @GetMapping("/registerSchedule.page")
+    public String registerSchedule(Model model) { 
+        model.addAttribute("submenu", "registerSchedule.jsp");
+        return "contents/schedule/registerSchedule";
+    }
+    // SELECT 일정 목록을 JSON 형식으로 반환하여 불러오기 
     @GetMapping(value = "/getScheduleList.do", produces = "application/json")
     @ResponseBody
     public ResponseEntity<String> getScheduleList(HttpServletRequest request) {
@@ -41,35 +47,32 @@ public class ScheduleController {
         JSONArray jsonArray = new JSONArray();
         
         for (ScdlDto scdl : scheduleList) {
-            JSONObject jsonObject = new JSONObject();            
-            jsonObject.put("scdlNo", scdl.getScdlNo());
+        	
+            JSONObject jsonObject = new JSONObject();    
+            
             jsonObject.put("title", scdl.getScdlTitle());
             jsonObject.put("start", scdl.getStartDatetime());
             jsonObject.put("end", scdl.getEndDatetime());
+            jsonObject.put("color", scdl.getScdlColor()); 
+            
+            jsonObject.put("scdlNo", scdl.getScdlNo());
             jsonObject.put("contents", scdl.getScdlContents());
             
-            // Optional additional properties
+            // 추가로 불러올 항목 JSON 형식으로  
             // jsonObject.put("allDay", scdl.getScdlAllday()); 
-            // jsonObject.put("color", scdl.getScdlColor()); 
             
             jsonArray.put(jsonObject); 
         }
         
         return ResponseEntity.ok(jsonArray.toString());
     }
-    // 일정 등록하기 
-    @GetMapping("/registerSchedule.page")
-    public String registerSchedule(Model model) { 
-        model.addAttribute("submenu", "registerSchedule.jsp");
-        return "contents/schedule/registerSchedule";
-    }
-    // 일정 등록하기 POST INSERT
+    // INSERT 일정 등록하기 
     @PostMapping("/register.do") 
     public String register(HttpServletRequest request, RedirectAttributes redirectAttributes) { 
         redirectAttributes.addFlashAttribute("insertCount", scdlService.registerScheduler(request));
         return "redirect:/schedule/mySchedule.page"; 
     }
-    // 일정 수정하기 UPDATE
+    // UPDATE 일정 수정하기 
     @PostMapping("/update.do") 
     @ResponseBody
     public ResponseEntity<String> editSchedule(@RequestBody ScdlDto scdl) {
@@ -80,7 +83,7 @@ public class ScheduleController {
             return ResponseEntity.status(500).body("error");
         }
     }
-    // 일정 삭제하기 DELETE
+    // DELETE 일정 삭제하기 
     @PostMapping("/delete.do")
     @ResponseBody
     public ResponseEntity<String> deleteSchedule(HttpServletRequest request) {

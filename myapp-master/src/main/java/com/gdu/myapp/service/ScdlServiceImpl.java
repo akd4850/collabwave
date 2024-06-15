@@ -18,21 +18,25 @@ public class ScdlServiceImpl implements ScdlService {
 
     private final ScdlMapper scdlMapper;
 
-    // 일정 등록하기 INSERT 
+    // SELECT 일정 목록 가져오기 
+    @Override
+    public List<ScdlDto> getScheduleList(HttpServletRequest request) {
+        return scdlMapper.getAllSchedules();
+    }
+    // INSERT 일정 등록하기 
     @Override
     public int registerScheduler(HttpServletRequest request) {
-        String scdlTitle = request.getParameter("scdlTitle");
-        // String scdlPlace = request.getParameter("scdlPlace");
+
+    	String empCode = request.getParameter("empCode");
+    	String scdlTitle = request.getParameter("scdlTitle");
         String scdlContents = request.getParameter("scdlContents");
-        String scdlOpenYn = request.getParameter("scdlOpenYn") != null ? "Y" : "N";
-        String scdlPublicYn = request.getParameter("scdlPublicYn");
-
-        String empCode = request.getParameter("empCode");
-
         String startDate = request.getParameter("startDate");
         String startTime = request.getParameter("startTime");
         String endDate = request.getParameter("endDate");
         String endTime = request.getParameter("endTime");
+        String scdlColor = request.getParameter("scdlColor");
+        String scdlOpenYn = request.getParameter("scdlOpenYn") != null ? "Y" : "N";
+        String scdlPublicYn = request.getParameter("scdlPublicYn");
 
         // Handle null or empty startTime and endTime
         startTime = (startTime == null || startTime.isEmpty()) ? "" : startTime;
@@ -58,25 +62,21 @@ public class ScdlServiceImpl implements ScdlService {
                               .scdlPublicYn(scdlPublicYn)
                               .startDatetime(formattedStartDatetime)
                               .endDatetime(formattedEndDatetime)
+                              .scdlColor(scdlColor)
                               .emp(emp)
                               .build();
 
         return scdlMapper.insertScheduler(scdl);
     }
-    // 일정 목록 가져오기 SELECT
-    @Override
-    public List<ScdlDto> getScheduleList(HttpServletRequest request) {
-        return scdlMapper.getAllSchedules();
-    }
-    // 일정 수정하기 
+    // UPDATE 일정 수정하기 
     @Override
     public int updateSchedule(ScdlDto scdl) {
         return scdlMapper.updateScheduler(scdl);
     }
-    // 일정 삭제하기 DELETE 
+    // DELETE 일정 삭제하기 
     @Override
     public int deleteSchedule(int scdlNo) {
         return scdlMapper.deleteScheduler(scdlNo);
     }
-    
+
 }

@@ -46,7 +46,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(requiredSigninInterceptor).addPathPatterns("/edsm/**", "/admin/**", "/community/**",
-				"/dept/**", "/myPage/**", "/reservation/**", "/schedule/**", "/main.page");
+				"/dept/**", "/myPage/**", "/reservation/**", "/schedule/**", "/main.page", "/attendance/**");
 		registry.addInterceptor(requiredSignoutInterceptor).addPathPatterns("");
 		registry.addInterceptor(localeChangeInterceptor());
 	}

@@ -14,6 +14,7 @@ public class BoardDto {
 	private String brdCode;
 	private String brdName;
 	private String cmmtAuthYn;
+	private String brdUrl;
 
 	private DeptDto dept;
 	private String deptCode;

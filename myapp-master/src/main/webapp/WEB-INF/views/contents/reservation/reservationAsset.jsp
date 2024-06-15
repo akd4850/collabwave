@@ -87,7 +87,7 @@
 </div>
 
 <script>
-
+/* 날짜 관련 */
 const assetSubnameInput = document.getElementById('asset-subname');
 
     function setDefaultDate() {

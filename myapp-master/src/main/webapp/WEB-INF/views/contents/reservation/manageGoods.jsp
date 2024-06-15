@@ -40,33 +40,36 @@
     var totalPage = 0;
     
     const fnGetAssetList = () => {
-      
-      $.ajax({
-          type: 'GET',
-          url: '${contextPath}/reservation/getAssetList.do',
-          data: 'page=' + page,
-          dataType: 'json',
-        success: (resData) => {
-            totalPage = resData.totalPage;
-            console.log(resData);
-            $('.asset-list').empty();
-          $.each(resData.assetList, (i, asset) => {
-            let str = '<tr>';
-                str += '<td>' + asset.assetType + '</td>';
-                str += '<td>' + asset.assetSubname + '</td>';
-                str += '<td>' + asset.assetName + '</td>';
-                str += '<td>' + (asset.subasset ? asset.subasset : '') + '</td>';
-                str += '<td><button type="submit" class="btn btn-info btn-fill">수정</button></td>';
-                str += '<td><button type="submit" class="btn btn-info btn-fill">삭제</button></td>';
-                str += '</tr>';
-                $('.asset-list').append(str);
-          })
-        },
-        error: (jqXHR) => {
-            alert(jqXHR.statusText + '(' + jqXHR.status + ')');
-        }
-      });
-      
+        $.ajax({
+            type: 'GET',
+            url: '${contextPath}/reservation/getAssetList.do',
+            data: 'page=' + page,
+            dataType: 'json',
+            success: (resData) => {
+                totalPage = resData.totalPage;
+                console.log(resData);
+                $('.asset-list').empty();
+                $.each(resData.assetList, (i, asset) => {
+                    let str = '<tr>';
+                    str += '<td>' + asset.assetType + '</td>';
+                    str += '<td>' + asset.assetSubname + '</td>';
+                    str += '<td>' + asset.assetName + '</td>';
+                    str += '<td>' + (asset.subasset ? asset.subasset : '') + '</td>';
+                    str += '<td><button type="button" class="btn btn-info btn-fill edit-button" data-code="' + asset.assetCode + '">수정</button></td>';
+                    str += '<td><button type="button" class="btn btn-info btn-fill delete-button">삭제</button></td>';
+                    str += '</tr>';
+                    $('.asset-list').append(str);
+                });
+
+                $('.edit-button').on('click', function() {
+                var assetCode = $(this).data('code');
+                window.location.href = '${contextPath}/reservation/editAsset.page?code=' + assetCode;
+             });
+            },
+            error: (jqXHR) => {
+                alert(jqXHR.statusText + '(' + jqXHR.status + ')');
+            }
+        });
     }
 
     fnGetAssetList();

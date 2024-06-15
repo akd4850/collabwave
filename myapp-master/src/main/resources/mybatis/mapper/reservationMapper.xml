@@ -107,4 +107,11 @@
 	 WHERE ASSET_CODE = #{assetCode}
 </delete>
 
-</mapper>
+<select id="assetList"                                                 
+          resultType="map">                                            
+    SELECT ASSET_CODE, ASSET_NAME, ASSET_TYPE, ASSET_SUBNAME, SUBASSET    
+      FROM ASSETMANAGE_T                                                  
+</select>                      
+
+</mapper>                                           
+                                                                          

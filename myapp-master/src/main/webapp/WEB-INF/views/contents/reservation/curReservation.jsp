@@ -13,7 +13,7 @@
         <input type="button"
                 class="btn btn-info btn-fill"
                 style="margin-left:10px"
-                onclick="location.href='/reservation/reservationAsset.page'"
+                onclick="location.href='/reservation/reservationAsset.page?empCode=${sessionScope.emp.empCode}&positionName={sessionScope.emp.position.positionName}'"
                 value="예약 하기">
         <table class="table table-hover table-striped">
             <thead>

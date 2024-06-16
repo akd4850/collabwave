@@ -1,5 +1,6 @@
 package com.gdu.myapp.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.gdu.myapp.dto.AssetDto;
 import com.gdu.myapp.service.ReservationService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -53,6 +55,8 @@ public class ReservationController {
 	
 	@GetMapping("/reservationAsset.page")
 	public String reservationAsset(Model model) {
+		List<Map<String, Object>> assetList = reservationService.assetList();
+        model.addAttribute("assetList", assetList);
 		model.addAttribute("submenu", "reservationAsset.jsp");
 		return "contents/reservation/reservation";
 	}
@@ -80,20 +84,20 @@ public class ReservationController {
 		return "contents/reservation/reservation";
 
 	  }
-	  
-	@GetMapping(value="/getAssetList.do", produces="application/json")
-	public ResponseEntity<Map<String, Object>> getAssetList(HttpServletRequest request) {
-		return reservationService.getAssetList(request);
-	}
 	
 	@PostMapping("/modifyAsset.page")
-	  public String modifyBlog(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+	  public String modifyAsset(HttpServletRequest request, RedirectAttributes redirectAttributes) {
 	  	int modifyAssetCount = reservationService.modifyAsset(request);
 	  	redirectAttributes
 	  	.addAttribute("assetCode", request.getParameter("assetCode"))
 	  	.addFlashAttribute("modifyAssetResult", modifyAssetCount == 1 ? "자산이 수정되었습니다.": "자산이 수정되지 않았습니다.");
 	  	return "redirect:/reservation/management.page";
 	  }
+	
+	@GetMapping(value="/getAssetList.do", produces="application/json")
+	public ResponseEntity<Map<String, Object>> getAssetList(HttpServletRequest request) {
+		return reservationService.getAssetList(request);
+	}
 	
 	@PostMapping("/removeAsset.page")
 	public String removeAsset(@RequestParam String assetCode, RedirectAttributes redirectAttributes) {
@@ -107,6 +111,7 @@ public class ReservationController {
 		int addReservationCount = reservationService.addReservation(request);
 	  	redirectAttributes
 	  	.addAttribute("empCode", request.getParameter("empCode"))
+	  	.addAttribute("assetCode", request.getParameter("assetCode"))
 	  	.addFlashAttribute("addAssetResult", addReservationCount == 1 ? "예약되었습니다.": "예약되지 않았습니다.");
 		return "redirect:/reservation/curReservation.page";
 	}

@@ -1,5 +1,7 @@
 package com.gdu.myapp.service;
 
+import java.sql.Timestamp;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -60,19 +62,29 @@ public class ReservationServiceImpl implements ReservationService {
 	  			 						   , HttpStatus.OK);
 	  }
 	
+	public List<Map<String, Object>> assetList() {
+        return reservationMapper.assetList();
+    }
+	
 	@Override
 	public int addReservation(HttpServletRequest request) {
-		String empCode = request.getParameter("empCode");
-		String assetCode = request.getParameter("assetCode");
-		String reason = request.getParameter("reason");
-		
-		ReservationDto reser = ReservationDto.builder()
-										.empCode(empCode)
-										.assetCode(assetCode)
-										.reason(reason)
-									.build();
-							
-		
+	    String empCode = request.getParameter("empCode");
+	    String assetCode = request.getParameter("assetCode");
+	    String startDatetimeStr = request.getParameter("startDatetime");
+	    String endDatetimeStr = request.getParameter("endDatetime");
+	    String reason = request.getParameter("reason");
+
+	    Timestamp startDatetime = Timestamp.valueOf(startDatetimeStr);
+	    Timestamp endDatetime = Timestamp.valueOf(endDatetimeStr);
+
+	    ReservationDto reser = ReservationDto.builder()
+	                                        .empCode(empCode)
+	                                        .assetCode(assetCode)
+	                                        .startDatetime(startDatetime)
+	                                        .endDatetime(endDatetime)
+	                                        .reason(reason)
+	                                    .build();
+
 		int addReservationResultCount = reservationMapper.addReservation(reser);
 		return addReservationResultCount;
 	}

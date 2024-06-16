@@ -1,5 +1,6 @@
 package com.gdu.myapp.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
@@ -15,4 +16,5 @@ public interface ReservationService {
 	AssetDto getAsset(String assetCode);
 	int modifyAsset(HttpServletRequest request);
 	int removeAsset(String assetCode);
+	List<Map<String, Object>>assetList();
 }

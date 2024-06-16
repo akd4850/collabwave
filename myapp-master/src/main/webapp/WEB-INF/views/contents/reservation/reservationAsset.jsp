@@ -34,7 +34,7 @@
               <div class="center-content">
                 <h4>
                     <div id="date-display" class="date-display" onclick="showDatePicker()"></div>
-                    <input type="date" id="date-input-start" name="startDate" class="date-input" onchange="handleDateChange()">
+                    <input type="date" id="date-input-start" class="date-input" onchange="handleDateChange()">
                 </h4>
                 </div>
 
@@ -58,13 +58,13 @@
                       <div class="col-md-4">
                         <div class="form-group">
                           <label>시작 시간</label>
-                          <input type="time" class="form-control" placeholder="시작 시간" name="startDatetime" id="startDatetime" onchange="forceMinutesToZero(this)">
+                          <input type="time" class="form-control" placeholder="시작 시간" id="startTime" onchange="forceMinutesToZero(this)">
                         </div>
                       </div>
                       <div class="col-md-4">
                         <div class="form-group">
                           <label>종료 시간</label>
-                          <input type="time" class="form-control" placeholder="종료 시간" name="endDatetime" id="endDatetime" onchange="forceMinutesToZero(this)">
+                          <input type="time" class="form-control" placeholder="종료 시간" id="endTime" onchange="forceMinutesToZero(this)">
                         </div>
                       </div>
                     </div>
@@ -76,8 +76,10 @@
                 <input type="text" class="form-control" id="asset-subname" name="reason" placeholder="예약 사유" value="">
             </div>
     
-
-            <input type="hidden" id="empCode" name="empCode" vlaue="empCode">
+            
+            <input type="hidden" id="startDatetime" name="startDatetime" vlaue="">
+            <input type="hidden" id="endDatetime" name="endDatetime" vlaue="">
+            <input type="hidden" id="empCode" name="empCode" vlaue="${emp.empCode}">
             <button type="submit" class="btn btn-info btn-fill pull-right">등록</button>
             <div class="clearfix"></div>
         </form>
@@ -87,7 +89,7 @@
 </div>
 
 <script>
-/* 날짜 관련 */
+/* 날짜 표시 */
 const assetSubnameInput = document.getElementById('asset-subname');
 
     function setDefaultDate() {
@@ -119,6 +121,8 @@ const assetSubnameInput = document.getElementById('asset-subname');
 
     window.onload = setDefaultDate;
 
+    /* 시간 표시 */
+
     function forceMinutesToZero(input) {
       if (input.value) {
         const timeParts = input.value.split(':');
@@ -127,6 +131,25 @@ const assetSubnameInput = document.getElementById('asset-subname');
         }
       }
     }
+
+
+    /* 타임스탬프 구하기 */
+    function combineDateTime() {
+    const dateInput = document.getElementById('date-input-start').value;
+    const startTime = document.getElementById('startTime').value;
+    const endTime = document.getElementById('endTime').value;
+
+    if (dateInput && startTime && endTime) {
+        const startDatetime = dateInput + ' ' + startTime + ':00';
+        const endDatetime = dateInput + ' ' + endTime + ':00';
+
+        document.getElementById('startDatetime').value = startDatetime;
+        document.getElementById('endDatetime').value = endDatetime;
+    } else {
+        alert('날짜와 시간을 모두 입력해주세요.');
+        return false; // 폼 제출 중지
+    }
+}
 
 
 </script>

@@ -17,4 +17,5 @@ public interface ReservationMapper {
 	AssetDto getAsset(String assetCode);
 	int modifyAsset(AssetDto asset);
 	int removeAsset(String assetCode);
+	List<Map<String, Object>> assetList();
 }

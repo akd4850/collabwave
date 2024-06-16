@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -313,7 +314,7 @@ public class EdsmServiceImpl implements EdsmService {
     }
     
     @Override
-    public void loadDraftList(HttpServletRequest request, Model model) {
+    public void loadDraftList(HttpServletRequest request, Model model, boolean bIsMain) {
     	
     	HttpSession session = request.getSession();
 		EmpDto empDto = (EmpDto)session.getAttribute("emp");
@@ -329,19 +330,24 @@ public class EdsmServiceImpl implements EdsmService {
 	                                   , "empCode", empDto.getEmpCode());
 	    
 	    List<EdsmDto> draftList = edsmMapper.getDraftList(map);
+	    List<EdsmDto> draftNewList = new ArrayList<>();
+	    
+	    if(bIsMain) {
+	    	for(int i = 0; i < draftList.size(); i++) {
+	    		if(i == 3) break;
+	    		draftNewList.add(draftList.get(i));
+	    	}
+	    } else draftNewList = draftList;
 	    
 	    model.addAttribute("beginNo", total - (page - 1) * display);
-	    model.addAttribute("draftList", draftList);
+	    model.addAttribute("draftList", draftNewList);
 	    model.addAttribute("paging", myPageUtils.getPagingNewVersion(request.getContextPath() + "/edsm/edsmDrafting.do"
 	                                                     , null
 	                                                     , display));
-	    
-	    // 기간 만료된 문서 상태 변경
-	    //edsmMapper.updateEdsmStatus(empDto.getEmpCode());
     }
     
     @Override
-    public void loadWaitList(HttpServletRequest request, Model model) {
+    public void loadWaitList(HttpServletRequest request, Model model, boolean bIsMain) {
     	
     	HttpSession session = request.getSession();
 		EmpDto empDto = (EmpDto)session.getAttribute("emp");
@@ -362,9 +368,17 @@ public class EdsmServiceImpl implements EdsmService {
 	                                   , "status", status);
 	    
 	    List<EdsmApprDto> waitList = edsmMapper.getWaitList(map);
+	    List<EdsmApprDto> waitNewList = new ArrayList<>();
+	    
+	    if(bIsMain) {
+	    	for(int i = 0; i < waitList.size(); i++) {
+	    		if(i == 3) break;
+	    		waitNewList.add(waitList.get(i));
+	    	}
+	    } else waitNewList = waitList;
 	    
 	    model.addAttribute("beginNo", total - (page - 1) * display);
-	    model.addAttribute("waitList", waitList);
+	    model.addAttribute("waitList", waitNewList);
 	    model.addAttribute("paging", myPageUtils.getPagingNewVersion(request.getContextPath() + "/edsm/edsmWaiting.do"
 	                                                     , null
 	                                                     , display));

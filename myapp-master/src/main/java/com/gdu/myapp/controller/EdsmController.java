@@ -34,6 +34,8 @@ public class EdsmController {
 
 		model.addAttribute("submenu", "edsmContents.jsp");
 		edsmService.updateEdsm(request);
+		edsmService.loadWaitList(request, model, true);
+		edsmService.loadDraftList(request, model, true);
 		
 		return "contents/edsm/edsm";
 	}
@@ -49,7 +51,7 @@ public class EdsmController {
 	public String edsmWaiting(HttpServletRequest request, Model model) {
 
 		model.addAttribute("submenu", "edsmWaiting.jsp");
-		edsmService.loadWaitList(request, model);
+		edsmService.loadWaitList(request, model, false);
 		
 		return "contents/edsm/edsm";
 	}
@@ -67,7 +69,7 @@ public class EdsmController {
     public String edsmDrafting(HttpServletRequest request, Model model) {
 
         model.addAttribute("submenu", "edsmDrafting.jsp");
-        edsmService.loadDraftList(request, model);
+        edsmService.loadDraftList(request, model, false);
         
         return "contents/edsm/edsm";
     }

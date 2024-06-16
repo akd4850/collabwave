@@ -12,10 +12,17 @@ import com.gdu.myapp.dto.ReservationDto;
 public interface ReservationMapper {
 	int addAsset(AssetDto asset);
 	int getAssetCount();
+	int reservationCount();
+	int myReservationCount();
 	List<AssetDto> getAssetList(Map<String, Object> map);
+	List<AssetDto> reservationList(Map<String, Object> map);
+	List<AssetDto> myReservationList(Map<String, Object> map);
 	int addReservation(ReservationDto reser);
 	AssetDto getAsset(String assetCode);
 	int modifyAsset(AssetDto asset);
 	int removeAsset(String assetCode);
+	int removeReservation(int reservationNumber);
 	List<Map<String, Object>> assetList();
+	
+
 }

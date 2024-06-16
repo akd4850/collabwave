@@ -50,8 +50,8 @@
 	  LEFT OUTER JOIN DEPT_T B
 		ON  A.DEPT_CODE = B.DEPT_CODE
 	<where>
-	  <if test="deptCode!='d0000'">A.DEPT_CODE = #{deptCode}</if>
-	  <if test="deptCode=='d0000'">A.DEPT_CODE IS NULL</if>
+	  <if test="deptCode!='d0000'">A.DEPT_CODE = #{deptCode} AND A.STATUS_CODE != 's03'</if>
+	  <if test="deptCode=='d0000'">A.DEPT_CODE IS NULL AND A.STATUS_CODE != 's03'</if>
     </where>
   </select>
 	

@@ -33,5 +33,17 @@
       FROM POSITION_T
   </select>
   
+  <insert id="insertPosition"
+          parameterType="PosDto">
+	INSERT INTO POSITION_T (
+		POSITION_CODE,
+		POSITION_NAME,
+		USE_YN
+	) VALUES (
+		#{posCode},
+		#{posName},
+		'Y')
+  </insert>
+  
 	
 </mapper>

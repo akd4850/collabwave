@@ -20,14 +20,17 @@
                 value="등록">
             </td>
 
-           
-                <form method="GET"
-                      action= "${contextPath}/admin/emp/search.do">
+                <div class="search-group">
                     
-                    <td><input type="text" class="form-control" name="query" placeholder="사원명을 입력하세요"></td>
-                    <td><button type="submit" class="btn btn-info btn-fill">검색</button></td>
-                    </tr>
-                </form>
+                    <form method="GET"
+                          action= "${contextPath}/admin/emp/search.do">
+                        
+                        <td><input type="text" class="form-control" name="query" placeholder="사원명을 입력하세요"></td>
+                        <td><button type="submit" class="btn btn-info btn-fill">검색</button></td>
+                        </tr>
+                    </form>
+
+                </div>
             </tr>
             </table>
         
@@ -56,8 +59,6 @@
                 </c:forEach>
             </tbody>
         </table>
-        <tfoot>
-            ${paging}
-        </tfoot>
+        ${paging}
     </div>
 </div>

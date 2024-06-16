@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.gdu.myapp.dto.EmpDto;
 import com.gdu.myapp.service.DeptService;
 import com.gdu.myapp.service.EmpService;
 import com.gdu.myapp.service.PosService;
@@ -107,6 +106,7 @@ public class AdminController {
   public String detailDept(@RequestParam String deptCode, Model model) {
     model.addAttribute("dept", deptService.getDeptDetail(deptCode));
     model.addAttribute("memberList", deptService.getDeptMember(deptCode));
+    model.addAttribute("deptNameList", deptService.getDeptListForTransfer(deptCode));
     model.addAttribute("submenu", "deptDetail.jsp");
     return "contents/admin/admin";
 	}
@@ -123,8 +123,9 @@ public class AdminController {
   }
 	
 	@PostMapping("/dept/appointLeader.do")
-	public void modifyDeptLeader(HttpServletRequest request) {
+	public String modifyDeptLeader(HttpServletRequest request) {
 	  deptService.modifyDeptLeader(request);
+	  return "redirect:/admin/dept/management.page";
 	}
 	
 	@GetMapping("/pos/management.page")
@@ -134,10 +135,22 @@ public class AdminController {
     return "contents/admin/admin";
 	}
 	
-	
 	@GetMapping(value="/detailAjax.do", produces="application/json")
 	public ResponseEntity<Map<String, Object>> detailEmpAjax(@RequestParam String empCode, Model model) {
 
 	  return empService.getEmpDetailAjax(empCode);
 	}
+	
+	@PostMapping("/pos/add.do")
+	public String registerPosition(HttpServletRequest request) {
+	  posService.registerPosition(request);
+	  return "redirect:/admin/pos/management.page";
+	}
+	
+	@PostMapping("/emp/deptTransfer.do")
+	public String deptTransfer(HttpServletRequest request) {
+	  empService.empDeptTransfer(request);
+	  return "redirect:/admin/dept/management.page";
+	}
+	
 }

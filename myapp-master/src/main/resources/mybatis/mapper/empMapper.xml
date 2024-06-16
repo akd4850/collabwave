@@ -70,6 +70,27 @@
      ORDER BY EMP_CODE ASC
   </select>
   
+  <select id="getSearchList"
+  	      resultType="EmpDto">
+  	SELECT EMP_CODE, EMP_NAME, DEPT_NAME, POSITION_NAME, MOBILE, EMAIL, STATUS_CODE
+      FROM(SELECT ROW_NUMBER() OVER(ORDER BY E.EMP_CODE DESC) AS RN, E.EMP_CODE, E.EMP_NAME, D.DEPT_NAME, P.POSITION_NAME, E.MOBILE, E.EMAIL, E.STATUS_CODE
+             FROM EMP_T E LEFT JOIN DEPT_T D
+               ON E.DEPT_CODE = D.DEPT_CODE
+            INNER JOIN POSITION_T P
+               ON E.POSITION_CODE = P.POSITION_CODE
+            WHERE STATUS_CODE IN ('s01', 's02')
+              AND E.EMP_NAME LIKE CONCAT(CONCAT('%', #{query}), '%'))
+    WHERE RN BETWEEN #{begin} AND #{end}
+  </select>
+  
+  <select id="getSearchCount"
+          parameterType="Map"
+          resultType="int">
+    SELECT COUNT(*)
+      FROM EMP_T        	
+	 WHERE EMP_NAME LIKE '%' || #{query} || '%'
+  </select>
+  
   <select id="getEmpDetail"
   		  parameterType="Map"
   		  resultMap="EmpDtoMap">
@@ -183,5 +204,12 @@
     ORDER BY LEAVE_DATE DESC
   </select>
   
-
+  <update id="empDeptTransfer">
+	UPDATE EMP_T
+	   SET DEPT_CODE = #{deptCode}
+	 WHERE EMP_CODE = #{empCode}
+	   AND EMP_CODE NOT IN (SELECT DEPT_LEADER_EMP_CODE
+	                          FROM DEPT_T)	
+  </update>
+  
 </mapper>

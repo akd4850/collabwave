@@ -163,110 +163,139 @@ public class EmpServiceImpl implements EmpService {
 				myPageUtils.getPaging(request.getContextPath() + "/admin/emp/search.do", "", 10, "query=" + query));
 	}
 
-	@Override
-	public void registerEmp(HttpServletRequest request, HttpServletResponse response) {
-
-		String empCode = request.getParameter("empCode");
-		String empName = MySecurityUtils.getPreventXss(request.getParameter("empName"));
-		String password = MySecurityUtils.getSha256(request.getParameter("password"));
-		String mobile = request.getParameter("mobile");
-		String email = request.getParameter("email");
-		String zipCode = request.getParameter("zipCode");
-		String address = request.getParameter("address");
-		String detailAddress = request.getParameter("detailAddress");
-		String positionCode = request.getParameter("positionCode");
-		String birthdayDate = request.getParameter("birthdayDate");
-
-		EmpDto emp = EmpDto.builder().empCode(empCode).empName(empName).password(password).mobile(mobile).email(email)
-				.zipCode(Integer.parseInt(zipCode)).address(address).detailAddress(detailAddress)
-				.positionCode(positionCode).birthdayDate(LocalDate.parse(birthdayDate)).build();
-
-		int insertCount = empMapper.insertEmployee(emp);
-
-		try {
-
-			response.setContentType("text/html; charset=UTF-8");
-			PrintWriter out = response.getWriter();
-			out.println("<script>");
-
-			if (insertCount == 1) {
-
-				out.println("alert('직원이 등록되었습니다.');");
-				out.println("location.href='" + request.getContextPath() + "/admin/emp/management.page';");
-
-			} else {
-				out.println("alert('직원 등록이 실패했습니다.');");
-				out.println("history.back();");
-			}
-			out.println("</script>");
-			out.flush();
-			out.close();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public EmpDto getEmpDetail(String empCode) {
-		return empMapper.getEmpDetail(empCode);
-	}
-
-	@Override
-	public void loadEmpLeaveList(HttpServletRequest request, Model model) {
-
-		// 수정해야함
-		int total = 15;
-
-		int display = 10;
-
-		Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
-		int page = Integer.parseInt(opt.orElse("1"));
-
-		myPageUtils.setPaging(total, display, page);
-
-		Map<String, Object> map = Map.of("begin", myPageUtils.getBegin(), "end", myPageUtils.getEnd());
-
-		List<EmpDto> empLeaveList = empMapper.getEmpLeaveList(map);
-
-		// 목록 화면으로 반환할 값 (목록 + 전체 페이지 수)
-		model.addAttribute("beginNo", total - (page - 1) * display);
-		model.addAttribute("empLeaveList", empLeaveList);
-		model.addAttribute("paging",
-				myPageUtils.getPagingNewVersion(request.getContextPath() + "admin/emp/leaverlist.do", null, display));
-	}
-
-	@Override
-	public int deleteEmp(String empCode) {
-		return empMapper.removeEmp(empCode);
-	}
-
-	@Override
-	public int modifyEmp(HttpServletRequest request) {
-
-		String empCode = request.getParameter("empCode");
-		String empName = request.getParameter("empName");
-		String mobile = request.getParameter("mobile");
-		String email = request.getParameter("email");
-		String zipCode = request.getParameter("zipCode");
-		String address = request.getParameter("address");
-		String detailAddress = request.getParameter("detailAddress");
-		String positionCode = request.getParameter("positionCode");
-		String birthdayDate = request.getParameter("birthdayDate");
-
-		EmpDto emp = EmpDto.builder().empCode(empCode).empName(empName).mobile(mobile).email(email)
-				.zipCode(Integer.parseInt(zipCode)).address(address).detailAddress(detailAddress)
-				.positionCode(positionCode).birthdayDate(LocalDate.parse(birthdayDate)).build();
-
-		int modifyResult = empMapper.updateEmp(emp);
-
-		return modifyResult;
-
-	}
+  public void registerEmp(HttpServletRequest request, HttpServletResponse response) {
+    
+    String empCode = request.getParameter("empCode");
+    String empName = MySecurityUtils.getPreventXss(request.getParameter("empName"));
+    String password = MySecurityUtils.getSha256(request.getParameter("password"));
+    String mobile = request.getParameter("mobile");
+    String email = request.getParameter("email");
+    String zipCode = request.getParameter("zipCode");
+    String address = request.getParameter("address");
+    String detailAddress = request.getParameter("detailAddress");
+    String positionCode = request.getParameter("positionCode");
+    String birthdayDate = request.getParameter("birthdayDate");
+    
+    EmpDto emp = EmpDto.builder()
+                    .empCode(empCode)
+                    .empName(empName)
+                    .password(password)
+                    .mobile(mobile)
+                    .email(email)
+                    .zipCode(Integer.parseInt(zipCode))
+                    .address(address)
+                    .detailAddress(detailAddress)
+                    .positionCode(positionCode)
+                    .birthdayDate(LocalDate.parse(birthdayDate))
+                  .build();
+    
+    int insertCount = empMapper.insertEmployee(emp);
+     
+    try {
+      
+      response.setContentType("text/html; charset=UTF-8");
+      PrintWriter out = response.getWriter();
+      out.println("<script>");
+      
+      if(insertCount == 1) {
+        
+        out.println("alert('직원이 등록되었습니다.');");
+        out.println("location.href='" + request.getContextPath() + "/admin/emp/management.page';");
+        
+      } else {
+        out.println("alert('직원 등록이 실패했습니다.');");
+        out.println("history.back();");
+      }
+      out.println("</script>");
+      out.flush();
+      out.close();
+      
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
+  @Override
+  public EmpDto getEmpDetail(String empCode) {
+    return empMapper.getEmpDetail(empCode);
+  }
+  
+  @Override
+  public void loadEmpLeaveList(HttpServletRequest request, Model model) {
+    
+    // 수정해야함
+    int total = 15;
+    
+    int display = 10;
+    
+    Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
+    int page = Integer.parseInt(opt.orElse("1"));
+    
+    myPageUtils.setPaging(total, display, page);
+    
+    Map<String, Object> map = Map.of("begin", myPageUtils.getBegin()
+                                   , "end", myPageUtils.getEnd());
+    
+    List<EmpDto> empLeaveList = empMapper.getEmpLeaveList(map);
+    
+    // 목록 화면으로 반환할 값 (목록 + 전체 페이지 수)
+    model.addAttribute("beginNo", total - (page - 1) * display);
+    model.addAttribute("empLeaveList", empLeaveList);
+    model.addAttribute("paging", myPageUtils.getPagingNewVersion(request.getContextPath() + "admin/emp/leaverlist.do", null, display));
+  }
+  
+  @Override
+  public int deleteEmp(String empCode) {
+    return empMapper.removeEmp(empCode);
+  }
+  
+  @Override
+  public int modifyEmp(HttpServletRequest request) {
+    
+    String empCode = request.getParameter("empCode");
+    String empName = request.getParameter("empName");
+    String mobile = request.getParameter("mobile");
+    String email = request.getParameter("email");
+    String zipCode = request.getParameter("zipCode");
+    String address = request.getParameter("address");
+    String detailAddress = request.getParameter("detailAddress");
+    String positionCode = request.getParameter("positionCode");
+    String birthdayDate = request.getParameter("birthdayDate");
+    
+    EmpDto emp = EmpDto.builder()
+                    .empCode(empCode)
+                    .empName(empName)
+                    .mobile(mobile)
+                    .email(email)
+                    .zipCode(Integer.parseInt(zipCode))
+                    .address(address)
+                    .detailAddress(detailAddress)
+                    .positionCode(positionCode)
+                    .birthdayDate(LocalDate.parse(birthdayDate))
+                  .build();
+    
+    int modifyResult = empMapper.updateEmp(emp);
+    
+    return modifyResult;
+    
+  }
 
 	@Override
 	public ResponseEntity<Map<String, Object>> getEmpDetailAjax(String empCode) {
 		return new ResponseEntity<>(Map.of("emp", empMapper.getEmpDetail(empCode)), HttpStatus.OK);
 	}
-
+	
+	@Override
+	public int empDeptTransfer(HttpServletRequest request) {
+	  
+	  String empCode = request.getParameter("transferEmpCode");
+	  String deptCode = request.getParameter("transferDeptCode");
+	  
+	  EmpDto emp = EmpDto.builder()
+	                  .empCode(empCode)
+	                  .deptCode(deptCode)
+	                .build();
+	  
+	  return empMapper.empDeptTransfer(emp);
+	}
 }

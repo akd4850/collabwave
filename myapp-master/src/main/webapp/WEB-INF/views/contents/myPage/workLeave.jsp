@@ -15,7 +15,14 @@
                         근퇴 현황
                     </div>
                     <div class="text-center">
-                        <h4><a href="#"></a> 2023.05 <a href="#">></a></2023.05></h4>
+                        <h4>
+                            <!--
+                            <a href="http://localhost:8090/attendance/workLeave.page?month="><</a> 
+                                2023.05
+                            <a href="http://localhost:8090/attendance/workLeave.page?month=">></a>
+                            -->
+                            ${curMon}
+                        </h4>
                     </div>
                     <div class="content table-responsive table-full-width">
                         <table class="table table-hover table-striped">

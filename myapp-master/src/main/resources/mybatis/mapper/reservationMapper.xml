@@ -84,5 +84,27 @@
 	  )
 </insert>
 
+ <select id="getAsset"
+         resultMap="AssetMap">
+ SELECT ASSET_CODE, ASSET_NAME, ASSET_TYPE, USE_YN, ASSET_SUBNAME, SUBASSET
+   FROM ASSETMANAGE_T
+  WHERE ASSET_CODE = #{assetCode}
+ </select>
+ 
+<update id="modifyAsset" 
+          parameterType="AssetDto">
+    UPDATE ASSETMANAGE_T
+       SET ASSET_CODE = #{assetCode}
+         , ASSET_NAME = #{assetName}
+         , ASSET_TYPE = #{assetType}
+         , SUBASSET = #{subasset}
+     WHERE ASSET_CODE = #{assetCode}
+  </update>
+
+<delete id="removeAsset">
+	DELETE
+	  FROM ASSETMANAGE_T
+	 WHERE ASSET_CODE = #{assetCode}
+</delete>
 
 </mapper>

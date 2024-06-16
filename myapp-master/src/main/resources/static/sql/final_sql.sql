@@ -420,3 +420,7 @@ ALTER TABLE assetreservation_t ADD CONSTRAINT FK_assetmanage_t_TO_assetreservati
 REFERENCES assetmanage_t (
 	asset_code
 );
+
+ALTER TABLE assetreservation_t MODIFY start_datetime TIMESTAMP;
+
+ALTER TABLE assetreservation_t MODIFY end_datetime TIMESTAMP;

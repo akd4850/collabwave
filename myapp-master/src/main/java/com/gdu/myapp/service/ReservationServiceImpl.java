@@ -77,7 +77,34 @@ public class ReservationServiceImpl implements ReservationService {
 		return addReservationResultCount;
 	}
 	
-
-
+	@Override
+	public AssetDto getAsset(String assetCode) {
+		return reservationMapper.getAsset(assetCode);
+	}
+	
+	@Override
+	public int modifyAsset(HttpServletRequest request) {
+		String assetType = request.getParameter("assetType");
+		String assetCode = request.getParameter("assetCode");
+		String assetName = request.getParameter("assetName");
+		String assetSubname = request.getParameter("assetSubname");
+		String subasset = request.getParameter("subasset");
+		
+		AssetDto asset = AssetDto.builder()
+							.assetType(assetType)
+							.assetCode(assetCode)
+							.assetName(assetName)
+							.assetSubname(assetSubname)
+							.subasset(subasset)
+						.build();
+		int modifyAssetResult = reservationMapper.modifyAsset(asset);
+		
+		return modifyAssetResult;
+	}
+	
+	@Override
+	public int removeAsset(String assetCode) {
+		return reservationMapper.removeAsset(assetCode);
+	}
 }
 	

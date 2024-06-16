@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gdu.myapp.service.ReservationService;
@@ -72,9 +73,33 @@ public class ReservationController {
 		return "redirect:/reservation/management.page";
 	}
 	
+	  @PostMapping("/editAsset.page")
+	  public String editAsset(@RequestParam String assetCode, Model model) {
+	    model.addAttribute("asset", reservationService.getAsset(assetCode));
+	    model.addAttribute("submenu", "modifyGoods.jsp");
+		return "contents/reservation/reservation";
+
+	  }
+	  
 	@GetMapping(value="/getAssetList.do", produces="application/json")
 	public ResponseEntity<Map<String, Object>> getAssetList(HttpServletRequest request) {
 		return reservationService.getAssetList(request);
+	}
+	
+	@PostMapping("/modifyAsset.page")
+	  public String modifyBlog(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+	  	int modifyAssetCount = reservationService.modifyAsset(request);
+	  	redirectAttributes
+	  	.addAttribute("assetCode", request.getParameter("assetCode"))
+	  	.addFlashAttribute("modifyAssetResult", modifyAssetCount == 1 ? "자산이 수정되었습니다.": "자산이 수정되지 않았습니다.");
+	  	return "redirect:/reservation/management.page";
+	  }
+	
+	@PostMapping("/removeAsset.page")
+	public String removeAsset(@RequestParam String assetCode, RedirectAttributes redirectAttributes) {
+		int removeAssetCount = reservationService.removeAsset(assetCode);
+		redirectAttributes.addFlashAttribute("removeAssetResult", removeAssetCount == 1 ? "자산이 삭제되었습니다." : "자산이 삭제되지 않았습니다.");
+		return "redirect:/blog.page";
 	}
 	
 	@PostMapping("/addReservation.page")
@@ -85,6 +110,8 @@ public class ReservationController {
 	  	.addFlashAttribute("addAssetResult", addReservationCount == 1 ? "예약되었습니다.": "예약되지 않았습니다.");
 		return "redirect:/reservation/curReservation.page";
 	}
+	
+	
 	
 	
 }

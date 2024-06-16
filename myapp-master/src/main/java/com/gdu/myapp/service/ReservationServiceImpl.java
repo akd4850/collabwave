@@ -1,6 +1,5 @@
 package com.gdu.myapp.service;
 
-import java.sql.Date;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -56,7 +55,6 @@ public class ReservationServiceImpl implements ReservationService {
 	  	
 	  	Map<String, Object> map = Map.of("begin" , myPageUtils.getBegin()
 	        , "end", myPageUtils.getEnd());
-	  	System.out.println(map);
 	  	 return new ResponseEntity<>(Map .of("assetList", reservationMapper.getAssetList(map)
 	         							   , "totalPage", myPageUtils.getTotalPage())
 	  			 						   , HttpStatus.OK);
@@ -64,21 +62,13 @@ public class ReservationServiceImpl implements ReservationService {
 	
 	@Override
 	public int addReservation(HttpServletRequest request) {
-		int reservationNumber = Integer.parseInt(request.getParameter("reservationNumber"));
 		String empCode = request.getParameter("empCode");
 		String assetCode = request.getParameter("assetCode");
-		/*Date startDatetime = request.getParameter("startDtaetime");
-		Date endDatetime = request.getParameter("endDatetime");*/
-		Date startDatetime = Date.valueOf(request.getParameter("startDtaetime"));
-		Date endDatetime = Date.valueOf(request.getParameter("endDatetime"));
 		String reason = request.getParameter("reason");
 		
 		ReservationDto reser = ReservationDto.builder()
-										.reservationNumber(reservationNumber)
 										.empCode(empCode)
 										.assetCode(assetCode)
-										.startDatetime(startDatetime)
-										.endDatetime(endDatetime)
 										.reason(reason)
 									.build();
 							
@@ -87,6 +77,7 @@ public class ReservationServiceImpl implements ReservationService {
 		return addReservationResultCount;
 	}
 	
+
 
 }
 	

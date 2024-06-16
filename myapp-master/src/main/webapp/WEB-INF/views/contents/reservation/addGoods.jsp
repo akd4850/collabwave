@@ -6,6 +6,9 @@
 <c:set var="dt" value="<%=System.currentTimeMillis()%>"/>
 
     <div class="card">
+        <div class="header">
+            자산 추가
+        </div>
         <div class="content">
         <form id="frm-addAsset"
               method="POST"

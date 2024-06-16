@@ -30,11 +30,11 @@
             <div class="info">
                 <div class="photo">
                     <c:choose>
-                        <c:when test="${sessionScope.emp.profileFileName == null}">
-                            <img src="${contextPath}/resources/img/new_logo.png" alt="기본 프로필" loading="lazy"/>
+                        <c:when test="${!emp.profileFileName}">
+                            <img src="${emp.profileFileName}" alt="프로필 이미지" loading="lazy"/>
                         </c:when>
                         <c:otherwise>
-                            <img src="${contextPath}${sessionScope.emp.profileFileName}" alt="프로필 이미지" loading="lazy"/>
+                            <img src="${contextPath}/resources/img/new_logo.png" alt="기본 프로필" loading="lazy"/>
                         </c:otherwise>
                     </c:choose>
                 </div>

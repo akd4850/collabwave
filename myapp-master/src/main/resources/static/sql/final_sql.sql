@@ -1,3 +1,5 @@
+DROP SEQUENCE assetreservation_seq;
+
 DROP TABLE cmmt_t;
 DROP TABLE vacation_t;
 DROP TABLE vacation_manage_t;
@@ -15,6 +17,8 @@ DROP TABLE emp_t;
 DROP TABLE dept_t;
 DROP TABLE position_t;
 DROP TABLE attach_t;
+
+CREATE SEQUENCE assetreservation_seq NOCACHE;
 
 CREATE TABLE emp_t (
 	emp_code	varchar2(5)		NOT NULL,

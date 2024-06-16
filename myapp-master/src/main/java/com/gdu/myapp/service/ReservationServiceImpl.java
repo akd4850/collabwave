@@ -62,6 +62,42 @@ public class ReservationServiceImpl implements ReservationService {
 	  			 						   , HttpStatus.OK);
 	  }
 	
+	@Override
+	public ResponseEntity<Map<String, Object>> reservationList(HttpServletRequest request) {
+
+		int total = reservationMapper.reservationCount();
+	  	
+	  	int display = 10;
+	  	
+	  	int page = Integer.parseInt(request.getParameter("page"));
+	  
+	  	myPageUtils.setPaging(total, display, page);
+	  	
+	  	Map<String, Object> map = Map.of("begin" , myPageUtils.getBegin()
+	        , "end", myPageUtils.getEnd());
+	  	 return new ResponseEntity<>(Map .of("reservationList", reservationMapper.reservationList(map)
+	         							   , "totalPage", myPageUtils.getTotalPage())
+	  			 						   , HttpStatus.OK);
+	  }
+	
+	@Override
+	public ResponseEntity<Map<String, Object>> myReservationList(HttpServletRequest request) {
+
+		int total = reservationMapper.myReservationCount();
+	  	
+	  	int display = 10;
+	  	
+	  	int page = Integer.parseInt(request.getParameter("page"));
+	  
+	  	myPageUtils.setPaging(total, display, page);
+	  	
+	  	Map<String, Object> map = Map.of("begin" , myPageUtils.getBegin()
+	        , "end", myPageUtils.getEnd());
+	  	 return new ResponseEntity<>(Map .of("myReservationList", reservationMapper.myReservationList(map)
+	         							   , "totalPage", myPageUtils.getTotalPage())
+	  			 						   , HttpStatus.OK);
+	  }
+	
 	public List<Map<String, Object>> assetList() {
         return reservationMapper.assetList();
     }
@@ -118,5 +154,13 @@ public class ReservationServiceImpl implements ReservationService {
 	public int removeAsset(String assetCode) {
 		return reservationMapper.removeAsset(assetCode);
 	}
+	
+	@Override
+	public int removeReservation(int reservationNumber) {
+		return reservationMapper.removeReservation(reservationNumber);
+	}
+	
+
+	
 }
 	

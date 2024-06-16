@@ -17,4 +17,7 @@ public interface ReservationService {
 	int modifyAsset(HttpServletRequest request);
 	int removeAsset(String assetCode);
 	List<Map<String, Object>>assetList();
+	ResponseEntity<Map<String, Object>> reservationList(HttpServletRequest request);
+	ResponseEntity<Map<String, Object>> myReservationList(HttpServletRequest request);
+	int removeReservation(int reservationNumber);
 }

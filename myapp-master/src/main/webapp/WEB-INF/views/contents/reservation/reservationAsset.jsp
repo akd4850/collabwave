@@ -16,7 +16,7 @@
       left: 50%;
       transform: translate(-50%, -50%);
       opacity: 0;
-      pointer-events: none;
+      pointer-events: auto;
     }
 
 </style>
@@ -28,6 +28,7 @@
         <div class="content">
         <form id="frm-reservationAsset"
               method="POST"
+              onsubmit="return combineDateTime()"
               action="${contextPath}/reservation/addReservation.page">
               
         
@@ -40,31 +41,37 @@
 
                 <div class="form-group">
                     <label id="asset-type-label">예약자</label>
-                    <input type="text" class="form-control" id="empCode" name="reason" placeholder="예약 사유" value="${emp.empName} ${emp.position.positionName}" readonly>
+                    <input type="text" class="form-control" id="empName" name="empName" placeholder="예약자" value="${emp.empName} ${emp.position.positionName}" readonly>
                 </div>
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>구분</label>
+                        <label>예약 자산</label>
                         <select id="asset-type" class="form-control" name="assetType">
                             <c:forEach items="${assetList}" var="asset" varStatus="vs">
-                                    <option>${asset.assetName}</option>
+                              <option value="${asset.assetName}" data-subasset="${asset.subasset}">${asset.assetName}</option>
                             </c:forEach>
                         </select>
                     </div>
                 </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                      <label>보유 기자재</label>
+                      <input type="text" class="form-control" id="subasset" name="subasset" placeholder="보유 기자재" readonly>
+                    </div>
+              </div>
                 <div class="container mt-4">
                     <div class="row">
                       <div class="col-md-4">
                         <div class="form-group">
                           <label>시작 시간</label>
-                          <input type="time" class="form-control" placeholder="시작 시간" id="startTime" onchange="forceMinutesToZero(this)">
+                          <input type="time" class="form-control" placeholder="시작 시간" id="startTime" onchange="forceMinutesToZero(this)" value="">
                         </div>
                       </div>
                       <div class="col-md-4">
                         <div class="form-group">
                           <label>종료 시간</label>
-                          <input type="time" class="form-control" placeholder="종료 시간" id="endTime" onchange="forceMinutesToZero(this)">
+                          <input type="time" class="form-control" placeholder="종료 시간" id="endTime" onchange="forceMinutesToZero(this)" value="">
                         </div>
                       </div>
                     </div>
@@ -77,9 +84,9 @@
             </div>
     
             
-            <input type="hidden" id="startDatetime" name="startDatetime" vlaue="">
-            <input type="hidden" id="endDatetime" name="endDatetime" vlaue="">
-            <input type="hidden" id="empCode" name="empCode" vlaue="${emp.empCode}">
+            <input type="hidden" id="startDatetime" name="startDatetime" value="">
+            <input type="hidden" id="endDatetime" name="endDatetime" value="">
+            <input type="hidden" id="empCode" name="empCode" value="${emp.empCode}">
             <button type="submit" class="btn btn-info btn-fill pull-right">등록</button>
             <div class="clearfix"></div>
         </form>
@@ -90,8 +97,6 @@
 
 <script>
 /* 날짜 표시 */
-const assetSubnameInput = document.getElementById('asset-subname');
-
     function setDefaultDate() {
       const dateInput = document.getElementById('date-input-start');
       const today = new Date();
@@ -151,5 +156,11 @@ const assetSubnameInput = document.getElementById('asset-subname');
     }
 }
 
+function updateSubasset() {
+    const assetTypeSelect = document.getElementById('asset-type');
+    const selectedOption = assetTypeSelect.options[assetTypeSelect.selectedIndex];
+    const subasset = selectedOption.getAttribute('data-subasset');
+    document.getElementById('subasset').value = subasset;
+}
 
 </script>

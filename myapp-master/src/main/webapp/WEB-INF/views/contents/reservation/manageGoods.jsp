@@ -30,12 +30,15 @@
               
             </tbody>
         </table>
-
+        <div class="pagination">
+            <button class="btn btn-info btn-fill" onclick="prevPage()">이전</button>
+            <span>페이지 <span id="page-number">1</span></span>
+            <button class="btn btn-info btn-fill" onclick="nextPage()">다음</button>
+        </div>
     </div>
 </div>
 
 <script>
-
     var page = 1;
     var totalPage = 0;
     
@@ -56,15 +59,22 @@
                     str += '<td>' + asset.assetName + '</td>';
                     str += '<td>' + (asset.subasset ? asset.subasset : '') + '</td>';
                     str += '<td><button type="button" class="btn btn-info btn-fill edit-button" data-code="' + asset.assetCode + '">수정</button></td>';
-                    str += '<td><button type="button" class="btn btn-info btn-fill delete-button">삭제</button></td>';
+                    str += '<td><button type="button" class="btn btn-info btn-fill delete-button" data-code="' + asset.assetCode + '">삭제</button></td>';
                     str += '</tr>';
                     $('.asset-list').append(str);
                 });
 
                 $('.edit-button').on('click', function() {
-                var assetCode = $(this).data('code');
-                window.location.href = '${contextPath}/reservation/editAsset.page?code=' + assetCode;
-             });
+                    var assetCode = $(this).data('code');
+                    window.location.href = '${contextPath}/reservation/editAsset.page?assetCode=' + assetCode;
+                });
+
+                $('.delete-button').on('click', function() {
+                    var assetCode = $(this).data('code');
+                    window.location.href = '${contextPath}/reservation/removeAsset.page?assetCode=' + assetCode;
+                });
+
+                $('#page-number').text(page);
             },
             error: (jqXHR) => {
                 alert(jqXHR.statusText + '(' + jqXHR.status + ')');
@@ -73,4 +83,4 @@
     }
 
     fnGetAssetList();
-        </script>
+</script>

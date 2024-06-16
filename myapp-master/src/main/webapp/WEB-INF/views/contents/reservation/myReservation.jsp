@@ -19,16 +19,80 @@
                 <th>예약 사유</th>
                 <th>취소</th>
             </thead>
-            <tbody>
-                <tr>
-                    <td>대회의실1</td>
-                    <td>홍길동 사원</td>
-                    <td>2024.05.22 17:30</td>
-                    <td>2024.05.23 18:30</td>
-                    <td>회의실 예약</td>
-                    <td><button type="submit" class="btn btn-info btn-fill">취소</button></td>
-                </tr>
+            <tbody class="myReservation-list">
+              
             </tbody>
         </table>
+        <div class="pagination">
+            <button class="btn btn-info btn-fill" onclick="prevPage()">이전</button>
+            <span>페이지 <span id="page-number">1</span></span>
+            <button class="btn btn-info btn-fill" onclick="nextPage()">다음</button>
+        </div>
     </div>
 </div>
+
+<script>
+var page = 1;
+var totalPage = 0;
+
+const formatDateTime = (timestamp) => {
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2); // Months are zero-based
+    const day = ('0' + date.getDate()).slice(-2);
+    const hours = ('0' + date.getHours()).slice(-2);
+    const minutes = ('0' + date.getMinutes()).slice(-2);
+    return `${year}.${month}.${day} ${hours}:${minutes}`;
+}
+
+const fnMyReservationList = () => {
+    $.ajax({
+        type: 'GET',
+        url: '${contextPath}/reservation/myReservationList.do',
+        data: 'page=' + page,
+        dataType: 'json',
+        success: (resData) => {
+            totalPage = resData.totalPage;
+            console.log(resData);
+            $('.myReservation-list').empty();
+            $.each(resData.reservationList, (i, reservation) => {
+                let str = '<tr>';
+                str += '<td>' + reservation.asset.assetName + '</td>';
+                str += '<td>' + reservation.emp.empName + ' ' +  reservation.emp.position.positionName + '</td>';
+                str += '<td>' + formatDateTime(reservation.startDatetime) + '</td>';
+                str += '<td>' + formatDateTime(reservation.endDatetime) + '</td>';
+                str += '<td>' + reservation.reason + '</td>';
+                str += '<td><button type="button" class="btn btn-info btn-fill cancel-button" data-number="'+ reservation.reservationNumber +'">취소</button></td>';
+                str += '</tr>';
+                $('.myReservation-list').append(str);
+            });
+            $('.cancel-button').on('click', function() {
+                var reservationNumber = $(this).data('number');
+                cancelReservation(reservationNumber);
+            });
+            $('#page-number').text(page);
+        },
+        error: (jqXHR) => {
+            alert(jqXHR.statusText + '(' + jqXHR.status + ')');
+        }
+    });
+}
+
+const cancelReservation = (reservationNumber) => {
+    $.ajax({
+        type: 'POST',
+        url: '${contextPath}/reservation/removeReservation.page',
+        data: { reservationNumber: reservationNumber },
+        success: (resData) => {
+            alert('예약이 취소되었습니다.');
+            fnMyReservationList();
+        },
+        error: (jqXHR) => {
+            alert(jqXHR.statusText + '(' + jqXHR.status + ')');
+        }
+    });
+}
+
+fnMyReservationList();
+
+</script>

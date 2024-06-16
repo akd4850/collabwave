@@ -94,16 +94,13 @@ public class ReservationController {
 	  	return "redirect:/reservation/management.page";
 	  }
 	
-	@GetMapping(value="/getAssetList.do", produces="application/json")
-	public ResponseEntity<Map<String, Object>> getAssetList(HttpServletRequest request) {
-		return reservationService.getAssetList(request);
-	}
+	
 	
 	@PostMapping("/removeAsset.page")
 	public String removeAsset(@RequestParam String assetCode, RedirectAttributes redirectAttributes) {
 		int removeAssetCount = reservationService.removeAsset(assetCode);
 		redirectAttributes.addFlashAttribute("removeAssetResult", removeAssetCount == 1 ? "자산이 삭제되었습니다." : "자산이 삭제되지 않았습니다.");
-		return "redirect:/blog.page";
+		return "redirect:/reservation/management.page";
 	}
 	
 	@PostMapping("/addReservation.page")
@@ -114,6 +111,28 @@ public class ReservationController {
 	  	.addAttribute("assetCode", request.getParameter("assetCode"))
 	  	.addFlashAttribute("addAssetResult", addReservationCount == 1 ? "예약되었습니다.": "예약되지 않았습니다.");
 		return "redirect:/reservation/curReservation.page";
+	}
+	
+	@PostMapping("/removeReservation.page")
+	public String removeReservation(@RequestParam int reservationNumber, RedirectAttributes redirectAttributes) {
+		int removeReservationCount = reservationService.removeReservation(reservationNumber);
+		redirectAttributes.addFlashAttribute("removeReservationResult", removeReservationCount == 1 ? "예약이 삭제되었습니다." : "예약이 삭제되지 않았습니다.");
+		return "redirect:/reservation/myReservation.page";
+	}
+	
+	@GetMapping(value="/getAssetList.do", produces="application/json")
+	public ResponseEntity<Map<String, Object>> getAssetList(HttpServletRequest request) {
+		return reservationService.getAssetList(request);
+	}
+	
+	@GetMapping(value="/reservationList.do", produces="application/json")
+	public ResponseEntity<Map<String, Object>> reservationList(HttpServletRequest request) {
+		return reservationService.reservationList(request);
+	}
+	
+	@GetMapping(value="/myReservationList.do", produces="application/json")
+	public ResponseEntity<Map<String, Object>> myReservationList(HttpServletRequest request) {
+		return reservationService.myReservationList(request);
 	}
 	
 	

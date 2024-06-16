@@ -13,7 +13,7 @@
         <input type="button"
                 class="btn btn-info btn-fill"
                 style="margin-left:10px"
-                onclick="location.href='/reservation/reservationAsset.page?empCode=${sessionScope.emp.empCode}&positionName={sessionScope.emp.position.positionName}'"
+                onclick="location.href='/reservation/reservationAsset.page?empCode=${sessionScope.emp.empCode}&positionName=${sessionScope.emp.position.positionName}'"
                 value="예약 하기">
         <table class="table table-hover table-striped">
             <thead>
@@ -24,14 +24,54 @@
                 <th>예약 사유</th>
             </thead>
             <tbody class="reservation-list">
-                <tr>
-                    <td>대회의실1</td>
-                    <td>홍길동 사원</td>
-                    <td>2024.05.22 17:30</td>
-                    <td>2024.05.23 18:30</td>
-                    <td>회의실 예약</td>
-                </tr>
+
             </tbody>
         </table>
     </div>
 </div>
+
+<script>
+
+    var page = 1;
+    var totalPage = 0;
+
+    const formatDateTime = (timestamp) => {
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2); // Months are zero-based
+    const day = ('0' + date.getDate()).slice(-2);
+    const hours = ('0' + date.getHours()).slice(-2);
+    const minutes = ('0' + date.getMinutes()).slice(-2);
+    return `${year}.${month}.${day} ${hours}:${minutes}`;
+}
+
+    const fnReservationList = () => {
+        $.ajax({
+            type: 'GET',
+            url: '${contextPath}/reservation/reservationList.do',
+            data: 'page=' + page,
+            dataType: 'json',
+            success: (resData) => {
+                totalPage = resData.totalPage;
+                console.log(resData);
+                $('.reservation-list').empty();
+                $.each(resData.reservationList, (i, reservation) => {
+                    let str = '<tr>';
+                    str += '<td>' + reservation.asset.assetName + '</td>';
+                    str += '<td>' + reservation.emp.empName + ' ' +  reservation.emp.position.positionName + '</td>';
+                    str += '<td>' + formatDateTime(reservation.startDatetime) + '</td>';
+                    str += '<td>' + formatDateTime(reservation.endDatetime) + '</td>';
+                    str += '<td>' + reservation.reason + '</td>';
+                    str += '</tr>';
+                    $('.reservation-list').append(str);
+                });
+            },
+            error: (jqXHR) => {
+                alert(jqXHR.statusText + '(' + jqXHR.status + ')');
+            }
+        });
+    }
+
+    fnReservationList();
+
+</script>

@@ -30,9 +30,11 @@ public class EdsmController {
 	}
 
 	@GetMapping("/edsmMain.page")
-	public String edsm(Model model) {
+	public String edsm(Model model, HttpServletRequest request) {
 
 		model.addAttribute("submenu", "edsmContents.jsp");
+		edsmService.updateEdsm(request);
+		
 		return "contents/edsm/edsm";
 	}
 
@@ -275,4 +277,14 @@ public class EdsmController {
 		
 		return "contents/edsm/organizationChart";
     }
+    
+ 
+    @GetMapping("/edsmDocument.do")
+	public String edsmDocument(HttpServletRequest request, Model model) {
+
+		model.addAttribute("submenu", "edsmDocument.jsp");
+		edsmService.loadDocumentList(request, model);
+		
+		return "contents/edsm/edsm";
+	}
 }

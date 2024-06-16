@@ -32,4 +32,6 @@ public interface EdsmService {
     void edsmDetail(HttpServletRequest request, Model model, int edsmNo);
     ResponseEntity<Map<String, Object>> getApprList(HttpServletRequest request);
     void confirmAppr(HttpServletRequest request);
+    void loadDocumentList(HttpServletRequest request, Model model);
+    void updateEdsm(HttpServletRequest request);
 }

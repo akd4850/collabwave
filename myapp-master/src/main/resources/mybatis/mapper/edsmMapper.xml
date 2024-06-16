@@ -70,6 +70,9 @@
 	    	<id property="edsmNo" column="EDSM_NO" />
 	    	<result property="edsmTitle" column="EDSM_TITLE" />
 	    	<result property="edsmStartDatetime" column="EDSM_START_DATETIME" />
+	    	<result property="edsmExpireDatetime" column="EDSM_EXPIRE_DATETIME" />
+	    	<result property="edsmEndDatetime" column="EDSM_END_DATETIME" />
+	    	<result property="edsmStatus" column="EDSM_STATUS" />
 	    	<association property="sample" javaType="EdsmFormDto">
 				<id property="sampleDotCode" column="SAMPLE_DOT_CODE" />
 	    		<result property="sampleTitle" column="SAMPLE_TITLE" />
@@ -312,6 +315,7 @@
 		    AND B.EMP_CODE = C.EMP_CODE
 		    AND A.APPR_SEQ = B.EDSM_SEQ
 		    AND A.EDSM_NO = B.EDSM_NO
+		    AND B.EDSM_STATUS = 'a0001'
 		  ORDER BY A.APPR_SEQ
 	</select>
     
@@ -326,12 +330,14 @@
 		        APPR_COMMENT,
 		        APPR_DATETIME,
 		        EDSM_START_DATETIME,
+		        EDSM_EXPIRE_DATETIME,
 		        SAMPLE_TITLE
 		   FROM (SELECT ROW_NUMBER() OVER(ORDER BY A.APPR_NO) AS RN,
 				 		A.APPR_NO,
 				        A.EDSM_NO,
 				        B.EDSM_TITLE,
 				        B.EDSM_START_DATETIME,
+				        B.EDSM_EXPIRE_DATETIME,
 				        A.EMP_CODE,
 				        C.EMP_NAME,
 				        A.APPR_SEQ,
@@ -349,11 +355,12 @@
 				    AND A.APPR_SEQ = B.EDSM_SEQ
 				    AND A.EDSM_NO = B.EDSM_NO
 				    AND B.SAMPLE_DOT_CODE = D.SAMPLE_DOT_CODE
+				    AND B.EDSM_STATUS = 'a0001'
 				  ORDER BY A.APPR_SEQ)
 		  WHERE RN BETWEEN #{begin} AND #{end}
 	</select>
 	
-	<!-- 자기가 결제할 차례 문서 -->
+	<!-- 자기가 결제 예정인 문서 -->
 	<select id="getExpectedCount" resultType="int" parameterType="Map">
 		 SELECT COUNT(*)
 		   FROM EDSM_APPROVAL_T A,
@@ -364,13 +371,14 @@
 		    AND B.EMP_CODE = C.EMP_CODE
 		    AND A.APPR_SEQ != B.EDSM_SEQ
 		    AND A.EDSM_NO = B.EDSM_NO
+		    AND B.EDSM_STATUS = 'a0001'
 		  ORDER BY A.APPR_SEQ
 	</select>
     
     <select id="getExpectedList" parameterType="Map" resultMap="EdsmApprMap">
-		 SELECT APPR_NO, EDSM_NO, EDSM_TITLE, EMP_CODE, EMP_NAME, APPR_SEQ, APPR_STATUS, APPR_COMMENT, APPR_DATETIME, EDSM_START_DATETIME, SAMPLE_TITLE
+		 SELECT APPR_NO, EDSM_NO, EDSM_TITLE, EMP_CODE, EMP_NAME, APPR_SEQ, APPR_STATUS, APPR_COMMENT, APPR_DATETIME, EDSM_START_DATETIME, EDSM_EXPIRE_DATETIME, SAMPLE_TITLE
 		   FROM (SELECT ROW_NUMBER() OVER(ORDER BY A.APPR_NO) AS RN,
-				 		A.APPR_NO, A.EDSM_NO, B.EDSM_TITLE, B.EDSM_START_DATETIME, A.EMP_CODE,
+				 		A.APPR_NO, A.EDSM_NO, B.EDSM_TITLE, B.EDSM_START_DATETIME, B.EDSM_EXPIRE_DATETIME, A.EMP_CODE,
 				        C.EMP_NAME, A.APPR_SEQ, A.APPR_STATUS, A.APPR_COMMENT, A.APPR_DATETIME, D.SAMPLE_TITLE
 				   FROM EDSM_APPROVAL_T A, EDSM_T B, EMP_T C, EDSM_SAMPLE_T D
 				  WHERE A.EMP_CODE = #{empCode}
@@ -379,6 +387,7 @@
 				    AND A.APPR_SEQ != B.EDSM_SEQ
 				    AND A.EDSM_NO = B.EDSM_NO
 				    AND B.SAMPLE_DOT_CODE = D.SAMPLE_DOT_CODE
+				    AND B.EDSM_STATUS = 'a0001'
 				  ORDER BY A.APPR_SEQ)
 		  WHERE RN BETWEEN #{begin} AND #{end}
 	</select>
@@ -417,7 +426,37 @@
 	</update>
 	
 	<update id="updateEdsmStatus">
-		UPDATE EDSM_T SET EDSM_STATUS = 'a0004' WHERE EMP_CODE = #{empCode} AND EDSM_EXPIRE_DATETIME <![CDATA[<]]> CURRENT_DATE AND EDSM_STATUS = 'a0001'
+		UPDATE EDSM_T SET EDSM_STATUS = 'a0004', EDSM_END_DATETIME = CURRENT_DATE WHERE EMP_CODE = #{empCode} AND EDSM_EXPIRE_DATETIME <![CDATA[<]]> CURRENT_DATE AND EDSM_STATUS = 'a0001'
 	</update>
+	
+	<!-- 자기가 결제한 문서 -->
+	<select id="getDocumentCount" resultType="int">
+		 SELECT COUNT(*)
+		   FROM EDSM_APPROVAL_T A,
+		        EDSM_T B,
+		        EMP_T C
+		  WHERE A.EMP_CODE = #{empCode}
+		    AND (A.APPR_STATUS = 'p0003' OR A.APPR_STATUS = 'p0002')
+		    AND B.EMP_CODE = C.EMP_CODE
+		    AND A.EDSM_NO = B.EDSM_NO
+		  ORDER BY A.APPR_SEQ
+	</select>
+    
+    <select id="getDocumentList" parameterType="Map" resultMap="EdsmApprMap">
+		 SELECT APPR_NO, EDSM_NO, EDSM_TITLE, EMP_CODE, EMP_NAME, APPR_SEQ, APPR_STATUS, APPR_COMMENT, APPR_DATETIME, EDSM_START_DATETIME, SAMPLE_TITLE,
+		 		EDSM_EXPIRE_DATETIME, EDSM_END_DATETIME, EDSM_STATUS
+		   FROM (SELECT ROW_NUMBER() OVER(ORDER BY A.APPR_NO) AS RN,
+				 		A.APPR_NO, A.EDSM_NO, B.EDSM_TITLE, B.EDSM_START_DATETIME, A.EMP_CODE,
+				        C.EMP_NAME, A.APPR_SEQ, A.APPR_STATUS, A.APPR_COMMENT, A.APPR_DATETIME, D.SAMPLE_TITLE,
+				        B.EDSM_EXPIRE_DATETIME, B.EDSM_END_DATETIME, B.EDSM_STATUS
+				   FROM EDSM_APPROVAL_T A, EDSM_T B, EMP_T C, EDSM_SAMPLE_T D
+				  WHERE A.EMP_CODE = #{empCode}
+				    AND (A.APPR_STATUS = 'p0003' OR A.APPR_STATUS = 'p0002')
+				    AND B.EMP_CODE = C.EMP_CODE
+				    AND A.EDSM_NO = B.EDSM_NO
+				    AND B.SAMPLE_DOT_CODE = D.SAMPLE_DOT_CODE
+				  ORDER BY A.APPR_SEQ)
+		  WHERE RN BETWEEN #{begin} AND #{end}
+	</select>
     
 </mapper>

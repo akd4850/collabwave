@@ -337,7 +337,7 @@ public class EdsmServiceImpl implements EdsmService {
 	                                                     , display));
 	    
 	    // 기간 만료된 문서 상태 변경
-	    edsmMapper.updateEdsmStatus(empDto.getEmpCode());
+	    //edsmMapper.updateEdsmStatus(empDto.getEmpCode());
     }
     
     @Override
@@ -346,7 +346,7 @@ public class EdsmServiceImpl implements EdsmService {
     	HttpSession session = request.getSession();
 		EmpDto empDto = (EmpDto)session.getAttribute("emp");
     	
-		String status = "a0001";
+		String status = "p0001";
 		Map<String, Object> countMap = Map.of("empCode", empDto.getEmpCode(),
 											  "status", status);
 		
@@ -376,7 +376,7 @@ public class EdsmServiceImpl implements EdsmService {
     	HttpSession session = request.getSession();
 		EmpDto empDto = (EmpDto)session.getAttribute("emp");
     	
-		String status = "a0001";
+		String status = "p0001";
 		Map<String, Object> countMap = Map.of("empCode", empDto.getEmpCode(),
 											  "status", status);
 		
@@ -460,5 +460,39 @@ public class EdsmServiceImpl implements EdsmService {
 				 "status", documentStatus);
 
     	edsmMapper.updateEdsm(edsmMap);
+    }
+    
+    @Override
+    public void loadDocumentList(HttpServletRequest request, Model model) {
+    	
+    	HttpSession session = request.getSession();
+		EmpDto empDto = (EmpDto)session.getAttribute("emp");
+		
+    	int total = edsmMapper.getDocumentCount(empDto.getEmpCode());
+	    int display = 10;
+	    Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
+	    int page = Integer.parseInt(opt.orElse("1"));
+	    
+	    myPageUtils.setPaging(total, display, page);
+	    Map<String, Object> map = Map.of("begin", myPageUtils.getBegin()
+	                                   , "end", myPageUtils.getEnd()
+	                                   , "empCode", empDto.getEmpCode());
+	    
+	    List<EdsmApprDto> documentList = edsmMapper.getDocumentList(map);
+	    
+	    model.addAttribute("beginNo", total - (page - 1) * display);
+	    model.addAttribute("documentList", documentList);
+	    model.addAttribute("paging", myPageUtils.getPagingNewVersion(request.getContextPath() + "/edsm/edsmDocument.do"
+	                                                     , null
+	                                                     , display));
+    }
+    
+    @Override
+    public void updateEdsm(HttpServletRequest request) {
+
+    	HttpSession session = request.getSession();
+		EmpDto empDto = (EmpDto)session.getAttribute("emp");
+    	// 기간 만료된 문서 상태 변경
+	    edsmMapper.updateEdsmStatus(empDto.getEmpCode());
     }
 }

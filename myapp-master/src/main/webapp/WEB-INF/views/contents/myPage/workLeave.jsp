@@ -9,38 +9,7 @@
     <div class="container-fluid">
         <div class="row">
 
-            <div class="col-md-2">
-                <div class="card">
-                    <div class="header">
-                        근퇴 관리
-                    </div>
-                    <div class="contents">
-                        <div>
-                            <h4 style="padding-left:10px">2024-05-22</h4>
-                        </div>
-                        <table class="table table-hover table-striped">
-                            <tbody>
-                                <tr>
-                                    <th>출근 시간</th>
-                                    <td>08:50:10</td>
-                                </tr>
-                                <tr>
-                                    <th>퇴근 시간</th>
-                                    <td>18:00:05</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="text-center">
-                            <hr>
-                            <input type="button" class="btn btn-info btn-fill" value="출근 하기" disabled/> 
-                            <input type="button" class="btn btn-info btn-fill" value="퇴근 하기"/>
-                            <br/>&nbsp;
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <div class="card">
                     <div class="header">
                         근퇴 현황
@@ -58,6 +27,16 @@
                                 <th>비고</th>
                             </thead>
                             <tbody>
+                                <c:forEach items="${attendanceList}" var="att" varStatus="vs">
+                                    <tr>
+                                        <td>${att.gotoworkDatetime.toString().split("T")[0].split("-")[2]}일</td>
+                                        <td>${att.gotoworkDatetime.toString().split("T")[1]}</td>
+                                        <td>${att.offworkDatetime.toString().split("T")[1]}</td>
+                                        <td>${Duration.between(att.gotoworkDatetime, att.offworkDatetime).toMinutes()}</td>
+                                        <td></td>
+                                    </tr>
+                                </c:forEach>
+                                <!--
                                 <tr>
                                     <td>3일</td>
                                     <td>09:00:33</td>
@@ -65,20 +44,7 @@
                                     <td>8h 54m 30s</td>
                                     <td>정상 근무</td>
                                 </tr>
-                                <tr>
-                                    <td>2일</td>
-                                    <td>09:10:30</td>
-                                    <td>18:10:50</td>
-                                    <td>8h 54m 30s</td>
-                                    <td>지각</td>
-                                </tr>
-                                <tr>
-                                    <td>1일</td>
-                                    <td>00:00:00</td>
-                                    <td>00:00:00</td>
-                                    <td>0h 0m 0s</td>
-                                    <td>휴가</td>
-                                </tr>
+                                -->
                             </tbody>
                         </table>
                     </div>

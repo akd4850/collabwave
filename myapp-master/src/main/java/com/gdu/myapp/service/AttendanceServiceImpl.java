@@ -96,10 +96,12 @@ public class AttendanceServiceImpl implements AttendanceService {
 		
 		List<AttendanceDto> attList = attendanceMapper.getAttendanceInfo(Map.of("empCode", empDto.getEmpCode(), "curMon", curMon));
 		for(int i = 0; i < attList.size(); i++) {
-			LocalTime start = attList.get(i).getGotoworkDatetime().toLocalTime();
-			LocalTime end = attList.get(i).getOffworkDatetime().toLocalTime();
-			Duration diff = Duration.between(start, end);
-			attList.get(i).setMinutes(diff.toMinutes());
+			if(attList.get(i).getGotoworkDatetime() != null && attList.get(i).getOffworkDatetime() != null) {
+				LocalTime start = attList.get(i).getGotoworkDatetime().toLocalTime();
+				LocalTime end = attList.get(i).getOffworkDatetime().toLocalTime();
+				Duration diff = Duration.between(start, end);
+				attList.get(i).setMinutes(diff.toMinutes());
+			}
 		}
 		
 		/*LocalDateTime test = LocalDateTime.of(strAry[0], strAry[1], [2], 0, 0);

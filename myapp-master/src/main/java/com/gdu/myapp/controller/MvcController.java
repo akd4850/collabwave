@@ -44,6 +44,7 @@ public class MvcController {
 	public String welcome(Model model, HttpServletRequest request) {
 		
 		model.addAttribute("submenu", "main.jsp");
+		
 		postService.getNoticeList(request, model);
 		List<PostDto> postList = (List<PostDto>) model.getAttribute("postList");
 		List<PostDto> postNewList = new ArrayList<>();
@@ -54,6 +55,17 @@ public class MvcController {
 		}
 		
 		model.addAttribute("postNewList", postNewList);
+		
+		postService.getFreeList(request, model);
+		List<PostDto> freeList = (List<PostDto>) model.getAttribute("postList");
+		List<PostDto> freeNewList = new ArrayList<>();
+		
+		for(int i = 0; i < freeList.size(); i++) {
+			if(i == 3) break;
+			freeNewList.add(freeList.get(i));
+		}
+		
+		model.addAttribute("freeNewList", freeNewList);
 		
 		return "index";
 	}

@@ -288,4 +288,22 @@
    WHERE CMMT_NO = #{cmmtNo}
 </delete>
 
+<!-- 게시판 추가 -->
+<insert id="insertNewBrd"
+		parameterType="BoardDto">
+	INSERT INTO BRD_T(
+		BRD_CODE,
+		BRD_NAME,
+		BRD_URL,
+		CMMT_AUTH_YN
+	)VALUES(
+		#{brdCode},
+		#{brdName},
+		#{brdUrl},
+		#{cmmtAuthYn}
+	)
+</insert>
+
+
+
 </mapper>

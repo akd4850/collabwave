@@ -105,6 +105,7 @@ function validateForm(evt) {
     if (document.getElementById('postTitle').value === '') {
         alert('제목 입력은 필수입니다.');
         evt.preventDefault();
+        return;
     }
 }
 

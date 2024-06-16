@@ -45,4 +45,7 @@ public interface PostService {
   
   void removeTempFiles();
   
+  // 게시판 추가
+  int registerNewBrd(HttpServletRequest request);
+  
 }

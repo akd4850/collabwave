@@ -67,17 +67,22 @@ public class PosServiceImpl implements PosService {
   @Override
   public int modifyPosition(HttpServletRequest request) {
     
-    String posCode = request.getParameter("posCode");
+    String modifyPosCode = request.getParameter("modifyPosCode");
     String modifyPosName = request.getParameter("modifyPosName");
-    String useYn = request.getParameter("useYn");
+    String modifyUseYn = request.getParameter("modifyUseYn");
     
     PosDto pos = PosDto.builder()
-                    .posCode(posCode)
+                    .posCode(modifyPosCode)
                     .posName(modifyPosName)
-                    .useYn(useYn)
+                    .useYn(modifyUseYn)
                   .build();
     
     return posMapper.updatePosition(pos);
+  }
+  
+  @Override
+  public PosDto getSelectedPosInfo(String posName) {
+    return posMapper.getSelectedPositon(posName);
   }
 
 }

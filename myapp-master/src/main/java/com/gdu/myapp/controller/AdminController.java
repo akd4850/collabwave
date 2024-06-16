@@ -160,6 +160,12 @@ public class AdminController {
 	  return "redirect:/admin/pos/management.page";
 	}
 	
+	@GetMapping("/pos/modalPosInfo.do")
+	public String modalPosInfo(@RequestParam String posName, Model model) {
+	  model.addAttribute("selectedPos", posService.getSelectedPosInfo(posName));
+	  return "contents/admin/admin";
+	}
+	
 	@PostMapping("/pos/modify.do")
 	public String modifyPosition(HttpServletRequest request) {
 	  posService.modifyPosition(request);

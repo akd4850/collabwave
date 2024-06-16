@@ -2,7 +2,9 @@ package com.gdu.myapp.controller;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -16,7 +18,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.LocaleResolver;
 
 import com.gdu.myapp.dto.EmpDto;
+import com.gdu.myapp.dto.PostDto;
 import com.gdu.myapp.service.EmpService;
+import com.gdu.myapp.service.PostService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,15 +32,29 @@ public class MvcController {
 	private final MessageSource messageSource;
 	private final LocaleResolver localeResolver;
 	private final EmpService empService;
-	public MvcController(MessageSource messageSource, LocaleResolver localeResolver, EmpService empService) {
+	private final PostService postService;
+	public MvcController(MessageSource messageSource, LocaleResolver localeResolver, EmpService empService, PostService postService) {
 		this.messageSource = messageSource;
 		this.localeResolver = localeResolver;
 		this.empService = empService;
+		this.postService = postService;
 	}
 
 	@GetMapping("/main.page")
-	public String welcome(Model model) {
+	public String welcome(Model model, HttpServletRequest request) {
+		
 		model.addAttribute("submenu", "main.jsp");
+		postService.getNoticeList(request, model);
+		List<PostDto> postList = (List<PostDto>) model.getAttribute("postList");
+		List<PostDto> postNewList = new ArrayList<>();
+		
+		for(int i = 0; i < postList.size(); i++) {
+			if(i == 3) break;
+			postNewList.add(postList.get(i));
+		}
+		
+		model.addAttribute("postNewList", postNewList);
+		
 		return "index";
 	}
 

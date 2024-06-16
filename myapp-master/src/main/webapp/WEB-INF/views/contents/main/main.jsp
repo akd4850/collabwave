@@ -85,10 +85,12 @@
                     <div class="content table-responsive table-full-width">
                         <table class="table table-hover table-striped">
                             <thead>
+                                <th>순번</th>
                                 <th>제목</th>
                                 <th>등록날짜</th>
                             </thead>
                             <tbody>
+                                <!--
                                 <tr>
                                     <td>연말 정산 공지</td>
                                     <td>2023-12-26</td>
@@ -101,6 +103,14 @@
                                     <td>탕비실 이용 유의사항</td>
                                     <td>2023-10-30</td>
                                 </tr>
+                                -->
+                                <c:forEach items="${postNewList}" var="post" varStatus="vs">
+                                    <tr>
+                                        <td>${vs.index + 1}</td>
+                                        <td><a href="${contextPath}/community/detail?postNo=${post.postNo}">${post.postTitle}</a></td>
+                                        <td>${post.postCreateDatetime}</td>
+                                    </tr>
+                                </c:forEach>
                             </tbody>
                         </table>
                     </div>

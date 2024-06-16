@@ -13,4 +13,5 @@ public interface PosMapper {
 	List<PosDto> getPosByMap(Map<String, Object> map);
 	int insertPosition(PosDto pos);
 	int updatePosition(PosDto pos);
+	PosDto getSelectedPositon(String posName);
 }

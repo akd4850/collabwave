@@ -93,11 +93,15 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>직급코드</label>
-                        <input type="text" class="form-control" placeholder="직급코드" id="modal-posCode" name="positionCode">
+                        <input type="text" class="form-control" placeholder="직급코드" id="modal-posCode" name="modifyPosCode">
                     </div>
                     <div class="form-group">
                         <label>직급명</label>
-                        <input type="text" class="form-control" placeholder="직급명" id="modal-posName">
+                        <input type="text" class="form-control" placeholder="직급명" id="modal-posName" name="modifyPosName">
+                    </div>
+                    <div class="form-group">
+                        <label>사용여부</label>
+                        <input type="text" class="form-control" placeholder="사용여부" id="modal-useYn" name="modifyUseYn">
                     </div>
                 </div>
         
@@ -114,20 +118,18 @@
 <script>
 
     const fnSetModalValue = () => {
+        var selectedPosName = event.target.textContent;
+        console.log(selectedPosName);
         $.ajax({
             type: 'GET',
             url: '${contextPath}/admin/pos/modalPosInfo.do',
-            data: 
-
+            data: 'posName=' + selectedPosName,
+            success: (resData) => {
+                $("#modal-posCode").val("${selectedPos.posName}");
+                $('#modal-posName').val("${selectedPos.posName}");
+                $('#modal-useYn').val("${selectedPos.useYn}");
+            }
         })
-        var selectedPosName = event.target.textContent;
-        console.log('선택한 직급명: ', selectedPosName);
-        $("#modal-posName").val(selectedPosName);
-        var selectedIndex = event.target.name;
-        console.log('선택한 인덱스: ', selectedIndex);
-
     };
-
-
 
 </script>

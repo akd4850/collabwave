@@ -45,12 +45,19 @@
 		'Y')
   </insert>
   
-  <update id="updatePosition"
-          parameterType="PosDto">
+  <select id="getSelectedPositon">
+	SELECT POSITION_CODE,
+	       POSITION_NAME,
+	       USE_YN
+	  FROM POSITION_T
+	 WHERE POSITION_NAME = #{positionName}
+  </select>
+  
+  <update id="updatePosition">
 	UPDATE POSITION_T
-	   SET POSITION_NAME = {posName}
-	       USE_YN = {useYn}
-	 WHERE POSITION_CODE = {posCode}
+	   SET POSITION_NAME = #{posName},
+	       USE_YN = #{useYn}
+	 WHERE POSITION_CODE = #{posCode}
   </update>
   
 	

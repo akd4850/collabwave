@@ -115,10 +115,21 @@ function register() {
 	
     document.getElementById('frm-post-register').addEventListener('submit', validateForm);
     
-    // Update the value of postOpenYn checkbox based on its checked status
     document.getElementById('postOpenYn').addEventListener('change', function() {
         this.value = this.checked ? 'Y' : 'N';
     });
+}
+
+//등록 확인
+function validateForm(event) {
+    event.preventDefault();
+
+    const confirmSubmission = confirm('글을 작성하시겠습니까?');
+
+    if (confirmSubmission) {
+        document.getElementById('frm-post-register').removeEventListener('submit', validateForm);
+        document.getElementById('frm-post-register').submit();
+    }
 }
 
 //크기 제한 스크립트 + 첨부 목록 출력 스크립트

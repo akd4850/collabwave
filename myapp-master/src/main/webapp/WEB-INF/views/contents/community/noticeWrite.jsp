@@ -64,7 +64,7 @@
                       <input type="hidden" name="empName" id="empName" value="${sessionScope.emp.empName}">
                       <input type="hidden" name="deptCode" id="deptCode" value="${deptCode}">
                       <input type="hidden" name="postState" id="postState" value="1">
-                      <button type="submit" class="btn btn-info btn-fill" id="submit">작성</button>
+                      <button type="submit" class="btn btn-info btn-fill" id="submit" onclick="confirmSubmit()">작성</button>
                       <button onclick="history.back()" type="button" class="btn btn-info btn-fill" id="cancel">취소</button>
                     </td>
                 </tr>
@@ -120,17 +120,15 @@ function register() {
     });
 }
 
-// 등록 확인
-function validateForm(event) {
-    event.preventDefault();
-
+//등록 확인
+function confirmSubmit() {
     const confirmSubmission = confirm('글을 작성하시겠습니까?');
 
     if (confirmSubmission) {
-        document.getElementById('frm-post-register').removeEventListener('submit', validateForm);
         document.getElementById('frm-post-register').submit();
     }
 }
+
 
 //크기 제한 스크립트 + 첨부 목록 출력 스크립트
 const fnAttachCheck = () => {
@@ -163,7 +161,6 @@ const fnAttachCheck = () => {
 
 // 호출
 insertCurrentDate();
-register();
 fnAttachCheck();
 
 </script>

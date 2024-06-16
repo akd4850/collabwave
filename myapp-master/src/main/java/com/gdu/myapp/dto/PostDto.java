@@ -1,6 +1,5 @@
 package com.gdu.myapp.dto;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;

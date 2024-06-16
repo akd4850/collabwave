@@ -140,7 +140,7 @@
     FROM POST_T P INNER JOIN EMP_T E 
       ON P.EMP_CODE = E.EMP_CODE
    WHERE P.BRD_CODE = 'DEPT'
-      AND E.DEPT_CODE = #{deptCode}
+      AND E.DEPT_CODE = #{deptCode, jdbcType=VARCHAR}
 </select>
 
 <select id="getPostList" parameterType="Map" resultMap="PostMap">
@@ -151,9 +151,9 @@
                , E.EMP_CODE, E.EMP_NAME, E.DEPT_CODE
             FROM EMP_T E INNER JOIN POST_T P ON E.EMP_CODE = P.EMP_CODE
                          LEFT JOIN DEPT_T D ON E.DEPT_CODE = D.DEPT_CODE
-           WHERE P.BRD_CODE = #{brdCode}
+           WHERE P.BRD_CODE = #{brdCode, jdbcType=VARCHAR}
              <if test="brdCode == 'DEPT'">
-               AND E.DEPT_CODE = #{deptCode}
+               AND E.DEPT_CODE = #{deptCode, jdbcType=VARCHAR}
              </if>
           )
    WHERE RN BETWEEN #{begin} AND #{end}

@@ -266,28 +266,12 @@ const fnAttachCheck = () => {
 
 //목록화면으로 이동
 function backToList() {
-var brdCode = document.getElementById('brdCode1').value;
-console.log("brdCode:",brdCode);
-var destinationUrl = ''; // 목적지 URL 초기화
-
-switch (brdCode) { // brdCode 값에 따라 목적지 URL 설정
-    case 'NOTI':
-        destinationUrl = '${contextPath}/community/notice';
-        break;
-    case 'DEPT':
-        destinationUrl = '${contextPath}/community/dept';
-        break;
-    case 'FREE':
-        destinationUrl = '${contextPath}/community/free';
-        break;
-    case 'REFE':
-        destinationUrl = '${contextPath}/community/ref';
-        break;
-    default:
-        return;
-}
-location.href = destinationUrl; // 목적지 URL로 이동
-console.log(destinationUrl);
+	
+    // 삭제 확인
+    var confirmDeletion = confirm('삭제하시겠습니까?');
+    if (!confirmDeletion) {
+        return; // 취소하면 함수 종료
+    }
 }
 
 // 함수 호출

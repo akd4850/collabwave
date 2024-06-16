@@ -15,7 +15,6 @@ public class CommentDto {
 	
 	private int cmmtNo;
 	private String cmmtContent;
-	private int cmmtGroup;
 	private int cmmtStatus;
 	private LocalDateTime cmmtCreateDatetime;
 	private LocalDateTime cmmtModifyDatetime;

@@ -124,15 +124,16 @@
       )
   </insert>
   
-  <update id="updateEmp"
-          parameterType="EmpDto">
+  <update id="updateEmp">
 	UPDATE EMP_T
 	   SET EMP_NAME = #{empName},
-	       EMP_CODE = #{empCode},
 	       POSITION_CODE = #{positionCode},
+	       POSITION_NAME = #{positionName},
+	       PHONE = #{phone},
 	       MOBILE = #{mobile},
 	       EMAIL = #{email},
 	       BIRTHDAY_DATE = #{birthdayDate},
+	       JOIN_DATE = #{joinDate},
 	       ZIP_CODE = #{zipCode},
 	       ADDRESS = #{address},
 		   DETAIL_ADDRESS = #{detailAddress}

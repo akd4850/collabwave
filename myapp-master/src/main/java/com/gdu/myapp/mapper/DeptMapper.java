@@ -19,4 +19,5 @@ public interface DeptMapper {
 	List<EmpDto> getDeptMember(String deptCode);
 	int appointDeptLeader(DeptDto dept);
 	List<DeptDto> getDeptListForTransfer(String deptCode);
+	int updateDeptInfo(DeptDto dept);
 }

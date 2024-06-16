@@ -8,5 +8,6 @@ public interface PosService {
   
   void loadPosList(HttpServletRequest request, Model model);
   int registerPosition(HttpServletRequest request);
+  int modifyPosition(HttpServletRequest request);
   
 }

@@ -30,7 +30,6 @@ public class PosServiceImpl implements PosService {
   public void loadPosList(HttpServletRequest request, Model model) {
     
     int total = posMapper.getPosCount();
-    
     int display = 10;
     
     Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
@@ -63,6 +62,22 @@ public class PosServiceImpl implements PosService {
     int insertCount = posMapper.insertPosition(pos);
     
     return insertCount;
+  }
+  
+  @Override
+  public int modifyPosition(HttpServletRequest request) {
+    
+    String posCode = request.getParameter("posCode");
+    String modifyPosName = request.getParameter("modifyPosName");
+    String useYn = request.getParameter("useYn");
+    
+    PosDto pos = PosDto.builder()
+                    .posCode(posCode)
+                    .posName(modifyPosName)
+                    .useYn(useYn)
+                  .build();
+    
+    return posMapper.updatePosition(pos);
   }
 
 }

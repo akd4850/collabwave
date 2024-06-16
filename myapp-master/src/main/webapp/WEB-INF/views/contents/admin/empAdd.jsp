@@ -95,8 +95,17 @@
                 </div>
             </div>
             
-            <button type="submit" class="btn btn-info btn-fill pull-right">등록</button>
+            <div style="text-align:right">
+            <button type="submit" class="btn btn-info btn-fill">등록</button>
+            <button type="button" id="btn-cancel" class="btn btn-danger btn-fill">취소</button>
+            </div>
             <div class="clearfix"></div>
         </form>
     </div>
 </div>
+
+<script>
+    document.getElementById('btn-cancel').onclick = function() { 
+        history.back();
+    }
+</script>

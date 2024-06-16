@@ -151,4 +151,28 @@ public class DeptServiceImpl implements DeptService {
 	  return deptMapper.getDeptListForTransfer(deptCode);
 	}
 	
+	@Override
+	public int modifyDeptInfo(HttpServletRequest request) {
+	  
+	  String deptCode = request.getParameter("deptCode");
+	  String deptName = request.getParameter("deptName");
+	  int deptLevel = Integer.parseInt(request.getParameter("deptLevel"));
+	  String deptLocation = request.getParameter("deptLocation");
+	  char useYn = (request.getParameter("useYn").equals("Y")) ? 'Y' : 'N';
+	  String deptUpstairCode = request.getParameter("deptUpstairCode");
+	  
+	  DeptDto dept = DeptDto.builder()
+	                    .deptCode(deptCode)
+	                    .deptName(deptName)
+	                    .deptLevel(deptLevel)
+	                    .deptLocation(deptLocation)
+	                    .useYn(useYn)
+	                    .deptUpstairCode(deptUpstairCode)
+	                  .build();
+	  
+	  int modifyCount = deptMapper.updateDeptInfo(dept);
+	  
+	  return modifyCount;
+	}
+	
 }

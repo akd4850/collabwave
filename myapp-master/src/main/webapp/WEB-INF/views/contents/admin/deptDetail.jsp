@@ -24,24 +24,26 @@
 
         <!-- 탭1(부서정보) -->
         <div class="container tab-pane active" id="info">
-            <form>
+            <form id="frm-deptInfo-modify"
+                  method="POST"
+                  action="${contextPath}/admin/dept/modify.do">
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>부서명</label>
-                            <input type="text" class="form-control" placeholder="부서명" value="${dept.deptName}">
+                            <input type="text" class="form-control" placeholder="부서명" id="deptName" name="deptName" value="${dept.deptName}">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                           <label>부서코드</label>
-                          <input type="text" class="form-control" placeholder="부서코드" value="${dept.deptCode}">
+                          <input type="text" class="form-control" placeholder="부서코드" id="deptCode" name="deptCode" value="${dept.deptCode}" readonly>
                     </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>부서레벨</label>
-                            <input type="text" class="form-control" placeholder="부서레벨" value="${dept.deptLevel}">
+                            <input type="text" class="form-control" placeholder="부서레벨" id="deptLevel" name="deptLevel" value="${dept.deptLevel}">
                         </div>
                     </div>
                 </div>
@@ -50,19 +52,19 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>상위부서</label>
-                            <input type="text" class="form-control" placeholder="상위부서" value="${dept.deptUpstairCode}">
+                            <input type="text" class="form-control" placeholder="상위부서" name="deptUpstairCode" value="${dept.deptUpstairCode}">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>부서위치</label>
-                            <input type="text" class="form-control" placeholder="부서위치" value="${dept.deptLocation}">
+                            <input type="text" class="form-control" placeholder="부서위치" name="deptLocation" value="${dept.deptLocation}">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>생성일</label>
-                            <input type="text" class="form-control" placeholder="생성일" value="${dept.deptCreatedate}">
+                            <input type="text" class="form-control" placeholder="생성일" name="deptCreatedate" value="${dept.deptCreatedate}" readonly>
                         </div>
                     </div>
                 </div>
@@ -71,12 +73,20 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>부서장 사원코드</label>
-                            <input type="text" class="form-control" placeholder="부서장 사원코드" value="${dept.deptLeaderEmpCode}">
+                            <input type="text" class="form-control" placeholder="부서장 사원코드" name="deptLeaderEmpCode" value="${dept.deptLeaderEmpCode}" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>사용여부</label>
+                            <input type="text" class="form-control" placeholder="사용여부" name="useYn" value="${dept.useYn}">
                         </div>
                     </div>
                 </div>
+                <div style="text-align:right">
                 <button type="submit" id="btn-update" class="btn btn-info btn-fill">수정</button>
                 <button type="button" id="btn-cancel" class="btn btn-danger btn-fill">취소</button>
+                </div>
             </form>
         </div>
 

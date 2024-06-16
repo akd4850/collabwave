@@ -257,26 +257,31 @@ public class EmpServiceImpl implements EmpService {
   @Override
   public int modifyEmp(HttpServletRequest request) {
     
-    String empCode = request.getParameter("empCode");
-    String empName = request.getParameter("empName");
-    String mobile = request.getParameter("mobile");
-    String email = request.getParameter("email");
-    String zipCode = request.getParameter("zipCode");
-    String address = request.getParameter("address");
-    String detailAddress = request.getParameter("detailAddress");
-    String positionCode = request.getParameter("positionCode");
-    String birthdayDate = request.getParameter("birthdayDate");
+    String modifyEmpCode = request.getParameter("modifyEmpCode");
+    String modifyEmpName = request.getParameter("modifyEmpName");
+    String modifyJoinDate = request.getParameter("modifyJoinDate");
+    String modifyBirthdayDate = request.getParameter("modifyBirthdayDate");
+    String modifyPhone = request.getParameter("modifyPhone");
+    String modifyMobile = request.getParameter("modifyMobile");
+    String modifyEmail = request.getParameter("modifyEmail");
+    String modifyZipCode = request.getParameter("modifyZipCode");
+    String modifyAddress = request.getParameter("modifyAddress");
+    String modifyDetailAddress = request.getParameter("modifyDetailAddress");
+    String modifyPositionCode = request.getParameter("modifyPositionCode");
+
     
     EmpDto emp = EmpDto.builder()
-                    .empCode(empCode)
-                    .empName(empName)
-                    .mobile(mobile)
-                    .email(email)
-                    .zipCode(Integer.parseInt(zipCode))
-                    .address(address)
-                    .detailAddress(detailAddress)
-                    .positionCode(positionCode)
-                    .birthdayDate(LocalDate.parse(birthdayDate))
+                    .empCode(modifyEmpCode)
+                    .empName(modifyEmpName)
+                    .joinDate(LocalDate.parse(modifyJoinDate))
+                    .birthdayDate(LocalDate.parse(modifyBirthdayDate))
+                    .phone(modifyPhone)
+                    .mobile(modifyMobile)
+                    .email(modifyEmail)
+                    .zipCode(Integer.parseInt(modifyZipCode))
+                    .address(modifyAddress)
+                    .detailAddress(modifyDetailAddress)
+                    .positionCode(modifyPositionCode)
                   .build();
     
     int modifyResult = empMapper.updateEmp(emp);

@@ -45,5 +45,13 @@
 		'Y')
   </insert>
   
+  <update id="updatePosition"
+          parameterType="PosDto">
+	UPDATE POSITION_T
+	   SET POSITION_NAME = {posName}
+	       USE_YN = {useYn}
+	 WHERE POSITION_CODE = {posCode}
+  </update>
+  
 	
 </mapper>

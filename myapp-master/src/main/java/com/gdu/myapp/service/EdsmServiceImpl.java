@@ -335,6 +335,9 @@ public class EdsmServiceImpl implements EdsmService {
 	    model.addAttribute("paging", myPageUtils.getPagingNewVersion(request.getContextPath() + "/edsm/edsmDrafting.do"
 	                                                     , null
 	                                                     , display));
+	    
+	    // 기간 만료된 문서 상태 변경
+	    edsmMapper.updateEdsmStatus(empDto.getEmpCode());
     }
     
     @Override
@@ -343,7 +346,7 @@ public class EdsmServiceImpl implements EdsmService {
     	HttpSession session = request.getSession();
 		EmpDto empDto = (EmpDto)session.getAttribute("emp");
     	
-		String status = "p0001";
+		String status = "a0001";
 		Map<String, Object> countMap = Map.of("empCode", empDto.getEmpCode(),
 											  "status", status);
 		
@@ -373,7 +376,7 @@ public class EdsmServiceImpl implements EdsmService {
     	HttpSession session = request.getSession();
 		EmpDto empDto = (EmpDto)session.getAttribute("emp");
     	
-		String status = "p0001";
+		String status = "a0001";
 		Map<String, Object> countMap = Map.of("empCode", empDto.getEmpCode(),
 											  "status", status);
 		
@@ -432,8 +435,29 @@ public class EdsmServiceImpl implements EdsmService {
     	
     	edsmMapper.updateAppr(map);
     	
+    	List<EdsmApprDto> apprList = edsmMapper.getEdsmAppr(edsmNo);
+    	
+    	String documentStatus = "";
+    	int confirmCount = 0;
+    	for(int i = 0; i < apprList.size(); i++) {
+    		// 반려
+    		if(apprList.get(i).getApprStatus().equals("p0002")) {
+    			documentStatus = "a0002";
+    			continue;
+    		}
+    		
+    		if(apprList.get(i).getApprStatus().equals("p0003")) {
+    			confirmCount++;
+    		}
+    	}
+    	
+    	if(apprList.size() == confirmCount) {
+    		documentStatus = "a0003";
+    	}
+    	
     	Map<String, Object> edsmMap = Map.of("edsmNo", edsmNo,
-											 "edsmSeq", edsmSeq + 1);
+				 "edsmSeq", edsmSeq + 1,
+				 "status", documentStatus);
 
     	edsmMapper.updateEdsm(edsmMap);
     }

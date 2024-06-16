@@ -384,7 +384,7 @@
 	</select>
     
     <select id="getEdsmDetail" resultMap="EdsmMap">
-		SELECT 	EDSM_NO, SAMPLE_DOT_CODE, A.EMP_CODE, ATTACH_NO, EDSM_CREATE_DATETIME, EDSM_CONTENT,
+		SELECT 	EDSM_NO, SAMPLE_DOT_CODE, A.EMP_CODE, EDSM_CREATE_DATETIME, EDSM_CONTENT,
 				EDSM_START_DATETIME, EDSM_END_DATETIME, EDSM_STATUS, EDSM_EXPIRE_DATETIME,
 				EDSM_TITLE, EDSM_SEQ, EMP_NAME, SIGN_FILE_NAME
 		  FROM	EDSM_T A, EMP_T B
@@ -413,7 +413,11 @@
 	</update>
 	
 	<update id="updateEdsm" parameterType="Map">
-		UPDATE EDSM_T SET EDSM_SEQ = #{edsmSeq} WHERE EDSM_NO = #{edsmNo}
+		UPDATE EDSM_T SET EDSM_SEQ = #{edsmSeq}, EDSM_STATUS = #{status} WHERE EDSM_NO = #{edsmNo}
+	</update>
+	
+	<update id="updateEdsmStatus">
+		UPDATE EDSM_T SET EDSM_STATUS = 'a0004' WHERE EMP_CODE = #{empCode} AND EDSM_EXPIRE_DATETIME <![CDATA[<]]> CURRENT_DATE AND EDSM_STATUS = 'a0001'
 	</update>
     
 </mapper>

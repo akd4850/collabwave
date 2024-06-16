@@ -46,4 +46,5 @@ public interface EdsmMapper {
 	EdsmApprDto getEdsmApprByCode(Map<String, Object> map);
 	int updateAppr(Map<String, Object> map);
 	int updateEdsm(Map<String, Object> map);
+	void updateEdsmStatus(String empCode);
 }

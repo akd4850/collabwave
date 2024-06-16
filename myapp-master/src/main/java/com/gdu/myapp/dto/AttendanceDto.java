@@ -15,4 +15,5 @@ public class AttendanceDto {
 	private int attendanceNo;
 	private LocalDateTime gotoworkDatetime, offworkDatetime;
 	private EmpDto emp;
+	private long minutes;
 }

@@ -24,7 +24,6 @@
                                 <th>업무시작</th>
                                 <th>업무종료</th>
                                 <th>총 근무시간</th>
-                                <th>비고</th>
                             </thead>
                             <tbody>
                                 <c:forEach items="${attendanceList}" var="att" varStatus="vs">
@@ -32,8 +31,7 @@
                                         <td>${att.gotoworkDatetime.toString().split("T")[0].split("-")[2]}일</td>
                                         <td>${att.gotoworkDatetime.toString().split("T")[1]}</td>
                                         <td>${att.offworkDatetime.toString().split("T")[1]}</td>
-                                        <td>${Duration.between(att.gotoworkDatetime, att.offworkDatetime).toMinutes()}</td>
-                                        <td></td>
+                                        <td>${att.minutes}분</td>
                                     </tr>
                                 </c:forEach>
                                 <!--

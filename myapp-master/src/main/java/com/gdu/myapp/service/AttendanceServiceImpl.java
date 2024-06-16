@@ -1,7 +1,9 @@
 package com.gdu.myapp.service;
 
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,9 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import com.gdu.myapp.dto.AttendanceDto;
+import com.gdu.myapp.dto.EmpDto;
 import com.gdu.myapp.mapper.AttendanceMapper;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Transactional
 @Service
@@ -32,13 +36,14 @@ public class AttendanceServiceImpl implements AttendanceService {
 	@Override
 	public ResponseEntity<Map<String, Object>> getAttendanceToday(HttpServletRequest request) {
 		
-		String empCode = request.getParameter("empCode");
+		HttpSession session = request.getSession();
+		EmpDto empDto = (EmpDto)session.getAttribute("emp");
 		
 		Date date = new Date();
         SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd");
         String today = simpleDate.format(date);
 		
-		AttendanceDto attendance = attendanceMapper.getAttendanceToday(empCode);
+		AttendanceDto attendance = attendanceMapper.getAttendanceToday(empDto.getEmpCode());
 		if(attendance == null) {
 			return new ResponseEntity<>(Map .of("bIsAttendance", false, "today", today), HttpStatus.OK);
 		}
@@ -49,13 +54,14 @@ public class AttendanceServiceImpl implements AttendanceService {
 	@Override
 	public ResponseEntity<Map<String, Object>> gotowork(HttpServletRequest request) {
 		
-		String empCode = request.getParameter("empCode");
+		HttpSession session = request.getSession();
+		EmpDto empDto = (EmpDto)session.getAttribute("emp");
 		
 		int result = 0;
 		
-		AttendanceDto attendance = attendanceMapper.getAttendanceToday(empCode);
+		AttendanceDto attendance = attendanceMapper.getAttendanceToday(empDto.getEmpCode());
 		if(attendance == null) {
-			result = attendanceMapper.gotowork(empCode);
+			result = attendanceMapper.gotowork(empDto.getEmpCode());
 		} else {
 			result = -1;
 		}
@@ -66,16 +72,19 @@ public class AttendanceServiceImpl implements AttendanceService {
 	@Override
 	public ResponseEntity<Map<String, Object>> offwork(HttpServletRequest request) {
 
-		String empCode = request.getParameter("empCode");
+		HttpSession session = request.getSession();
+		EmpDto empDto = (EmpDto)session.getAttribute("emp");
 		
-		int result = attendanceMapper.offwork(empCode);
+		int result = attendanceMapper.offwork(empDto.getEmpCode());
 		return new ResponseEntity<>(Map .of("result", result), HttpStatus.OK);
 	}
 	
 	@Override
 	public void getAttendanceInfo(HttpServletRequest request, Model model) {
 		
-		String empCode = request.getParameter("empCode");
+		HttpSession session = request.getSession();
+		EmpDto empDto = (EmpDto)session.getAttribute("emp");
+		
 		String curMon = request.getParameter("curMon");
 		
 		if(curMon == null) {
@@ -83,15 +92,14 @@ public class AttendanceServiceImpl implements AttendanceService {
 			curMon = strAry[0] + "-" + strAry[1] + "-01";
 		}
 		
-		List<Integer> timeAry = new ArrayList<>();
-		List<AttendanceDto> attList = attendanceMapper.getAttendanceInfo(Map.of("empCode", empCode, "curMon", curMon));
+		List<AttendanceDto> attList = attendanceMapper.getAttendanceInfo(Map.of("empCode", empDto.getEmpCode(), "curMon", curMon));
 		for(int i = 0; i < attList.size(); i++) {
-			/*LocalTime start = createDate.toLocalTime();
-			LocalTime end = now.toLocalTime();
+			LocalTime start = attList.get(i).getGotoworkDatetime().toLocalTime();
+			LocalTime end = attList.get(i).getOffworkDatetime().toLocalTime();
 			Duration diff = Duration.between(start, end);
-			long diffMin = diff.toMinutes();*/
+			attList.get(i).setMinutes(diff.toMinutes());
 		}
 		
-		//model.addAttribute("attendanceList", );
+		model.addAttribute("attendanceList", attList);
 	}
 }

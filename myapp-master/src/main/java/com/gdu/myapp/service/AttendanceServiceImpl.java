@@ -1,13 +1,18 @@
 package com.gdu.myapp.service;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 
 import com.gdu.myapp.dto.AttendanceDto;
 import com.gdu.myapp.mapper.AttendanceMapper;
@@ -65,5 +70,28 @@ public class AttendanceServiceImpl implements AttendanceService {
 		
 		int result = attendanceMapper.offwork(empCode);
 		return new ResponseEntity<>(Map .of("result", result), HttpStatus.OK);
+	}
+	
+	@Override
+	public void getAttendanceInfo(HttpServletRequest request, Model model) {
+		
+		String empCode = request.getParameter("empCode");
+		String curMon = request.getParameter("curMon");
+		
+		if(curMon == null) {
+			String[] strAry = LocalDate.now().toString().split("-");
+			curMon = strAry[0] + "-" + strAry[1] + "-01";
+		}
+		
+		List<Integer> timeAry = new ArrayList<>();
+		List<AttendanceDto> attList = attendanceMapper.getAttendanceInfo(Map.of("empCode", empCode, "curMon", curMon));
+		for(int i = 0; i < attList.size(); i++) {
+			/*LocalTime start = createDate.toLocalTime();
+			LocalTime end = now.toLocalTime();
+			Duration diff = Duration.between(start, end);
+			long diffMin = diff.toMinutes();*/
+		}
+		
+		//model.addAttribute("attendanceList", );
 	}
 }

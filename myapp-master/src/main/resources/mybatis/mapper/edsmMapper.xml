@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gdu.myapp.mapper.EdsmMapper">
+	
+	<resultMap type="EdsmFormDto" id="EdsmFormMap">
+	    <id property="sampleDotCode" column="SAMPLE_DOT_CODE" />
+	    <result property="sampleContent" column="SAMPLE_CONTENT" />
+	    <result property="createDatetime" column="CREATE_DATETIME" />
+	    <result property="modifyDatetime" column="MODIFY_DATETIME" />
+	    <result property="useYn" column="USE_YN" />
+	    <result property="sampleTitle" column="SAMPLE_TITLE" />
+	    <association property="emp" javaType="EmpDto">
+	    	<id property="empCode" column="EMP_CODE" />
+    	</association>
+	</resultMap>
+	
+    <resultMap type="CustomApprItemDto" id="CustomApprItemMap">
+        <id property="customApprItemNo" column="CUSTOM_APPR_ITEM_NO" />
+        <result property="apprSeq" column="APPR_SEQ" />
+        <association property="customAppr" javaType="EdsmCustomApprDto">
+			<id property="customApprNo" column="CUSTOM_APPR_NO" />
+            <result property="lineName" column="LINE_NAME" />
+            <association property="emp" javaType="EmpDto">
+				<id property="empCode" column="EMP_CODE" />
+				<result property="empName" column="EMP_NAME" />
+				<association property="dept" javaType="DeptDto">
+					<id property="deptCode" column="DEPT_CODE" />
+					<result property="deptName" column="DEPT_NAME" />
+		        </association>
+	        </association>
+        </association>
+    </resultMap>
+    
+    <resultMap type="EdsmDto" id="EdsmMap">
+		<id property="edsmNo" column="EDSM_NO" />
+		<result property="edsmCreateDatetime" column="EDSM_CREATE_DATETIME" />
+		<result property="edsmStartDatetime" column="EDSM_START_DATETIME" />
+		<result property="edsmEndDatetime" column="EDSM_END_DATETIME" />
+		<result property="edsmExpireDatetime" column="EDSM_EXPIRE_DATETIME" />
+		<result property="edsmContent" column="EDSM_CONTENT" />
+		<result property="edsmStatus" column="EDSM_STATUS" />
+		<result property="edsmTitle" column="EDSM_TITLE" />
+		<result property="edsmSeq" column="EDSM_SEQ" />
+		<association property="sample" javaType="EdsmFormDto">
+	    	<id property="sampleDotCode" column="SAMPLE_DOT_CODE" />
+	    	<result property="sampleTitle" column="SAMPLE_TITLE" />
+    	</association>
+    	<association property="emp" javaType="EmpDto">
+	    	<id property="empCode" column="EMP_CODE" />
+	    	<result property="empName" column="EMP_NAME" />
+	    	<result property="signFileName" column="SIGN_FILE_NAME" />
+    	</association>
+    </resultMap>
+    
+    <resultMap id="EdsmApprMap" type="EdsmApprDto">
+		<id property="apprNo" column="APPR_NO" />
+		<result property="apprStatus" column="APPR_STATUS" />
+		<result property="apprComment" column="APPR_COMMENT" />
+		<result property="apprDatetime" column="APPR_DATETIME" />
+		<result property="apprSeq" column="APPR_SEQ" />
+		<association property="emp" javaType="EmpDto">
+	    	<id property="empCode" column="EMP_CODE" />
+	    	<result property="empName" column="EMP_NAME" />
+	    	<result property="signFileName" column="SIGN_FILE_NAME" />
+    	</association>
+    	<association property="edsm" javaType="EdsmDto">
+	    	<id property="edsmNo" column="EDSM_NO" />
+	    	<result property="edsmTitle" column="EDSM_TITLE" />
+	    	<result property="edsmStartDatetime" column="EDSM_START_DATETIME" />
+	    	<association property="sample" javaType="EdsmFormDto">
+				<id property="sampleDotCode" column="SAMPLE_DOT_CODE" />
+	    		<result property="sampleTitle" column="SAMPLE_TITLE" />
+    		</association>
+    	</association>
+	</resultMap>
+
+	<insert id="registerForm" parameterType="EdsmFormDto">
+		INSERT INTO EDSM_SAMPLE_T (
+			SAMPLE_DOT_CODE,
+			EMP_CODE,
+			SAMPLE_CONTENT,
+			CREATE_DATETIME,
+			MODIFY_DATETIME,
+			USE_YN,
+			SAMPLE_TITLE
+		) VALUES (
+			#{sampleDotCode},
+			#{emp.empCode},
+			#{sampleContent},
+			CURRENT_DATE,
+			CURRENT_DATE,
+			#{useYn},
+			#{sampleTitle}
+		)
+	</insert>
+	
+	<select id="getSampleCount" resultType="int">
+		SELECT COUNT(*) FROM EDSM_SAMPLE_T
+	</select>
+	
+	<select id="getSampleList" parameterType="Map" resultMap="EdsmFormMap">
+		SELECT 	SAMPLE_DOT_CODE,
+				SAMPLE_CONTENT,
+				CREATE_DATETIME,
+				MODIFY_DATETIME,
+				USE_YN,
+				SAMPLE_TITLE
+		  FROM	(SELECT ROW_NUMBER() OVER(ORDER BY SAMPLE_DOT_CODE) AS RN,
+		 		 		SAMPLE_DOT_CODE,
+				 		SAMPLE_CONTENT,
+				 		CREATE_DATETIME,
+				 		MODIFY_DATETIME,
+				 		USE_YN,
+				 		SAMPLE_TITLE
+		    	   FROM EDSM_SAMPLE_T)
+		 WHERE RN BETWEEN #{begin} AND #{end}		 
+	</select>
+	
+	<select id="getSample" resultMap="EdsmFormMap">
+		SELECT 	SAMPLE_DOT_CODE,
+				SAMPLE_CONTENT,
+				CREATE_DATETIME,
+				MODIFY_DATETIME,
+				USE_YN,
+				SAMPLE_TITLE,
+				EMP_CODE
+		   FROM EDSM_SAMPLE_T
+		  WHERE SAMPLE_DOT_CODE = #{sampleDotCode}
+	</select>
+	
+	<update id="modifyForm" parameterType="EdsmFormDto">
+		UPDATE EDSM_SAMPLE_T
+		   SET SAMPLE_CONTENT = #{sampleContent},
+		   	   MODIFY_DATETIME = CURRENT_DATE,
+		   	   USE_YN = #{useYn},
+		   	   SAMPLE_TITLE = #{sampleTitle}
+		 WHERE SAMPLE_DOT_CODE = #{sampleDotCode}
+	</update>
+	
+	<delete id="removeForm">
+		DELETE FROM EDSM_SAMPLE_T WHERE SAMPLE_DOT_CODE = #{sampleDotCode}
+	</delete>
+	
+	<select id="getLineCount" resultType="int">
+		SELECT COUNT(*) FROM EDSM_CUSTOM_APPROVAL_T WHERE EMP_CODE = #{empCode}
+	</select>
+	
+	<select id="getLineList" parameterType="Map" resultType="EdsmCustomApprDto">
+		SELECT 	CUSTOM_APPR_NO,
+				EMP_CODE,
+				LINE_NAME
+		  FROM	(SELECT ROW_NUMBER() OVER(ORDER BY CUSTOM_APPR_NO) AS RN,
+		 		 		CUSTOM_APPR_NO,
+				 		EMP_CODE,
+				 		LINE_NAME
+		    	   FROM EDSM_CUSTOM_APPROVAL_T
+		    	  WHERE EMP_CODE = #{empCode})
+		 WHERE RN BETWEEN #{begin} AND #{end}		 
+	</select>
+
+	<select id="getCustomApprSeqNextval">
+		SELECT EDSM_CUSTOM_APPROVAL_SEQ.NEXTVAL FROM DUAL
+	</select>
+	
+	<insert id="registerLine" parameterType="Map">
+		INSERT INTO EDSM_CUSTOM_APPROVAL_T (CUSTOM_APPR_NO, EMP_CODE, LINE_NAME) VALUES 
+			(#{nextVal}, #{myEmpCode}, #{title})
+	</insert>
+	
+	<select id="getCustomApprItemLastID" resultType="CustomApprItemDto">
+		SELECT CUSTOM_APPR_ITEM_NO FROM (SELECT CUSTOM_APPR_ITEM_NO FROM EDSM_CUSTOM_APPROVAL_ITEM_T ORDER BY CUSTOM_APPR_ITEM_NO DESC) WHERE ROWNUM = 1
+	</select>
+	
+	<insert id="registerLineItem" parameterType="Map">
+		INSERT INTO EDSM_CUSTOM_APPROVAL_ITEM_T (CUSTOM_APPR_ITEM_NO, CUSTOM_APPR_NO, EMP_CODE, APPR_SEQ) 
+    	<foreach collection="empCodeList" item="empCode" index="index" separator=" UNION ALL ">
+			SELECT #{curApprItemSeq}+#{index}+1, #{customApprNo}, #{empCode}, #{index}+1 FROM DUAL
+        </foreach>
+	</insert>
+
+    <select id="getLineDetail" resultMap="CustomApprItemMap">
+        SELECT  A.CUSTOM_APPR_ITEM_NO,
+		        A.CUSTOM_APPR_NO,        
+		        A.APPR_SEQ,
+		        A.EMP_CODE,
+		        B.LINE_NAME,
+		        C.EMP_NAME,
+        		D.DEPT_NAME
+		FROM    EDSM_CUSTOM_APPROVAL_ITEM_T A
+		LEFT 	OUTER JOIN EDSM_CUSTOM_APPROVAL_T B
+		ON      A.CUSTOM_APPR_NO = B.CUSTOM_APPR_NO
+		LEFT 	OUTER JOIN EMP_T C
+		ON      A.EMP_CODE = C.EMP_CODE
+		LEFT 	OUTER JOIN DEPT_T D
+		ON      C.DEPT_CODE = D.DEPT_CODE
+		WHERE   A.CUSTOM_APPR_NO = #{apprNo}
+		ORDER 	BY A.APPR_SEQ
+    </select>
+    
+    <delete id="removeLineItem">
+		DELETE FROM EDSM_CUSTOM_APPROVAL_ITEM_T WHERE CUSTOM_APPR_NO = #{apprNo}
+	</delete>
+	
+	<delete id="removeLine">
+		DELETE FROM EDSM_CUSTOM_APPROVAL_T WHERE CUSTOM_APPR_NO = #{apprNo}
+	</delete>
+	
+	<select id="getSampleListAll" resultMap="EdsmFormMap">
+		SELECT 	SAMPLE_DOT_CODE,
+				SAMPLE_CONTENT,
+				SAMPLE_TITLE
+		  FROM	EDSM_SAMPLE_T
+		 WHERE	USE_YN = 'Y'
+	</select>
+	
+	<insert id="addApprDo" parameterType="Map">
+		INSERT INTO	EDSM_T 
+					(EDSM_NO,
+					SAMPLE_DOT_CODE,
+					EMP_CODE,
+					EDSM_CREATE_DATETIME,
+					EDSM_CONTENT,
+					EDSM_START_DATETIME,
+					<!--EDSM_END_DATETIME,-->
+					EDSM_STATUS,
+					EDSM_EXPIRE_DATETIME,
+					EDSM_TITLE,
+					EDSM_SEQ)
+			 VALUES (EDSM_SEQ.NEXTVAL,
+			 		#{sampleDotCode},
+			 		#{empCode},
+			 		CURRENT_DATE,
+			 		#{edsmContent},
+			 		#{edsmStartDatetime},
+			 		<!--#{edsmEndDateTime},-->
+			 		#{edsmStatus},
+			 		#{edsmExpireDatetime},
+			 		#{edsmTitle},
+			 		1)					
+	</insert>
+	
+	<select id="getLineListAll" resultType="EdsmCustomApprDto">
+		SELECT 	CUSTOM_APPR_NO,
+				EMP_CODE,
+				LINE_NAME
+		  FROM	EDSM_CUSTOM_APPROVAL_T
+		 WHERE	EMP_CODE = #{empCode}	 
+	</select>
+	
+	<select id="getApprSeqNextval">
+		SELECT EDSM_SEQ.CURRVAL FROM DUAL
+	</select>
+	
+	<select id="getApprItemLastID" resultType="EdsmApprDto">
+		SELECT APPR_NO FROM (SELECT APPR_NO FROM EDSM_APPROVAL_T ORDER BY APPR_NO DESC) WHERE ROWNUM = 1
+	</select>
+	
+	<insert id="registerEdsmLineItem" parameterType="Map">
+		INSERT INTO EDSM_APPROVAL_T 
+					(APPR_NO, EDSM_NO, EMP_CODE, APPR_SEQ, APPR_STATUS) 
+    	<foreach collection="empCodeList" item="empCode" index="index" separator=" UNION ALL ">
+			SELECT #{curApprItemSeq}+#{index}+1, #{edsmNo}, #{empCode}, #{index}+1, #{apprStatus} FROM DUAL
+        </foreach>
+	</insert>
+	
+	<!-- 내가 기안한 문서 -->
+	<select id="getDraftCount" resultType="int">
+		SELECT COUNT(*) FROM EDSM_T WHERE EMP_CODE = #{empCode}
+	</select>
+    
+    <select id="getDraftList" parameterType="Map" resultMap="EdsmMap">
+		 SELECT 	EDSM_NO,
+			        SAMPLE_DOT_CODE,
+			        SAMPLE_TITLE,
+			        EMP_CODE,
+			        EDSM_CREATE_DATETIME,
+			        EDSM_CONTENT,
+			        EDSM_START_DATETIME,
+			        EDSM_END_DATETIME,
+			        EDSM_STATUS,
+			        EDSM_EXPIRE_DATETIME,
+			        EDSM_TITLE
+			  FROM	(SELECT ROW_NUMBER() OVER(ORDER BY EDSM_NO) AS RN
+			            , A.EDSM_NO 
+			            , A.SAMPLE_DOT_CODE 
+			            , B.SAMPLE_TITLE 
+			            , A.EMP_CODE 
+			            , A.EDSM_CREATE_DATETIME 
+			            , A.EDSM_CONTENT 
+			            , A.EDSM_START_DATETIME 
+			            , A.EDSM_END_DATETIME 
+			            , A.EDSM_STATUS 
+			            , A.EDSM_EXPIRE_DATETIME 
+			            , A.EDSM_TITLE
+			           FROM EDSM_T A, EDSM_SAMPLE_T B
+			          WHERE A.EMP_CODE = #{empCode}
+			          )
+			 WHERE RN BETWEEN #{begin} AND #{end}
+	</select>
+	
+	<!-- 자기가 결제할 차례 문서 -->
+	<select id="getWaitCount" resultType="int" parameterType="Map">
+		 SELECT COUNT(*)
+		   FROM EDSM_APPROVAL_T A,
+		        EDSM_T B,
+		        EMP_T C
+		  WHERE A.EMP_CODE = #{empCode}
+		    AND A.APPR_STATUS = #{status}
+		    AND B.EMP_CODE = C.EMP_CODE
+		    AND A.APPR_SEQ = B.EDSM_SEQ
+		    AND A.EDSM_NO = B.EDSM_NO
+		  ORDER BY A.APPR_SEQ
+	</select>
+    
+    <select id="getWaitList" parameterType="Map" resultMap="EdsmApprMap">
+		 SELECT APPR_NO,
+		        EDSM_NO,
+		        EDSM_TITLE,
+		        EMP_CODE,
+		        EMP_NAME,
+		        APPR_SEQ,
+		        APPR_STATUS,
+		        APPR_COMMENT,
+		        APPR_DATETIME,
+		        EDSM_START_DATETIME,
+		        SAMPLE_TITLE
+		   FROM (SELECT ROW_NUMBER() OVER(ORDER BY A.APPR_NO) AS RN,
+				 		A.APPR_NO,
+				        A.EDSM_NO,
+				        B.EDSM_TITLE,
+				        B.EDSM_START_DATETIME,
+				        A.EMP_CODE,
+				        C.EMP_NAME,
+				        A.APPR_SEQ,
+				        A.APPR_STATUS,
+				        A.APPR_COMMENT,
+				        A.APPR_DATETIME,
+				        D.SAMPLE_TITLE
+				   FROM EDSM_APPROVAL_T A,
+				        EDSM_T B,
+				        EMP_T C,
+				        EDSM_SAMPLE_T D
+				  WHERE A.EMP_CODE = #{empCode}
+				    AND A.APPR_STATUS = #{status}
+				    AND B.EMP_CODE = C.EMP_CODE
+				    AND A.APPR_SEQ = B.EDSM_SEQ
+				    AND A.EDSM_NO = B.EDSM_NO
+				    AND B.SAMPLE_DOT_CODE = D.SAMPLE_DOT_CODE
+				  ORDER BY A.APPR_SEQ)
+		  WHERE RN BETWEEN #{begin} AND #{end}
+	</select>
+	
+	<!-- 자기가 결제할 차례 문서 -->
+	<select id="getExpectedCount" resultType="int" parameterType="Map">
+		 SELECT COUNT(*)
+		   FROM EDSM_APPROVAL_T A,
+		        EDSM_T B,
+		        EMP_T C
+		  WHERE A.EMP_CODE = #{empCode}
+		    AND A.APPR_STATUS = #{status}
+		    AND B.EMP_CODE = C.EMP_CODE
+		    AND A.APPR_SEQ != B.EDSM_SEQ
+		    AND A.EDSM_NO = B.EDSM_NO
+		  ORDER BY A.APPR_SEQ
+	</select>
+    
+    <select id="getExpectedList" parameterType="Map" resultMap="EdsmApprMap">
+		 SELECT APPR_NO, EDSM_NO, EDSM_TITLE, EMP_CODE, EMP_NAME, APPR_SEQ, APPR_STATUS, APPR_COMMENT, APPR_DATETIME, EDSM_START_DATETIME, SAMPLE_TITLE
+		   FROM (SELECT ROW_NUMBER() OVER(ORDER BY A.APPR_NO) AS RN,
+				 		A.APPR_NO, A.EDSM_NO, B.EDSM_TITLE, B.EDSM_START_DATETIME, A.EMP_CODE,
+				        C.EMP_NAME, A.APPR_SEQ, A.APPR_STATUS, A.APPR_COMMENT, A.APPR_DATETIME, D.SAMPLE_TITLE
+				   FROM EDSM_APPROVAL_T A, EDSM_T B, EMP_T C, EDSM_SAMPLE_T D
+				  WHERE A.EMP_CODE = #{empCode}
+				    AND A.APPR_STATUS = #{status}
+				    AND B.EMP_CODE = C.EMP_CODE
+				    AND A.APPR_SEQ != B.EDSM_SEQ
+				    AND A.EDSM_NO = B.EDSM_NO
+				    AND B.SAMPLE_DOT_CODE = D.SAMPLE_DOT_CODE
+				  ORDER BY A.APPR_SEQ)
+		  WHERE RN BETWEEN #{begin} AND #{end}
+	</select>
+    
+    <select id="getEdsmDetail" resultMap="EdsmMap">
+		SELECT 	EDSM_NO, SAMPLE_DOT_CODE, A.EMP_CODE, ATTACH_NO, EDSM_CREATE_DATETIME, EDSM_CONTENT,
+				EDSM_START_DATETIME, EDSM_END_DATETIME, EDSM_STATUS, EDSM_EXPIRE_DATETIME,
+				EDSM_TITLE, EDSM_SEQ, EMP_NAME, SIGN_FILE_NAME
+		  FROM	EDSM_T A, EMP_T B
+		 WHERE	EDSM_NO = #{edsmNo} 
+           AND  A.EMP_CODE = B.EMP_CODE
+	</select>
+	
+	<select id="getEdsmAppr" resultMap="EdsmApprMap">
+		SELECT	APPR_NO, EDSM_NO, A.EMP_CODE, APPR_SEQ, APPR_STATUS, APPR_COMMENT, APPR_DATETIME, SIGN_FILE_NAME
+		  FROM	EDSM_APPROVAL_T A, EMP_T B
+		 WHERE	EDSM_NO = #{edsmNo}
+		   AND  A.EMP_CODE = B.EMP_CODE
+		 ORDER 	BY APPR_SEQ
+	</select>
+	
+	<select id="getEdsmApprByCode" parameterType="Map" resultMap="EdsmApprMap">
+		SELECT	APPR_NO, EDSM_NO, A.EMP_CODE, APPR_SEQ, APPR_STATUS, APPR_COMMENT, APPR_DATETIME, SIGN_FILE_NAME
+		  FROM	EDSM_APPROVAL_T A, EMP_T B
+		 WHERE	EDSM_NO = #{edsmNo} AND A.EMP_CODE = #{empCode}
+		   AND  A.EMP_CODE = B.EMP_CODE
+		 ORDER 	BY APPR_SEQ
+	</select>
+    
+    <update id="updateAppr" parameterType="Map">
+		UPDATE EDSM_APPROVAL_T SET APPR_STATUS = #{apprStatus}, APPR_COMMENT = #{comment}, APPR_DATETIME = CURRENT_DATE WHERE APPR_NO = #{apprNo}
+	</update>
+	
+	<update id="updateEdsm" parameterType="Map">
+		UPDATE EDSM_T SET EDSM_SEQ = #{edsmSeq} WHERE EDSM_NO = #{edsmNo}
+	</update>
+    
+</mapper>

@@ -58,16 +58,16 @@
       FROM ASSETMANAGE_T        
 </select>
 
-<select id="reservationCount"  >
+<select id="reservationCount">
     SELECT COUNT(*)
       FROM ASSETRESERVATION_T        
 </select>
 
-<select id="myReservationCount"
-          parameterType="int">
+<select id="myReservationCount" 
+          parameterType="String">
     SELECT COUNT(*)
       FROM ASSETRESERVATION_T
-     WHERE EMP_CODE = #{empCode}        
+     WHERE EMP_CODE = #{value}        
 </select>
   
 <select id="getAssetList"
@@ -86,9 +86,9 @@
                  R.RESERVATION_NUMBER, R.START_DATETIME, R.END_DATETIME, R.REASON,
                  E.EMP_CODE, E.EMP_NAME, P.POSITION_CODE, P.POSITION_NAME,
                  A.ASSET_CODE, A.ASSET_NAME
-            FROM RESERVATION_T R INNER JOIN EMP_T E ON R.EMP_CODE = E.EMP_CODE
+            FROM ASSETRESERVATION_T R INNER JOIN EMP_T E ON R.EMP_CODE = E.EMP_CODE
           	     INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
-          	     INNER JOIN ASSET_T A ON R.ASSET_CODE = A.ASSET_CODE)
+          	     INNER JOIN ASSETMANAGE_T A ON R.ASSET_CODE = A.ASSET_CODE)
    		 WHERE RN BETWEEN #{begin} AND #{end}
 </select>
 
@@ -101,9 +101,9 @@
                  R.RESERVATION_NUMBER, R.START_DATETIME, R.END_DATETIME, R.REASON,
                  E.EMP_CODE, E.EMP_NAME, P.POSITION_CODE, P.POSITION_NAME,
                  A.ASSET_CODE, A.ASSET_NAME
-            FROM RESERVATION_T R INNER JOIN EMP_T E ON R.EMP_CODE = E.EMP_CODE
+            FROM ASSETRESERVATION_T R INNER JOIN EMP_T E ON R.EMP_CODE = E.EMP_CODE
           	     INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
-          	     INNER JOIN ASSET_T A ON R.ASSET_CODE = A.ASSET_CODE
+          	     INNER JOIN ASSETMANAGE_T A ON R.ASSET_CODE = A.ASSET_CODE
            WHERE E.EMP_CODE = #{empCode})
    		 WHERE RN BETWEEN #{begin} AND #{end}
 </select>

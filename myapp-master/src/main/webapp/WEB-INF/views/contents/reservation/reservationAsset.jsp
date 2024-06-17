@@ -38,7 +38,22 @@
                     <input type="date" id="date-input-start" class="date-input" onchange="handleDateChange()">
                 </h4>
                 </div>
-
+                <div class="container mt-4">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>시작 시간</label>
+                        <input type="time" class="form-control" placeholder="시작 시간" id="startTime" onchange="forceMinutesToZero(this)" value="">
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>종료 시간</label>
+                        <input type="time" class="form-control" placeholder="종료 시간" id="endTime" onchange="forceMinutesToZero(this)" value="">
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div class="form-group">
                     <label id="asset-type-label">예약자</label>
                     <input type="text" class="form-control" id="empName" name="empName" placeholder="예약자" value="${emp.empName} ${emp.position.positionName}" readonly>
@@ -60,22 +75,6 @@
                       <input type="text" class="form-control" id="subasset" name="subasset" placeholder="보유 기자재" readonly>
                     </div>
               </div>
-                <div class="container mt-4">
-                    <div class="row">
-                      <div class="col-md-4">
-                        <div class="form-group">
-                          <label>시작 시간</label>
-                          <input type="time" class="form-control" placeholder="시작 시간" id="startTime" onchange="forceMinutesToZero(this)" value="">
-                        </div>
-                      </div>
-                      <div class="col-md-4">
-                        <div class="form-group">
-                          <label>종료 시간</label>
-                          <input type="time" class="form-control" placeholder="종료 시간" id="endTime" onchange="forceMinutesToZero(this)" value="">
-                        </div>
-                      </div>
-                    </div>
-                  </div>
             </div>
 
             <div class="form-group">
@@ -112,7 +111,7 @@
     function updateDateDisplay(date) {
       const dateDisplay = document.getElementById('date-display');
       const [yyyy, mm, dd] = date.split('-');
-      dateDisplay.textContent = yyyy + '년' + mm + '월' + dd+'일';
+      dateDisplay.textContent = yyyy + '년' + mm + '월' + dd+'일 ▼';
     }
 
     function showDatePicker() {

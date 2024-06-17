@@ -94,7 +94,8 @@ public class ReservationServiceImpl implements ReservationService {
 	  	myPageUtils.setPaging(total, display, page);
 	  	
 	  	Map<String, Object> map = Map.of("begin" , myPageUtils.getBegin()
-	        , "end", myPageUtils.getEnd());
+	        , "end", myPageUtils.getEnd()
+	        , "empCode", empCode);
 	  	 return new ResponseEntity<>(Map .of("myReservationList", reservationMapper.myReservationList(map)
 	         							   , "totalPage", myPageUtils.getTotalPage())
 	  			 						   , HttpStatus.OK);

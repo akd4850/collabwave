@@ -30,9 +30,13 @@ public class EdsmController {
 	}
 
 	@GetMapping("/edsmMain.page")
-	public String edsm(Model model) {
+	public String edsm(Model model, HttpServletRequest request) {
 
 		model.addAttribute("submenu", "edsmContents.jsp");
+		edsmService.updateEdsm(request);
+		edsmService.loadWaitList(request, model, true);
+		edsmService.loadDraftList(request, model, true);
+		
 		return "contents/edsm/edsm";
 	}
 
@@ -47,7 +51,7 @@ public class EdsmController {
 	public String edsmWaiting(HttpServletRequest request, Model model) {
 
 		model.addAttribute("submenu", "edsmWaiting.jsp");
-		edsmService.loadWaitList(request, model);
+		edsmService.loadWaitList(request, model, false);
 		
 		return "contents/edsm/edsm";
 	}
@@ -65,7 +69,7 @@ public class EdsmController {
     public String edsmDrafting(HttpServletRequest request, Model model) {
 
         model.addAttribute("submenu", "edsmDrafting.jsp");
-        edsmService.loadDraftList(request, model);
+        edsmService.loadDraftList(request, model, false);
         
         return "contents/edsm/edsm";
     }
@@ -275,4 +279,14 @@ public class EdsmController {
 		
 		return "contents/edsm/organizationChart";
     }
+    
+ 
+    @GetMapping("/edsmDocument.do")
+	public String edsmDocument(HttpServletRequest request, Model model) {
+
+		model.addAttribute("submenu", "edsmDocument.jsp");
+		edsmService.loadDocumentList(request, model);
+		
+		return "contents/edsm/edsm";
+	}
 }

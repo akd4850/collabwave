@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -37,5 +38,14 @@ public class AttendanceController {
 	public ResponseEntity<Map<String, Object>> offwork(HttpServletRequest request) {
 		
 		return attendanceService.offwork(request);
+	}
+	
+	@GetMapping("/workLeave.page")
+	public String attendancePage(HttpServletRequest request, Model model) {
+		
+		model.addAttribute("submenu", "workLeave.jsp");
+		attendanceService.getAttendanceInfo(request, model);
+		
+		return "contents/myPage/myPage";
 	}
 }

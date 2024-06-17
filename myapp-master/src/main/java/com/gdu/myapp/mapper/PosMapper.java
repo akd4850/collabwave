@@ -11,4 +11,7 @@ import com.gdu.myapp.dto.PosDto;
 public interface PosMapper {
   int getPosCount();
 	List<PosDto> getPosByMap(Map<String, Object> map);
+	int insertPosition(PosDto pos);
+	int updatePosition(PosDto pos);
+	PosDto getSelectedPositon(String posName);
 }

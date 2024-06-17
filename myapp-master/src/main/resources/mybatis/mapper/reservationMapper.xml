@@ -13,6 +13,25 @@
         <result property="assetSubname" column="ASSET_SUBNAME"/>
         <result property="subasset" column="SUBASSET"/>
    </resultMap>	
+   
+<resultMap type="ReservationDto" id="ReservationMap">
+	<id property="reservationNumber" column="RESERVATION_NUMBER"/>
+	<result property="startDatetime" column="START_DATETIME"/>
+	<result property="endDatetime" column="END_DATETIME"/>
+	<result property="reason" column="REASON"/>
+	<association property="emp" javaType="EmpDto">
+		<id property="empCode" column="EMP_CODE"/>
+		<result property="empName" column="EMP_NAME"/>
+		<association property="position" javaType="PositionDto">
+			<id property="positionCode" column="POSITION_CODE"/>
+			<result property="positionName" column="POSITION_NAME"/>
+		</association>
+	</association>
+	<association property="asset" javaType="AssetDto">
+		<id property="assetCode" column="ASSET_CODE"/>
+		<result property="assetName" column="ASSET_NAME"/>
+	</association>
+</resultMap>
 
 <insert id="addAsset"
 		parameterType="AssetDto">
@@ -38,6 +57,19 @@
     SELECT COUNT(*)
       FROM ASSETMANAGE_T        
 </select>
+
+<select id="reservationCount"
+          parameterType="int">
+    SELECT COUNT(*)
+      FROM ASSETRESERVATION_T        
+</select>
+
+<select id="myReservationCount"
+          parameterType="int">
+    SELECT COUNT(*)
+      FROM ASSETRESERVATION_T
+     WHERE EMP_CODE = #{empCode}        
+</select>
   
 <select id="getAssetList"
           parameterType="Map"
@@ -47,6 +79,90 @@
      ORDER BY ASSET_CODE ASC
 </select>
 
+<select id="reservationList"
+        parameterType="Map"
+        resultMap="ReservationMap">
+    SELECT RESERVATION_NUMBER, START_DATETIME, END_DATETIME, REASON, EMP_CODE, EMP_NAME, POSITION_CODE, POSITION_NAME, ASSET_CODE, ASSET_NAME
+    FROM (SELECT ROW_NUMBER() OVER(ORDER BY R.RESERVATION_NUMBER DESC) AS RN,
+                 R.RESERVATION_NUMBER, R.START_DATETIME, R.END_DATETIME, R.REASON,
+                 E.EMP_CODE, E.EMP_NAME, P.POSITION_CODE, P.POSITION_NAME,
+                 A.ASSET_CODE, A.ASSET_NAME
+            FROM RESERVATION_T R INNER JOIN EMP_T E ON R.EMP_CODE = E.EMP_CODE
+          	     INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
+          	     INNER JOIN ASSET_T A ON R.ASSET_CODE = A.ASSET_CODE
+           WHERE E.EMP_CODE = #{empCode})
+   		 WHERE RN BETWEEN #{begin} AND #{end}
+</select>
 
+  
+<select id="myReservationList"
+        parameterType="Map"
+        resultMap="ReservationMap">
+    SELECT RESERVATION_NUMBER, START_DATETIME, END_DATETIME, REASON, EMP_CODE, EMP_NAME, POSITION_CODE, POSITION_NAME, ASSET_CODE, ASSET_NAME
+    FROM (SELECT ROW_NUMBER() OVER(ORDER BY R.RESERVATION_NUMBER DESC) AS RN,
+                 R.RESERVATION_NUMBER, R.START_DATETIME, R.END_DATETIME, R.REASON,
+                 E.EMP_CODE, E.EMP_NAME, P.POSITION_CODE, P.POSITION_NAME,
+                 A.ASSET_CODE, A.ASSET_NAME
+            FROM RESERVATION_T R INNER JOIN EMP_T E ON R.EMP_CODE = E.EMP_CODE
+          	     INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
+          	     INNER JOIN ASSET_T A ON R.ASSET_CODE = A.ASSET_CODE
+           WHERE E.EMP_CODE = #{empCode})
+   		 WHERE RN BETWEEN #{begin} AND #{end}
+</select>
 
-</mapper>
+<insert id="addReservation"
+	 	parameterType="ReservationDto">
+	INSERT INTO ASSETRESERVATION_T (
+		RESERVATION_NUMBER
+	  , EMP_CODE
+	  , ASSET_CODE
+	  , START_DATETIME
+	  , END_DATETIME
+	  , REASON
+	  )VALUES (
+	  	ASSETRESERVATION_SEQ.NEXTVAL
+	  , #{empCode}
+	  , #{assetCode}
+	  , #{startDatetime}
+	  , #{endDatetime}
+	  , #{reason}
+	  )
+</insert>
+
+ <select id="getAsset"
+         resultMap="AssetMap">
+ SELECT ASSET_CODE, ASSET_NAME, ASSET_TYPE, USE_YN, ASSET_SUBNAME, SUBASSET
+   FROM ASSETMANAGE_T
+  WHERE ASSET_CODE = #{assetCode}
+ </select>
+ 
+<update id="modifyAsset" 
+          parameterType="AssetDto">
+    UPDATE ASSETMANAGE_T
+       SET ASSET_CODE = #{assetCode}
+         , ASSET_NAME = #{assetName}
+         , ASSET_TYPE = #{assetType}
+         , SUBASSET = #{subasset}
+     WHERE ASSET_CODE = #{assetCode}
+  </update>
+
+<delete id="removeAsset">
+	DELETE
+	  FROM ASSETMANAGE_T
+	 WHERE ASSET_CODE = #{assetCode}
+</delete>
+
+<delete id="removeReservation">
+	DELETE
+	  FROM ASSETRESERVATION_T
+	 WHERE RESERVATION_NUMBER = #{reservationNumber}
+</delete>
+
+<select id="assetList"                                                 
+          resultType="map">                                            
+    SELECT ASSET_CODE, ASSET_NAME, ASSET_TYPE, ASSET_SUBNAME, SUBASSET    
+      FROM ASSETMANAGE_T                                                  
+</select>                      
+
+</mapper>                                           
+                                                                          

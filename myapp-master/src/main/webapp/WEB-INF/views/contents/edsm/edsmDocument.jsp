@@ -7,7 +7,7 @@
 
 <div class="card">
     <div class="header">
-        기안 문서함
+        결재 문서함
     </div>
     <div class="content table-responsive table-full-width">
         <table class="table table-hover table-striped">
@@ -21,41 +21,28 @@
                 <th>결재상태</th>
             </thead>
             <tbody>
-                <!--<tr>
-                    <td>2024-05-22</td>
-                    <td>2024-05-23</td>
-                    <td>업무협조</td>
-                    <td>업무협조 문서 결재</td>
-                    <td></td>
-                    <td>2023-0523</td>
-                    <td>
-                        <button class="btn btn-xs btn-fill" style="background-color:blue;border:none">완료</button>
-                        <button class="btn btn-xs btn-fill" style="background-color:red;border:none">반려</button>
-                        <button class="btn btn-xs btn-fill" style="background-color:green;border:none">진행중</button>
-                    </td>
-                </tr>-->
-                <c:forEach items="${draftList}" var="draft" varStatus="vs">
+                <c:forEach items="${documentList}" var="document" varStatus="vs">
                     <tr>
-                        <td>${draft.edsmNo}</td>
-                        <td>${draft.edsmStartDatetime}</td>
-                        <td>${draft.edsmEndDatetime}</td>
-                        <td>${draft.edsmExpireDatetime}</td>
+                        <td>${document.edsm.edsmNo}</td>
+                        <td>${document.edsm.edsmStartDatetime}</td>
+                        <td>${document.edsm.edsmEndDatetime}</td>
+                        <td>${document.edsm.edsmExpireDatetime}</td>
                         <td>
-                            <a href="${contextPath}/edsm/edsmDetail.do?edsmNo=${draft.edsmNo}">${draft.edsmTitle}</a>
+                            <a href="${contextPath}/edsm/edsmDetail.do?edsmNo=${document.edsm.edsmNo}">${document.edsm.edsmTitle}</a>
                         </td>
-                        <td>${draft.sample.sampleTitle}</td>
+                        <td>${document.edsm.sample.sampleTitle}</td>
                         <td>
                             <!--a0001 진행중 a0002 반려 a0003 완료-->
-                            <c:if test="${draft.edsmStatus == 'a0001'}">
+                            <c:if test="${document.edsm.edsmStatus == 'a0001'}">
                                 <button class="btn btn-xs btn-fill" style="background-color:green;border:none">진행중</button>
                             </c:if>
-                            <c:if test="${draft.edsmStatus == 'a0002'}">
+                            <c:if test="${document.edsm.edsmStatus == 'a0002'}">
                                 <button class="btn btn-xs btn-fill" style="background-color:red;border:none">반려</button>
                             </c:if>
-                            <c:if test="${draft.edsmStatus == 'a0003'}">
+                            <c:if test="${document.edsm.edsmStatus == 'a0003'}">
                                 <button class="btn btn-xs btn-fill" style="background-color:blue;border:none">완료</button>
                             </c:if>
-                            <c:if test="${draft.edsmStatus == 'a0004'}">
+                            <c:if test="${document.edsm.edsmStatus == 'a0004'}">
                                 <button class="btn btn-xs btn-fill" style="background-color:orange;border:none">만료</button>
                             </c:if>
                         </td>

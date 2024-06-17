@@ -34,7 +34,7 @@
             <li>
                 <ul class="list-unstyled subtab2">
                     <li><a href="${contextPath}/edsm/edsmDrafting.do">기안 문서함</a></li>
-                    <li><a href="">결재 문서함</a></li>
+                    <li><a href="${contextPath}/edsm/edsmDocument.do">결재 문서함</a></li>
                 </ul>
             </li>
             <li><b>문서함</b></li>

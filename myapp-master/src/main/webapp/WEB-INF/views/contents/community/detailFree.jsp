@@ -159,7 +159,7 @@ console.log(destinationUrl);
 
 						<!-- 댓글 개수 -->
 						<tr>
-								<th style="width: 100px">댓글 ${commentCount}개</th>
+								<th id="comment-count" style="width: 100px">댓글 ${commentCount}개</th>
 								<td></td>
 						</tr>
 
@@ -213,8 +213,6 @@ const fnPaging = (p) => {
 
 var page = 1;
 var sessionEmpCode = "${sessionScope.emp.empCode}";
-console.log("세션작성자" + sessionEmpCode);
-
 
 function fnCommentList() {
     $.ajax({
@@ -230,6 +228,7 @@ function fnCommentList() {
 
             if (resData.commentList.length === 0) {
                 commentList.append('<div>댓글이 없습니다</div>');
+                $('#comment-count').html('댓글 0개');
                 return;
             } else {
                 let table = '<table class="table table-hover table-striped"><tbody>';
@@ -259,6 +258,7 @@ function fnCommentList() {
                 
                 // 댓글 수(count) 업데이트
                 const commentCount = resData.commentList.length;
+                console.log(commentCount);
                 $('#comment-count').html(`댓글 ${commentCount}개`);
             }
             
@@ -284,7 +284,7 @@ function fnRegisterComment() {
                 if (resData.insertComment === 1) {
                     alert('댓글이 등록되었습니다.');
                     $('#cmmtContent').val('');
-                    fnCommentList();
+                    location.reload();  // Add this line to refresh the page
                 } else {
                     alert('댓글 등록이 실패했습니다.');
                 }
@@ -293,6 +293,7 @@ function fnRegisterComment() {
                 alert(jqXHR.statusText + '(' + jqXHR.status + ')');
             }
         });
+        fnCommentList();
     });
 }
 
@@ -363,7 +364,7 @@ function fnRemoveComment() {
             dataType: 'json',
             success: function(resData) {
                 alert(resData.removeResult);
-                fnCommentList();
+                location.reload();  // Add this line to refresh the page
             },
             error: function(jqXHR) {
                 alert(jqXHR.statusText + '(' + jqXHR.status + ')');
@@ -375,8 +376,8 @@ function fnRemoveComment() {
 
 
 $(document).ready(function() {
-    fnCommentList();
     fnRegisterComment();
+    fnCommentList();
     fnModifyComment();
     fnRemoveComment();
 });

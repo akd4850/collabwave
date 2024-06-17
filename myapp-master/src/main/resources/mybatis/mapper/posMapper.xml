@@ -33,5 +33,32 @@
       FROM POSITION_T
   </select>
   
+  <insert id="insertPosition"
+          parameterType="PosDto">
+	INSERT INTO POSITION_T (
+		POSITION_CODE,
+		POSITION_NAME,
+		USE_YN
+	) VALUES (
+		#{posCode},
+		#{posName},
+		'Y')
+  </insert>
+  
+  <select id="getSelectedPositon">
+	SELECT POSITION_CODE,
+	       POSITION_NAME,
+	       USE_YN
+	  FROM POSITION_T
+	 WHERE POSITION_NAME = #{positionName}
+  </select>
+  
+  <update id="updatePosition">
+	UPDATE POSITION_T
+	   SET POSITION_NAME = #{posName},
+	       USE_YN = #{useYn}
+	 WHERE POSITION_CODE = #{posCode}
+  </update>
+  
 	
 </mapper>

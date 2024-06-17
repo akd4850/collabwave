@@ -129,16 +129,50 @@ public class DeptServiceImpl implements DeptService {
 	@Override
 	public void modifyDeptLeader(HttpServletRequest request) {
 	  
+	  try {
+      
+	    String deptCode = request.getParameter("deptCode");
+	    String empCode = request.getParameter("modifyEmpCode");
+	    
+	    DeptDto dept = DeptDto.builder()
+	        .deptCode(deptCode)
+	        .empCode(empCode)
+	        .build();
+	    
+	    deptMapper.appointDeptLeader(dept);
+	    
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+	}
+	
+	@Override
+	public List<DeptDto> getDeptListForTransfer(String deptCode) {
+	  return deptMapper.getDeptListForTransfer(deptCode);
+	}
+	
+	@Override
+	public int modifyDeptInfo(HttpServletRequest request) {
+	  
 	  String deptCode = request.getParameter("deptCode");
-	  String empCode = request.getParameter("empCode");
+	  String deptName = request.getParameter("deptName");
+	  int deptLevel = Integer.parseInt(request.getParameter("deptLevel"));
+	  String deptLocation = request.getParameter("deptLocation");
+	  char useYn = (request.getParameter("useYn").equals("Y")) ? 'Y' : 'N';
+	  String deptUpstairCode = request.getParameter("deptUpstairCode");
 	  
 	  DeptDto dept = DeptDto.builder()
 	                    .deptCode(deptCode)
-	                    .empCode(empCode)
+	                    .deptName(deptName)
+	                    .deptLevel(deptLevel)
+	                    .deptLocation(deptLocation)
+	                    .useYn(useYn)
+	                    .deptUpstairCode(deptUpstairCode)
 	                  .build();
 	  
-	  deptMapper.updateDeptLeader(dept);
+	  int modifyCount = deptMapper.updateDeptInfo(dept);
 	  
+	  return modifyCount;
 	}
 	
 }

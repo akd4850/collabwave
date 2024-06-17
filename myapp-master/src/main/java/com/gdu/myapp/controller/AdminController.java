@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.gdu.myapp.dto.EmpDto;
 import com.gdu.myapp.service.DeptService;
 import com.gdu.myapp.service.EmpService;
 import com.gdu.myapp.service.PosService;
@@ -84,16 +83,23 @@ public class AdminController {
 	
 	@PostMapping("/emp/modify.do")
 	public String modify(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+	  empService.modifyEmp(request);
 	  int modifyCount = empService.modifyEmp(request);
 	  redirectAttributes.addAttribute("empCode", request.getParameter("empCode"))
 	                    .addFlashAttribute("modifyResult", modifyCount == 1 ? "직원정보가 수정되었습니다." : "직원정보 수정이 실패했습니다.");
-	  return "redirect:/admin/emp/detail.do?empCode={empCode}";
+	  return "redirect:/admin/emp/management.page";
 	}
 	
 	@PostMapping("/emp/delete.do")
 	public String deleteEmp(@RequestParam String empCode, RedirectAttributes redirectAttributes) {
 	  redirectAttributes.addFlashAttribute("removeEmpCount", empService.deleteEmp(empCode));
 	  return "redirect:/admin/emp/management.page";
+	}
+	
+	@PostMapping("/emp/deptTransfer.do")
+	public String deptTransfer(HttpServletRequest request) {
+	  empService.empDeptTransfer(request);
+	  return "redirect:/admin/dept/management.page";
 	}
 	
 	@GetMapping("/dept/management.page")
@@ -107,6 +113,7 @@ public class AdminController {
   public String detailDept(@RequestParam String deptCode, Model model) {
     model.addAttribute("dept", deptService.getDeptDetail(deptCode));
     model.addAttribute("memberList", deptService.getDeptMember(deptCode));
+    model.addAttribute("deptNameList", deptService.getDeptListForTransfer(deptCode));
     model.addAttribute("submenu", "deptDetail.jsp");
     return "contents/admin/admin";
 	}
@@ -122,22 +129,48 @@ public class AdminController {
     deptService.registerDept(request, response);
   }
 	
+	@PostMapping("/dept/modify.do")
+	public String modifyDeptInfo(@RequestParam String deptCode, HttpServletRequest request) {
+	  deptService.modifyDeptInfo(request);
+	  return "redirect:/admin/dept/detail.do?deptCode=" + deptCode;
+	}
+	
 	@PostMapping("/dept/appointLeader.do")
-	public void modifyDeptLeader(HttpServletRequest request) {
+	public String modifyDeptLeader(HttpServletRequest request) {
 	  deptService.modifyDeptLeader(request);
+	  return "redirect:/admin/dept/management.page";
 	}
-	
-	@GetMapping("/pos/management.page")
-  public String posManage(HttpServletRequest request, Model model) {
-    model.addAttribute("submenu", "posManage.jsp");
-    posService.loadPosList(request, model);
-    return "contents/admin/admin";
-	}
-	
 	
 	@GetMapping(value="/detailAjax.do", produces="application/json")
 	public ResponseEntity<Map<String, Object>> detailEmpAjax(@RequestParam String empCode, Model model) {
 
 	  return empService.getEmpDetailAjax(empCode);
 	}
+	
+	@GetMapping("/pos/management.page")
+	public String posManage(HttpServletRequest request, Model model) {
+	  model.addAttribute("submenu", "posManage.jsp");
+	  posService.loadPosList(request, model);
+	  return "contents/admin/admin";
+	}
+	
+	@PostMapping("/pos/add.do")
+	public String registerPosition(HttpServletRequest request) {
+	  posService.registerPosition(request);
+	  return "redirect:/admin/pos/management.page";
+	}
+	
+	@GetMapping("/pos/modalPosInfo.do")
+	public String modalPosInfo(@RequestParam String posName, Model model) {
+	  model.addAttribute("selectedPos", posService.getSelectedPosInfo(posName));
+	  return "contents/admin/admin";
+	}
+	
+	@PostMapping("/pos/modify.do")
+	public String modifyPosition(HttpServletRequest request) {
+	  posService.modifyPosition(request);
+	  return "redirect:/admin/pos/management.page";
+	}
+	
+	
 }

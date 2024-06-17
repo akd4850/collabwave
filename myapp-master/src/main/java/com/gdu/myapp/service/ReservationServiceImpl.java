@@ -1,6 +1,7 @@
 package com.gdu.myapp.service;
 
-import java.sql.Date;
+import java.sql.Timestamp;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -56,37 +57,110 @@ public class ReservationServiceImpl implements ReservationService {
 	  	
 	  	Map<String, Object> map = Map.of("begin" , myPageUtils.getBegin()
 	        , "end", myPageUtils.getEnd());
-	  	System.out.println(map);
 	  	 return new ResponseEntity<>(Map .of("assetList", reservationMapper.getAssetList(map)
 	         							   , "totalPage", myPageUtils.getTotalPage())
 	  			 						   , HttpStatus.OK);
 	  }
 	
 	@Override
+	public ResponseEntity<Map<String, Object>> reservationList(HttpServletRequest request) {
+
+		int total = reservationMapper.reservationCount();
+	  	
+	  	int display = 10;
+	  	
+	  	int page = Integer.parseInt(request.getParameter("page"));
+	  
+	  	myPageUtils.setPaging(total, display, page);
+	  	
+	  	Map<String, Object> map = Map.of("begin" , myPageUtils.getBegin()
+	        , "end", myPageUtils.getEnd());
+	  	 return new ResponseEntity<>(Map .of("reservationList", reservationMapper.reservationList(map)
+	         							   , "totalPage", myPageUtils.getTotalPage())
+	  			 						   , HttpStatus.OK);
+	  }
+	
+	@Override
+	public ResponseEntity<Map<String, Object>> myReservationList(HttpServletRequest request) {
+
+		int total = reservationMapper.myReservationCount();
+	  	
+	  	int display = 10;
+	  	
+	  	int page = Integer.parseInt(request.getParameter("page"));
+	  
+	  	myPageUtils.setPaging(total, display, page);
+	  	
+	  	Map<String, Object> map = Map.of("begin" , myPageUtils.getBegin()
+	        , "end", myPageUtils.getEnd());
+	  	 return new ResponseEntity<>(Map .of("myReservationList", reservationMapper.myReservationList(map)
+	         							   , "totalPage", myPageUtils.getTotalPage())
+	  			 						   , HttpStatus.OK);
+	  }
+	
+	public List<Map<String, Object>> assetList() {
+        return reservationMapper.assetList();
+    }
+	
+	@Override
 	public int addReservation(HttpServletRequest request) {
-		int reservationNumber = Integer.parseInt(request.getParameter("reservationNumber"));
-		String empCode = request.getParameter("empCode");
-		String assetCode = request.getParameter("assetCode");
-		/*Date startDatetime = request.getParameter("startDtaetime");
-		Date endDatetime = request.getParameter("endDatetime");*/
-		Date startDatetime = Date.valueOf(request.getParameter("startDtaetime"));
-		Date endDatetime = Date.valueOf(request.getParameter("endDatetime"));
-		String reason = request.getParameter("reason");
-		
-		ReservationDto reser = ReservationDto.builder()
-										.reservationNumber(reservationNumber)
-										.empCode(empCode)
-										.assetCode(assetCode)
-										.startDatetime(startDatetime)
-										.endDatetime(endDatetime)
-										.reason(reason)
-									.build();
-							
-		
+	    String empCode = request.getParameter("empCode");
+	    String assetCode = request.getParameter("assetCode");
+	    String startDatetimeStr = request.getParameter("startDatetime");
+	    String endDatetimeStr = request.getParameter("endDatetime");
+	    String reason = request.getParameter("reason");
+
+	    Timestamp startDatetime = Timestamp.valueOf(startDatetimeStr);
+	    Timestamp endDatetime = Timestamp.valueOf(endDatetimeStr);
+
+	    ReservationDto reser = ReservationDto.builder()
+	                                        .empCode(empCode)
+	                                        .assetCode(assetCode)
+	                                        .startDatetime(startDatetime)
+	                                        .endDatetime(endDatetime)
+	                                        .reason(reason)
+	                                    .build();
+
 		int addReservationResultCount = reservationMapper.addReservation(reser);
 		return addReservationResultCount;
 	}
 	
+	@Override
+	public AssetDto getAsset(String assetCode) {
+		return reservationMapper.getAsset(assetCode);
+	}
+	
+	@Override
+	public int modifyAsset(HttpServletRequest request) {
+		String assetType = request.getParameter("assetType");
+		String assetCode = request.getParameter("assetCode");
+		String assetName = request.getParameter("assetName");
+		String assetSubname = request.getParameter("assetSubname");
+		String subasset = request.getParameter("subasset");
+		
+		AssetDto asset = AssetDto.builder()
+							.assetType(assetType)
+							.assetCode(assetCode)
+							.assetName(assetName)
+							.assetSubname(assetSubname)
+							.subasset(subasset)
+						.build();
+		int modifyAssetResult = reservationMapper.modifyAsset(asset);
+		
+		return modifyAssetResult;
+	}
+	
+	@Override
+	public int removeAsset(String assetCode) {
+		return reservationMapper.removeAsset(assetCode);
+	}
+	
+	@Override
+	public int removeReservation(int reservationNumber) {
+		return reservationMapper.removeReservation(reservationNumber);
+	}
+	
 
+	
 }
 	

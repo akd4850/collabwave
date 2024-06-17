@@ -2,6 +2,7 @@ package com.gdu.myapp.service;
 
 import java.util.Map;
 
+import org.apache.catalina.filters.ExpiresFilter.XHttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 
@@ -29,7 +30,6 @@ public interface EmpService {
 	void registerEmp(HttpServletRequest request, HttpServletResponse response);
 	int modifyEmp(HttpServletRequest request);
 	int deleteEmp(String empCode);
-	
-	// int editEmployee(EmpDto emp);
+	int empDeptTransfer(HttpServletRequest request);
 
 }

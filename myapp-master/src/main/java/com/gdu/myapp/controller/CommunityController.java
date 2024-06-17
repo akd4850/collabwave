@@ -114,8 +114,7 @@ public class CommunityController {
 	    model.addAttribute("submenu", "detailFree.jsp");
 	    model.addAttribute("postNo", postNo);
 	    
-	    postService.getPost(//request, 
-	    										model, postNo);
+	    postService.getPost(model, postNo);
 	
 	    // 댓글 개수 가져오기
 	    int commentCount = postService.getCommentCount(postNo);

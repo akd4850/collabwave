@@ -26,10 +26,12 @@ public interface EdsmService {
     void addApprDo(HttpServletRequest request);
     ResponseEntity<Map<String, Object>> getLineList(HttpServletRequest request);
     ResponseEntity<Map<String, Object>> getMyLineDetail(HttpServletRequest request);
-    void loadDraftList(HttpServletRequest request, Model model);
-    void loadWaitList(HttpServletRequest request, Model model);
+    void loadDraftList(HttpServletRequest request, Model model, boolean bIsMain);
+    void loadWaitList(HttpServletRequest request, Model model, boolean bIsMain);
     void loadExpectList(HttpServletRequest request, Model model);
     void edsmDetail(HttpServletRequest request, Model model, int edsmNo);
     ResponseEntity<Map<String, Object>> getApprList(HttpServletRequest request);
     void confirmAppr(HttpServletRequest request);
+    void loadDocumentList(HttpServletRequest request, Model model);
+    void updateEdsm(HttpServletRequest request);
 }

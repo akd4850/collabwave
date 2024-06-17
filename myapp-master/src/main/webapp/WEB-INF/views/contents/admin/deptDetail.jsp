@@ -22,25 +22,28 @@
 
     <div class="tab-content">
 
+        <!-- 탭1(부서정보) -->
         <div class="container tab-pane active" id="info">
-            <form>
+            <form id="frm-deptInfo-modify"
+                  method="POST"
+                  action="${contextPath}/admin/dept/modify.do">
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>부서명</label>
-                            <input type="text" class="form-control" placeholder="부서명" value="${dept.deptName}">
+                            <input type="text" class="form-control" placeholder="부서명" id="deptName" name="deptName" value="${dept.deptName}">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                           <label>부서코드</label>
-                          <input type="text" class="form-control" placeholder="부서코드" value="${dept.deptCode}">
+                          <input type="text" class="form-control" placeholder="부서코드" id="deptCode" name="deptCode" value="${dept.deptCode}" readonly>
                     </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>부서레벨</label>
-                            <input type="text" class="form-control" placeholder="부서레벨" value="${dept.deptLevel}">
+                            <input type="text" class="form-control" placeholder="부서레벨" id="deptLevel" name="deptLevel" value="${dept.deptLevel}">
                         </div>
                     </div>
                 </div>
@@ -49,19 +52,19 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>상위부서</label>
-                            <input type="text" class="form-control" placeholder="상위부서" value="${dept.deptUpstairCode}">
+                            <input type="text" class="form-control" placeholder="상위부서" name="deptUpstairCode" value="${dept.deptUpstairCode}">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>부서위치</label>
-                            <input type="text" class="form-control" placeholder="부서위치" value="${dept.deptLocation}">
+                            <input type="text" class="form-control" placeholder="부서위치" name="deptLocation" value="${dept.deptLocation}">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>생성일</label>
-                            <input type="text" class="form-control" placeholder="생성일" value="${dept.deptCreatedate}">
+                            <input type="text" class="form-control" placeholder="생성일" name="deptCreatedate" value="${dept.deptCreatedate}" readonly>
                         </div>
                     </div>
                 </div>
@@ -70,76 +73,112 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>부서장 사원코드</label>
-                            <input type="text" class="form-control" placeholder="부서장 사원코드" value="${dept.deptLeaderEmpCode}">
+                            <input type="text" class="form-control" placeholder="부서장 사원코드" name="deptLeaderEmpCode" value="${dept.deptLeaderEmpCode}" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>사용여부</label>
+                            <input type="text" class="form-control" placeholder="사용여부" name="useYn" value="${dept.useYn}">
                         </div>
                     </div>
                 </div>
-            </div>
+                <div style="text-align:right">
+                <button type="submit" id="btn-update" class="btn btn-info btn-fill">수정</button>
+                <button type="button" id="btn-cancel" class="btn btn-danger btn-fill">취소</button>
+                </div>
+            </form>
+        </div>
 
+        <!-- 탭2(부서원)-->
         <div class="container tab-pane fade" id="member">
             
-            <form method= "POST"
-                  action="${contextPath}/admin/dept/apppointLeader.do">
+            <form method= "POST">
 
+                <button type="submit"
+                        id="btn-dept-leader"
+                        class="btn btn-outline-primary"
+                        formaction="${contextPath}/admin/dept/appointLeader.do">부서장 위임</button>
+                <button type="button"
+                        id="btn-dept-transfer"
+                        class="btn btn-outline-primary"
+                        data-toggle="modal"
+                        data-target="#myModal"
+                        onclick="setModalValue();">부서이동</button>
 
-            <button type="submit" id="btn-dept-leader" class="btn btn-outline-primary">부서장 위임</button>
-            <button type="button" id="btn-transfer" class="btn btn-outline-primary">부서이동</button>
+                <input type="hidden" name="deptCode" value="${dept.deptCode}">
 
-            <table class="table table-hover table-striped">
-                <thead>
-                    <tr>
-                        <th>이름</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach items="${memberList}" var="member" varStatus="vs">
+                <table class="table table-hover table-striped">
+                    <thead>
                         <tr>
-                            <th>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="flexRadio">
-                                    <label class="form-check-label" for="flexCheck">
-                                        ${member.empName}
-                                    </label>
-                                  </div>
-                            </th>
-                        </tr> 
-                    </c:forEach>
-                </tbody>
-            </table>
-        </form>
+                            <th>이름</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${memberList}" var="member" varStatus="vs">
+                            <tr>
+                                <th>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="modifyEmpCode" value="${member.empCode}">
+                                        <label class="form-check-label" for="flexCheck">
+                                            ${member.empName}
+                                        </label>
+                                    </div>
+                                </th>
+                            </tr> 
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </form>
         </div>
-        </div>
-        <button type="submit" id="btn-update" class="btn btn-info btn-fill">수정</button>
-        <button type="button" id="btn-cancel" class="btn btn-danger btn-fill">취소</button>
-        <div class="clearfix"></div>
-    </form>
 
+    </div>
+    <div class="clearfix"></div>
 </div>
 
+
+<!-- 모달(부서이동) -->
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form method="POST"
+                  action="${contextPath}/admin/emp/deptTransfer.do">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">부서 이동</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <table style="border-collapse: separate; border-spacing: 10px 10px;">
+                        <c:forEach items="${deptNameList}" var="dnl" varStatus="vs">
+                            <tr>
+                                <th><button type="button" class="btn btn-secondary" name="transferDeptCode" value="{dnl.deptCode}">${dnl.deptName}</button></th>
+                            </tr>
+                        </c:forEach>
+                    </table>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info btn-fill">이동</button>
+                    <button type="button" class="btn btn-danger btn-fill" data-dismiss="modal">취소</button>
+                </div>
+                <input type="hidden" name="transferDeptCode" id="transferDeptCode">
+                <input type="hidden" name="transferEmpCode" id="transferEmpCode">
+            </form>
+        </div>
+    </div>
+</div>
+
+
 <script>
+
     document.getElementById('btn-cancel').onclick = function() { 
         history.back();
     }
 
-    const fnAppointDeptLeader = () => {
-        $('#btn-dept-leader').on('click', (evt) => {
-            $.ajax({
-                //요청
-                type: 'POST',
-                url: '${contextPath}/admin/dept/apppointLeader.do',
-                data: {deptCode: '${dept.deptCode}',
-                        empCode: '${emp.empCode}'},
-
-                //응답
-                success: (resData) => {
-                    alert('${emp.empName}님이 ${dept.deptName} 부서장으로 임명되었습니다.');
-                },
-                error: (jqXHR) => {
-                    alert(jqXHR.statusText + '(' + jqXHR.status + ')');
-                }
-            })
-        })
+    const setModalValue = () => {
+        $("#transferEmpCode").val( $("input[name='modifyEmpCode']:checked").val() );
     }
-
 
 </script>

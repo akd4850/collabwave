@@ -13,8 +13,8 @@ public interface ReservationMapper {
 	int addAsset(AssetDto asset);
 	int getAssetCount();
 	int reservationCount();
-	int myReservationCount();
-	List<AssetDto> getAssetList(Map<String, Object> map);
+	int myReservationCount(String empCode);
+	List<AssetDto> getAssetList(Map<String, Object>  map);
 	List<AssetDto> reservationList(Map<String, Object> map);
 	List<AssetDto> myReservationList(Map<String, Object> map);
 	int addReservation(ReservationDto reser);

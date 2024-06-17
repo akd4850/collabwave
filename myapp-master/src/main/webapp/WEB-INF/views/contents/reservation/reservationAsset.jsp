@@ -47,11 +47,11 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>예약 자산</label>
-                        <select id="asset-type" class="form-control" name="assetType">
+                        <select id="asset-type" class="form-control" name="assetType" onchange="updateSubassetAndCode()">
                             <c:forEach items="${assetList}" var="asset" varStatus="vs">
-                              <option value="${asset.assetName}" data-subasset="${asset.subasset}">${asset.assetName}</option>
+                              <option value="${asset.ASSET_NAME}" data-subasset="${asset.SUBASSET}" data-assetcode="${asset.ASSET_CODE}">${asset.ASSET_NAME}</option>
                             </c:forEach>
-                        </select>
+                          </select>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -84,6 +84,7 @@
             </div>
     
             
+            <input type="hidden" id="assetCode" name="assetCode">
             <input type="hidden" id="startDatetime" name="startDatetime" value="">
             <input type="hidden" id="endDatetime" name="endDatetime" value="">
             <input type="hidden" id="empCode" name="empCode" value="${emp.empCode}">
@@ -156,11 +157,19 @@
     }
 }
 
-function updateSubasset() {
-    const assetTypeSelect = document.getElementById('asset-type');
-    const selectedOption = assetTypeSelect.options[assetTypeSelect.selectedIndex];
-    const subasset = selectedOption.getAttribute('data-subasset');
-    document.getElementById('subasset').value = subasset;
-}
+function updateSubassetAndCode() {
+        var assetSelect = document.getElementById('asset-type');
+        var selectedOption = assetSelect.options[assetSelect.selectedIndex];
+        var subasset = selectedOption.getAttribute('data-subasset');
+        var assetCode = selectedOption.getAttribute('data-assetcode');
 
+        document.getElementById('subasset').value = subasset;
+        document.getElementById('assetCode').value = assetCode;
+    }
+
+    // 페이지 로드 시 초기값 설정
+    document.addEventListener('DOMContentLoaded', function() {
+        updateSubassetAndCode();
+    });
+    
 </script>

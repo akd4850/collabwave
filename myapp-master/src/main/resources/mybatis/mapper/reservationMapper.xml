@@ -58,8 +58,7 @@
       FROM ASSETMANAGE_T        
 </select>
 
-<select id="reservationCount"
-          parameterType="int">
+<select id="reservationCount"  >
     SELECT COUNT(*)
       FROM ASSETRESERVATION_T        
 </select>
@@ -89,8 +88,7 @@
                  A.ASSET_CODE, A.ASSET_NAME
             FROM RESERVATION_T R INNER JOIN EMP_T E ON R.EMP_CODE = E.EMP_CODE
           	     INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
-          	     INNER JOIN ASSET_T A ON R.ASSET_CODE = A.ASSET_CODE
-           WHERE E.EMP_CODE = #{empCode})
+          	     INNER JOIN ASSET_T A ON R.ASSET_CODE = A.ASSET_CODE)
    		 WHERE RN BETWEEN #{begin} AND #{end}
 </select>
 
@@ -142,6 +140,7 @@
        SET ASSET_CODE = #{assetCode}
          , ASSET_NAME = #{assetName}
          , ASSET_TYPE = #{assetType}
+         , ASSET_SUBNAME = #{assetSubname}
          , SUBASSET = #{subasset}
      WHERE ASSET_CODE = #{assetCode}
   </update>

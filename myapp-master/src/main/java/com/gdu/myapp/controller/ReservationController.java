@@ -77,7 +77,7 @@ public class ReservationController {
 		return "redirect:/reservation/management.page";
 	}
 	
-	  @PostMapping("/editAsset.page")
+	  @GetMapping("/editAsset.page")
 	  public String editAsset(@RequestParam String assetCode, Model model) {
 	    model.addAttribute("asset", reservationService.getAsset(assetCode));
 	    model.addAttribute("submenu", "modifyGoods.jsp");
@@ -96,7 +96,7 @@ public class ReservationController {
 	
 	
 	
-	@PostMapping("/removeAsset.page")
+	@GetMapping("/removeAsset.page")
 	public String removeAsset(@RequestParam String assetCode, RedirectAttributes redirectAttributes) {
 		int removeAssetCount = reservationService.removeAsset(assetCode);
 		redirectAttributes.addFlashAttribute("removeAssetResult", removeAssetCount == 1 ? "자산이 삭제되었습니다." : "자산이 삭제되지 않았습니다.");

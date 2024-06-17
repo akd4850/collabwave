@@ -13,7 +13,7 @@
         <input type="button"
                 class="btn btn-info btn-fill"
                 style="margin-left:10px"
-                onclick="location.href='/reservation/reservationAsset.page?empCode=${sessionScope.emp.empCode}&positionName=${sessionScope.emp.position.positionName}'"
+                onclick="location.href='/reservation/reservationAsset.page?empCode=${sessionScope.emp.empCode}'"
                 value="예약 하기">
         <table class="table table-hover table-striped">
             <thead>
@@ -26,7 +26,13 @@
             <tbody class="reservation-list">
 
             </tbody>
+            
         </table>
+        <div class="pagination">
+            <button class="btn btn-info btn-fill" onclick="prevPage()">이전</button>
+            <span>페이지 <span id="page-number">1</span></span>
+            <button class="btn btn-info btn-fill" onclick="nextPage()">다음</button>
+        </div>
     </div>
 </div>
 

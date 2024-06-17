@@ -46,10 +46,15 @@ const formatDateTime = (timestamp) => {
 }
 
 const fnMyReservationList = () => {
+    const empCode = "${emp.empCode}";
+
     $.ajax({
         type: 'GET',
         url: '${contextPath}/reservation/myReservationList.do',
-        data: 'page=' + page,
+        data: {
+            page: page,
+            empCode: empCode
+        },
         dataType: 'json',
         success: (resData) => {
             totalPage = resData.totalPage;

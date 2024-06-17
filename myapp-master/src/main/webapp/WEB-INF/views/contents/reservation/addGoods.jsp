@@ -19,8 +19,8 @@
                         <label>자산타입</label>
                         <select id="asset-type" class="form-control" name="assetType">
                             <option value="">선택</option>
-                            <option value="사무실">사무실</option>
-                            <option value="차량">차량</option>
+                            <option value="room">사무실</option>
+                            <option value="car">차량</option>
                         </select>
                     </div>
                 </div>
@@ -64,8 +64,10 @@
     $(document).ready(function() {
         $('#asset-type').change(function() {
             var selectedValue = $(this).val();
-            if (selectedValue === '사무실') {
+            if (selectedValue === 'room') {
                 $('#room-fields').removeClass('hidden');
+            } else if (selectedValue === 'car') {
+                $('#room-fields').addClass('hidden');
             }
         });
     });
@@ -78,7 +80,7 @@
 
         
         // 선택된 구분에 따라 assetSubname 설정
-        if (assetType === '차량') {
+        if (assetType === 'car') {
             assetSubnameInput.placeholder = '차량 번호';
             labelElement.innerText = '차량 번호';
         } else if (assetType === 'room') {

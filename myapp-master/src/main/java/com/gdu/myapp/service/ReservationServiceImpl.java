@@ -83,7 +83,9 @@ public class ReservationServiceImpl implements ReservationService {
 	@Override
 	public ResponseEntity<Map<String, Object>> myReservationList(HttpServletRequest request) {
 
-		int total = reservationMapper.myReservationCount();
+		String empCode = request.getParameter("empCode");
+		
+		int total = reservationMapper.myReservationCount(empCode);
 	  	
 	  	int display = 10;
 	  	
@@ -120,7 +122,7 @@ public class ReservationServiceImpl implements ReservationService {
 	                                        .endDatetime(endDatetime)
 	                                        .reason(reason)
 	                                    .build();
-
+	    	    
 		int addReservationResultCount = reservationMapper.addReservation(reser);
 		return addReservationResultCount;
 	}
@@ -145,6 +147,7 @@ public class ReservationServiceImpl implements ReservationService {
 							.assetSubname(assetSubname)
 							.subasset(subasset)
 						.build();
+		
 		int modifyAssetResult = reservationMapper.modifyAsset(asset);
 		
 		return modifyAssetResult;

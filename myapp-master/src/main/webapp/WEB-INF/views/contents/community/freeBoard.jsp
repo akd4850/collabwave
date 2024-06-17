@@ -41,7 +41,7 @@
 	                <tr>
 	                    <td class="postTitleCell"><a href="/community/detailFree?postNo=${post.postNo}">${post.postTitle}</a></td>
 	                    <td>${post.emp.empName}</td>
-	                    <td>${post.postCreateDatetime}</td>
+                		<td class="postCreateDatetime">${post.postCreateDatetime}</td>
 	                    <td>${post.postHit}</td>
 	                </tr>
                 </c:forEach>
@@ -65,3 +65,15 @@
 	<div>${paging}</div>
 
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var dateElements = document.querySelectorAll('.postCreateDatetime');
+    dateElements.forEach(function(element) {
+        var originalDate = element.textContent.trim();
+        var formattedDate = moment(originalDate).format('YYYY-MM-DD HH:mm');
+        element.textContent = formattedDate;
+    });
+});
+
+</script>

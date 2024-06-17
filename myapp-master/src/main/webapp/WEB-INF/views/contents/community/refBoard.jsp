@@ -41,7 +41,7 @@
 			            </td>
 			            <td><a href="/community/detail?postNo=${post.postNo}">${post.postTitle}</a></td>
 			            <td>${post.emp.empName}</td>
-			            <td>${post.postCreateDatetime}</td>
+                		<td class="postCreateDatetime">${post.postCreateDatetime}</td>
 			            <td>${post.postHit}</td>
 			        </tr>
 			    </c:forEach>
@@ -68,6 +68,16 @@
 </div>
 
 <script>
+document.addEventListener("DOMContentLoaded", function() {
+    var dateElements = document.querySelectorAll('.postCreateDatetime');
+    dateElements.forEach(function(element) {
+        var originalDate = element.textContent.trim();
+        var formattedDate = moment(originalDate).format('YYYY-MM-DD HH:mm');
+        element.textContent = formattedDate;
+    });
+});
+
+
 document.addEventListener('DOMContentLoaded', function() {
     var totalPosts = ${postList.size()}; // Assuming you have a way to get the total number of posts
     for (var i = 0; i < totalPosts; i++) {

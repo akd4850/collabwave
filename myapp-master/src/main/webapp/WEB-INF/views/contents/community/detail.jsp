@@ -15,7 +15,7 @@
                 </tr>
                 <tr>
                     <th>등록일</th>
-                    <td>${post.postCreateDatetime}</td>
+                		<td class="postCreateDatetime">${post.postCreateDatetime}</td>
                 </tr>
                 <tr>
                     <th>조회수</th>
@@ -78,6 +78,15 @@
 <script src="${contextPath}/ckeditor5/ckeditor.js"></script>
 <script src="${contextPath}/ckeditor5/script.js"></script>
 <script>
+document.addEventListener("DOMContentLoaded", function() {
+    var dateElements = document.querySelectorAll('.postCreateDatetime');
+    dateElements.forEach(function(element) {
+        var originalDate = element.textContent.trim();
+        var formattedDate = moment(originalDate).format('YYYY-MM-DD HH:mm');
+        element.textContent = formattedDate;
+    });
+});
+
 
 ClassicEditor
 .create(document.querySelector("#editor"), {

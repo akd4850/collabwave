@@ -24,12 +24,12 @@
         <table class="table table-hover table-striped">
             <tbody>
                 <tr>
-                    <th style="width:100px">작성자</th>
-                    <td>${sessionScope.emp.empName}</td>
+                    <th>구분</th>
+                    <td>자료실 글쓰기</td>
                 </tr>
                 <tr>
-                    <th>작성날짜</th>
-                    <td id="current-date"></td>
+                    <th style="width:100px">작성자</th>
+                    <td>${sessionScope.emp.empName}</td>
                 </tr>
                 <tr>
                     <th>제목</th>
@@ -88,17 +88,6 @@ ClassicEditor
     console.error( error );
 } );
 
-// 현재 일시 구현
-function insertCurrentDate() {
-    var today = new Date();
-    var year = today.getFullYear();
-    var month = ('0' + (today.getMonth() + 1)).slice(-2); // 두 자리수로 만들기
-    var day = ('0' + today.getDate()).slice(-2); // 두 자리수로 만들기
-    var hours = ('0' + today.getHours()).slice(-2);
-    var minutes = ('0' + today.getMinutes()).slice(-2);
-    var formattedDate = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes;
-    document.getElementById('current-date').textContent = formattedDate;
-}
 
 // 제목 입력 필수
 function validateForm(evt) {

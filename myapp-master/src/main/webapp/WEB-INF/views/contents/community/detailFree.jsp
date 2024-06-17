@@ -121,7 +121,7 @@ console.log(destinationUrl);
 								</tr>
 								<tr>
 										<th>등록일</th>
-										<td>${post.postCreateDatetime}</td>
+                		<td class="postCreateDatetime">${post.postCreateDatetime}</td>
 								</tr>
 								<tr>
 										<th>조회수</th>
@@ -205,6 +205,16 @@ console.log(destinationUrl);
 <script src="${contextPath}/ckeditor5/script.js"></script>
 
 <script>
+document.addEventListener("DOMContentLoaded", function() {
+    var dateElements = document.querySelectorAll('.postCreateDatetime');
+    dateElements.forEach(function(element) {
+        var originalDate = element.textContent.trim();
+        var formattedDate = moment(originalDate).format('YYYY-MM-DD HH:mm');
+        element.textContent = formattedDate;
+    });
+});
+
+
 // 페이징
 const fnPaging = (p) => {
   page = p;
@@ -238,7 +248,7 @@ function fnCommentList() {
                     if (comment.cmmtStatus === 0) {
                         str += '<td colspan="2">삭제된 댓글입니다.</td>';
                     } else {
-                        str += '<th>' + comment.emp.empName + ' (' + moment(comment.cmmtCreateDatetime).format('YYYY.MM.DD') + ')</th>';
+                        str += '<th>' + comment.emp.empName + ' (' + moment(comment.cmmtCreateDatetime).format('YYYY-MM-DD HH:mm:ss') + ')</th>';
                         str += '<td class="comment-content">' + comment.cmmtContent + '</td>';
                         if (sessionEmpCode === comment.emp.empCode) {
                             console.log("댓글 작성자 코드: " + comment.emp.empCode);

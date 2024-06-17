@@ -42,8 +42,8 @@ public class AdminController {
     return "contents/admin/admin";
   }
 	
-	@GetMapping("/admin/emp/list.do")
-	public String empPaging(HttpServletRequest request, Model model) {
+	@GetMapping("/emp/list.do")
+	public String empList(HttpServletRequest request, Model model) {
 	  model.addAttribute("submenu", "empManage.jsp");
     empService.loadEmpList(request, model);
     return "contents/admin/admin";
@@ -81,6 +81,13 @@ public class AdminController {
 	  return "contents/admin/admin";
 	}
 	
+	@GetMapping("/emp/leaverList.do")
+  public String empLeaveList(HttpServletRequest request, Model model) {
+    model.addAttribute("submenu", "empLeave.jsp");
+    empService.loadEmpLeaveList(request, model);
+    return "contents/admin/admin";
+  }
+	
 	@PostMapping("/emp/modify.do")
 	public String modify(HttpServletRequest request, RedirectAttributes redirectAttributes) {
 	  empService.modifyEmp(request);
@@ -107,6 +114,13 @@ public class AdminController {
 	  model.addAttribute("submenu", "deptManage.jsp");
 	  deptService.getDeptListForManage(request, model);
 	  return "contents/admin/admin";
+	}
+	
+	@GetMapping("/dept/list.do")
+  public String deptList(HttpServletRequest request, Model model) {
+    model.addAttribute("submenu", "deptManage.jsp");
+    deptService.getDeptListForManage(request, model);
+    return "contents/admin/admin";
 	}
 	
 	@GetMapping("/dept/detail.do")
@@ -153,6 +167,13 @@ public class AdminController {
 	  posService.loadPosList(request, model);
 	  return "contents/admin/admin";
 	}
+	
+	@GetMapping("/pos/list.do")
+  public String postList(HttpServletRequest request, Model model) {
+    model.addAttribute("submenu", "posManage.jsp");
+    posService.loadPosList(request, model);
+    return "contents/admin/admin";
+  }
 	
 	@PostMapping("/pos/add.do")
 	public String registerPosition(HttpServletRequest request) {

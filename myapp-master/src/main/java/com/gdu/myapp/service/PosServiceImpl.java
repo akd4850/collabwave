@@ -31,7 +31,6 @@ public class PosServiceImpl implements PosService {
     
     int total = posMapper.getPosCount();
     int display = 10;
-    
     Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
     int page = Integer.parseInt(opt.orElse("1"));
     
@@ -44,7 +43,7 @@ public class PosServiceImpl implements PosService {
     
     model.addAttribute("beginNo", total - (page - 1) * display);
     model.addAttribute("posList", posList);
-    model.addAttribute("paging", myPageUtils.getPagingNewVersion(request.getContextPath() + "contents/admin/pos/list.do", null, display));
+    model.addAttribute("paging", myPageUtils.getPagingNewVersion(request.getContextPath() + "/admin/pos/list.do", null, display));
 
   }
   

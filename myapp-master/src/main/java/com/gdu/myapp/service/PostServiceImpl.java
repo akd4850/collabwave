@@ -228,7 +228,7 @@ public class PostServiceImpl implements PostService {
       // 세션에서 현재 로그인한 사원의 부서 코드 가져오기
   		HttpSession session = request.getSession();
   		EmpDto emp = (EmpDto) session.getAttribute("emp");      
-  		String deptCode = emp.getDept().getDeptCode();
+  		String deptCode = emp.getDeptCode();
   		System.out.println("=========deptCode" + deptCode);
 
       // 전체 게시글 수

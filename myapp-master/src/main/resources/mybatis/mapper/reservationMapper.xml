@@ -16,8 +16,8 @@
    
 <resultMap type="ReservationDto" id="ReservationMap">
 	<id property="reservationNumber" column="RESERVATION_NUMBER"/>
-	<result property="startDatetime" column="START_DATETIME"/>
-	<result property="endDatetime" column="END_DATETIME"/>
+	<result property="startTime" column="START_DATETIME"/>
+	<result property="endTime" column="END_DATETIME"/>
 	<result property="reason" column="REASON"/>
 	<association property="emp" javaType="EmpDto">
 		<id property="empCode" column="EMP_CODE"/>
@@ -96,7 +96,7 @@
 <select id="myReservationList"
         parameterType="Map"
         resultMap="ReservationMap">
-    SELECT RESERVATION_NUMBER, START_DATETIME, END_DATETIME, REASON, EMP_CODE, EMP_NAME, POSITION_CODE, POSITION_NAME, ASSET_CODE, ASSET_NAME
+    SELECT RESERVATION_NUMBER, TO_CHAR(START_DATETIME, 'HH24:MI') AS START_DATETIME, TO_CHAR(END_DATETIME, 'HH24:MI') AS END_DATETIME, REASON, EMP_CODE, EMP_NAME, POSITION_CODE, POSITION_NAME, ASSET_CODE, ASSET_NAME
     FROM (SELECT ROW_NUMBER() OVER(ORDER BY R.RESERVATION_NUMBER DESC) AS RN,
                  R.RESERVATION_NUMBER, R.START_DATETIME, R.END_DATETIME, R.REASON,
                  E.EMP_CODE, E.EMP_NAME, P.POSITION_CODE, P.POSITION_NAME,

@@ -17,4 +17,5 @@ public class ReservationDto {
 	private Timestamp startDatetime, endDatetime;
 	private AssetDto asset;
 	private EmpDto emp;
+	private String startTime, endTime;
 }

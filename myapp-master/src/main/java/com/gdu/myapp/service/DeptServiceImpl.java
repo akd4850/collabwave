@@ -47,9 +47,7 @@ public class DeptServiceImpl implements DeptService {
 	public void getDeptListForManage(HttpServletRequest request, Model model) {
 	  
 	  int total = deptMapper.getDeptCount();
-    
     int display = 10;
-    
     Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
     int page = Integer.parseInt(opt.orElse("1"));
     
@@ -63,7 +61,7 @@ public class DeptServiceImpl implements DeptService {
     // 목록 화면으로 반환할 값 (목록 + 전체 페이지 수)
     model.addAttribute("beginNo", total - (page - 1) * display);
     model.addAttribute("deptList", deptList);
-    model.addAttribute("paging", myPageUtils.getPagingNewVersion(request.getContextPath() + "contents/admin/dept/list.do", null, display));
+    model.addAttribute("paging", myPageUtils.getPagingNewVersion(request.getContextPath() + "/admin/dept/list.do", null, display));
     
 	}
 	

@@ -52,13 +52,13 @@
   <select id="getEmpList"
   	      parameterType="Map"
   	      resultMap="EmpDtoMap">
-  	SELECT E.EMP_CODE, E.EMP_NAME, D.DEPT_NAME, P.POSITION_NAME,
-           E.MOBILE, E.EMAIL, E.STATUS_CODE
-      FROM EMP_T E
-           LEFT JOIN DEPT_T D ON E.DEPT_CODE = D.DEPT_CODE
-           INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
-     WHERE STATUS_CODE IN ('s01', 's02')
-     ORDER BY EMP_CODE ASC
+  	SELECT EMP_CODE, EMP_NAME, DEPT_NAME, POSITION_NAME, MOBILE, EMAIL, STATUS_CODE
+      FROM (SELECT ROW_NUMBER() OVER(ORDER BY EMP_CODE ASC) AS RN, E.EMP_CODE, E.EMP_NAME, D.DEPT_NAME, P.POSITION_NAME, E.MOBILE, E.EMAIL, E.STATUS_CODE
+              FROM EMP_T E
+                   LEFT JOIN DEPT_T D ON E.DEPT_CODE = D.DEPT_CODE
+                   INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
+             WHERE STATUS_CODE IN ('s01', 's02'))
+     WHERE RN BETWEEN #{begin} AND #{end}
   </select>
   
   <select id="getSearchList"
@@ -183,13 +183,21 @@
   <select id="getEmpLeaveList"
   	      parameterType="Map"
   	      resultMap="EmpDtoMap">
-  	SELECT E.EMP_CODE, E.EMP_NAME, D.DEPT_NAME, P.POSITION_NAME,
-           E.MOBILE, E.STATUS_CODE, E.JOIN_DATE, E.LEAVE_DATE
-      FROM EMP_T E
-           INNER JOIN DEPT_T D ON E.DEPT_CODE = D.DEPT_CODE
-           INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
-    WHERE STATUS_CODE = 's03'
-    ORDER BY LEAVE_DATE DESC
+  	SELECT EMP_CODE, EMP_NAME, DEPT_NAME, POSITION_NAME, MOBILE, STATUS_CODE, JOIN_DATE, LEAVE_DATE
+      FROM (SELECT ROW_NUMBER() OVER(ORDER BY E.LEAVE_DATE DESC) AS RN, E.EMP_CODE, E.EMP_NAME, 
+                   D.DEPT_NAME, P.POSITION_NAME, E.MOBILE, E.STATUS_CODE, E.JOIN_DATE, E.LEAVE_DATE
+              FROM EMP_T E
+             INNER JOIN DEPT_T D ON E.DEPT_CODE = D.DEPT_CODE
+             INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
+             WHERE STATUS_CODE = 's03')
+     WHERE RN BETWEEN #{begin} AND #{end}
+  </select>
+  
+  <select id="getEmpLeaveCount"
+  	      resultType="int">
+    SELECT COUNT(*)
+      FROM EMP_T
+     WHERE STATUS_CODE ='s03'
   </select>
   
   <update id="empDeptTransfer">

@@ -93,7 +93,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>직급코드</label>
-                        <input type="text" class="form-control" placeholder="직급코드" id="modal-posCode" name="modifyPosCode">
+                        <input type="text" class="form-control" placeholder="직급코드" id="modal-posCode" name="modifyPosCode" value="${selectedPos.posCode}">
                     </div>
                     <div class="form-group">
                         <label>직급명</label>
@@ -120,6 +120,7 @@
     const fnSetModalValue = () => {
         var selectedPosName = event.target.textContent;
         console.log(selectedPosName);
+        console.log('${selectedPos.posCode}');
         $.ajax({
             type: 'GET',
             url: '${contextPath}/admin/pos/modalPosInfo.do',

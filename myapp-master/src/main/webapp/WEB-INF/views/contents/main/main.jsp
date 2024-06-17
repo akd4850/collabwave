@@ -7,9 +7,9 @@
 
 <div class="main-content">
     <div class="container-fluid">
-        <div class="row">
+        <class class="row">
 
-            <div class="col-md-4">
+            <div class="col-md-6" style="height:400px;">
                 <div class="card card-user">
                     <div class="image">
                         <img src="${contextPath}/resources/img/full-screen-image-3.jpg" alt="..."/>
@@ -32,21 +32,9 @@
                         </p-->
                     </div>
                 </div>
-            </div>
-
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="header">
-                        24 Hours Performance
-                        <p class="category">Line Chart</p>
-                    </div>
-                    <div class="content">
-                        <div id="chartPerformance" class="ct-chart "></div>
-                    </div>
-                </div>
-            </div>
+            </div>            
             
-            <div class="col-md-4">
+            <div class="col-md-6" style="height:400px;">
                 <div class="card card-user">
                     <div class="header">
                         근퇴 관리
@@ -77,7 +65,33 @@
                 </div>
             </div>
 
-            <div class="col-md-8">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="header">
+                        자유게시판
+                    </div>
+                    <div class="content table-responsive table-full-width">
+                        <table class="table table-hover table-striped">
+                            <thead>
+                                <th>순번</th>
+                                <th>제목</th>
+                                <th>등록날짜</th>
+                            </thead>
+                            <tbody>
+                                <c:forEach items="${freeNewList}" var="post" varStatus="vs">
+                                    <tr>
+                                        <td>${vs.index + 1}</td>
+                                        <td><a href="${contextPath}/community/detail?postNo=${post.postNo}">${post.postTitle}</a></td>
+                                        <td>${post.postCreateDatetime}</td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
                 <div class="card">
                     <div class="header">
                         공지사항
@@ -85,10 +99,12 @@
                     <div class="content table-responsive table-full-width">
                         <table class="table table-hover table-striped">
                             <thead>
+                                <th>순번</th>
                                 <th>제목</th>
                                 <th>등록날짜</th>
                             </thead>
                             <tbody>
+                                <!--
                                 <tr>
                                     <td>연말 정산 공지</td>
                                     <td>2023-12-26</td>
@@ -101,6 +117,14 @@
                                     <td>탕비실 이용 유의사항</td>
                                     <td>2023-10-30</td>
                                 </tr>
+                                -->
+                                <c:forEach items="${postNewList}" var="post" varStatus="vs">
+                                    <tr>
+                                        <td>${vs.index + 1}</td>
+                                        <td><a href="${contextPath}/community/detail?postNo=${post.postNo}">${post.postTitle}</a></td>
+                                        <td>${post.postCreateDatetime}</td>
+                                    </tr>
+                                </c:forEach>
                             </tbody>
                         </table>
                     </div>

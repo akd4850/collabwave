@@ -54,7 +54,8 @@
                             </a>
                         </li>
                         <li class="sidebar-sub">
-                            <a href="/attendance/workLeave.page?empCode=${sessionScope.emp.empCode}">
+
+                            <a href="/attendance/workLeave.page">
                                 <span class="sidebar-mini"><!--MP--></span>
                                 <span class="sidebar-normal">근퇴 관리</span>
                             </a>

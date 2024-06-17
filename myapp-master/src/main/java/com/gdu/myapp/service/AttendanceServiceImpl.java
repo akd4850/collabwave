@@ -3,6 +3,8 @@ package com.gdu.myapp.service;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDate;
+
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -86,20 +88,30 @@ public class AttendanceServiceImpl implements AttendanceService {
 		EmpDto empDto = (EmpDto)session.getAttribute("emp");
 		
 		String curMon = request.getParameter("curMon");
+
+		String[] strAry = null;
 		
 		if(curMon == null) {
-			String[] strAry = LocalDate.now().toString().split("-");
+			strAry = LocalDate.now().toString().split("-");
 			curMon = strAry[0] + "-" + strAry[1] + "-01";
 		}
 		
 		List<AttendanceDto> attList = attendanceMapper.getAttendanceInfo(Map.of("empCode", empDto.getEmpCode(), "curMon", curMon));
 		for(int i = 0; i < attList.size(); i++) {
-			LocalTime start = attList.get(i).getGotoworkDatetime().toLocalTime();
-			LocalTime end = attList.get(i).getOffworkDatetime().toLocalTime();
-			Duration diff = Duration.between(start, end);
-			attList.get(i).setMinutes(diff.toMinutes());
+
+			if(attList.get(i).getGotoworkDatetime() != null && attList.get(i).getOffworkDatetime() != null) {
+				LocalTime start = attList.get(i).getGotoworkDatetime().toLocalTime();
+				LocalTime end = attList.get(i).getOffworkDatetime().toLocalTime();
+				Duration diff = Duration.between(start, end);
+				attList.get(i).setMinutes(diff.toMinutes());
+			}
 		}
 		
+		/*LocalDateTime test = LocalDateTime.of(strAry[0], strAry[1], [2], 0, 0);
+		LocalDateTime.now().plusMonths(1).toString().split("T")[0];
+		LocalDateTime.now().minusMonths(1);*/
+		
 		model.addAttribute("attendanceList", attList);
+		model.addAttribute("curMon", strAry[0] + "-" + strAry[1]);
 	}
 }

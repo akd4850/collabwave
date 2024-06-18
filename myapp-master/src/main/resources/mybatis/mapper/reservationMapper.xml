@@ -43,7 +43,7 @@
 	, ASSET_SUBNAME
 	, SUBASSET
 	) VALUES (
-	  #{assetCode}
+	  ASSETMANAGE_SEQ.NEXTVAL
 	, #{assetName}
 	, #{assetType}
 	, 'N'
@@ -81,21 +81,6 @@
 <select id="reservationList"
         parameterType="Map"
         resultMap="ReservationMap">
-    SELECT RESERVATION_NUMBER, START_DATETIME, END_DATETIME, REASON, EMP_CODE, EMP_NAME, POSITION_CODE, POSITION_NAME, ASSET_CODE, ASSET_NAME
-    FROM (SELECT ROW_NUMBER() OVER(ORDER BY R.RESERVATION_NUMBER DESC) AS RN,
-                 R.RESERVATION_NUMBER, R.START_DATETIME, R.END_DATETIME, R.REASON,
-                 E.EMP_CODE, E.EMP_NAME, P.POSITION_CODE, P.POSITION_NAME,
-                 A.ASSET_CODE, A.ASSET_NAME
-            FROM ASSETRESERVATION_T R INNER JOIN EMP_T E ON R.EMP_CODE = E.EMP_CODE
-          	     INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
-          	     INNER JOIN ASSETMANAGE_T A ON R.ASSET_CODE = A.ASSET_CODE)
-   		 WHERE RN BETWEEN #{begin} AND #{end}
-</select>
-
-  
-<select id="myReservationList"
-        parameterType="Map"
-        resultMap="ReservationMap">
     SELECT RESERVATION_NUMBER, TO_CHAR(START_DATETIME, 'HH24:MI') AS START_DATETIME, TO_CHAR(END_DATETIME, 'HH24:MI') AS END_DATETIME, REASON, EMP_CODE, EMP_NAME, POSITION_CODE, POSITION_NAME, ASSET_CODE, ASSET_NAME
     FROM (SELECT ROW_NUMBER() OVER(ORDER BY R.RESERVATION_NUMBER DESC) AS RN,
                  R.RESERVATION_NUMBER, R.START_DATETIME, R.END_DATETIME, R.REASON,
@@ -104,8 +89,26 @@
             FROM ASSETRESERVATION_T R INNER JOIN EMP_T E ON R.EMP_CODE = E.EMP_CODE
           	     INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
           	     INNER JOIN ASSETMANAGE_T A ON R.ASSET_CODE = A.ASSET_CODE
-           WHERE E.EMP_CODE = #{empCode})
-   		 WHERE RN BETWEEN #{begin} AND #{end}
+           WHERE R.START_DATETIME = #{date})
+   		   WHERE RN BETWEEN #{begin} AND #{end}
+   		 	 	
+</select>
+
+  
+<select id="myReservationList"
+        parameterType="Map"
+        resultMap="ReservationMap">
+	SELECT RESERVATION_NUMBER, TO_CHAR(START_DATETIME, 'HH24:MI') AS START_DATETIME, TO_CHAR(END_DATETIME, 'HH24:MI') AS END_DATETIME, REASON, EMP_CODE, EMP_NAME, POSITION_CODE, POSITION_NAME, ASSET_CODE, ASSET_NAME
+    FROM (SELECT ROW_NUMBER() OVER(ORDER BY R.RESERVATION_NUMBER DESC) AS RN,
+                 R.RESERVATION_NUMBER, R.START_DATETIME, R.END_DATETIME, R.REASON,
+                 E.EMP_CODE, E.EMP_NAME, P.POSITION_CODE, P.POSITION_NAME,
+                 A.ASSET_CODE, A.ASSET_NAME
+            FROM ASSETRESERVATION_T R INNER JOIN EMP_T E ON R.EMP_CODE = E.EMP_CODE
+          	     INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
+          	     INNER JOIN ASSETMANAGE_T A ON R.ASSET_CODE = A.ASSET_CODE
+           WHERE R.START_DATETIME = #{date}
+           	 AND E.EMP_CODE = #{empCode})
+   	 WHERE RN BETWEEN #{begin} AND #{end}
 </select>
 
 <insert id="addReservation"
@@ -137,8 +140,7 @@
 <update id="modifyAsset" 
           parameterType="AssetDto">
     UPDATE ASSETMANAGE_T
-       SET ASSET_CODE = #{assetCode}
-         , ASSET_NAME = #{assetName}
+       SET ASSET_NAME = #{assetName}
          , ASSET_TYPE = #{assetType}
          , ASSET_SUBNAME = #{assetSubname}
          , SUBASSET = #{subasset}
@@ -157,11 +159,19 @@
 	 WHERE RESERVATION_NUMBER = #{reservationNumber}
 </delete>
 
-<select id="assetList"                                                 
+<select id="carAssetList"                                                 
           resultType="map">                                            
     SELECT ASSET_CODE, ASSET_NAME, ASSET_TYPE, ASSET_SUBNAME, SUBASSET    
-      FROM ASSETMANAGE_T                                                  
-</select>                      
+      FROM ASSETMANAGE_T
+     WHERE ASSET_TYPE = '차량'                                             
+</select> 
+
+<select id="roomAssetList"                                                 
+          resultType="map">                                            
+    SELECT ASSET_CODE, ASSET_NAME, ASSET_TYPE, ASSET_SUBNAME, SUBASSET    
+      FROM ASSETMANAGE_T
+     WHERE ASSET_TYPE = '사무실'                               
+</select>                         
 
 </mapper>                                           
                                                                           

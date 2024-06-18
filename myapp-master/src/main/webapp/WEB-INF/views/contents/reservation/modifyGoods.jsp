@@ -5,6 +5,9 @@
 <c:set var="contextPath" value="<%=request.getContextPath()%>"/>
 <c:set var="dt" value="<%=System.currentTimeMillis()%>"/>
 
+<c:set var="assetType" value="${asset.assetType}" />
+
+
     <div class="card">
         <div class="header">
             자산 수정
@@ -17,20 +20,14 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>자산타입</label>
-                        <input type="text" class="form-control" placeholder="자산타입" name="assetType" value="${asset.assetType}" readonly>
+                        <input type="text" class="form-control" name="assetType" placeholder="자산타입" value="${asset.assetType}" readonly>
                     </div>
                 </div>
 
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>자산코드</label>
-                        <input type="text" class="form-control" placeholder="자산코드" name="assetCode" value="${asset.assetCode}" readonly>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
                         <label>자산명</label>
-                        <input type="text" class="form-control" placeholder="자산명" name="assetName" value="${asset.assetName}">
+                        <input type="text" class="form-control" placeholder="자산명" name="assetName" value="${asset.assetName}" maxlength="5">
                     </div>
                 </div>
             </div>
@@ -48,7 +45,7 @@
                 </div>
             </div>
 
-            
+            <input type="hidden" name="assetCode" value="${asset.assetCode}">
             <button type="submit" class="btn btn-info btn-fill pull-right">등록</button>
             <div class="clearfix"></div>
         </form>
@@ -82,4 +79,5 @@
         // 초기 호출
         updateFieldsBasedOnAssetType(assetType);
     });
+
 </script>

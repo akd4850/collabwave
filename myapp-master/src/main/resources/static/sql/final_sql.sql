@@ -1,3 +1,5 @@
+DROP SEQUENCE ASSETMANAGE_SEQ;
+
 DROP TABLE cmmt_t;
 DROP TABLE vacation_t;
 DROP TABLE vacation_manage_t;
@@ -15,6 +17,9 @@ DROP TABLE emp_t;
 DROP TABLE dept_t;
 DROP TABLE position_t;
 DROP TABLE attach_t;
+
+
+CREATE SEQUENCE ASSETMANAGE_SEQ NOCACHE;
 
 CREATE TABLE emp_t (
 	emp_code	varchar2(5)		NOT NULL,
@@ -179,8 +184,8 @@ CREATE TABLE assetreservation_t (
 );
 
 CREATE TABLE assetmanage_t (
-	asset_code	varchar2(5)		NOT NULL,
-	asset_name	varchar2(20)		NOT NULL,
+	asset_code	NUMBER		NOT NULL,
+	asset_name	varchar2(100)		NOT NULL,
 	asset_type	varchar2(5)		NOT NULL,
 	use_yn	char(1)	DEFAULT 'N'	NULL,
 	asset_subname	varchar2(30)		NULL,
@@ -428,3 +433,6 @@ ADD CONSTRAINT FK_post_t_TO_cmmt_t_1
 FOREIGN KEY (post_no)
 REFERENCES post_t (post_no)
 ON DELETE CASCADE;
+
+ALTER TABLE ASSETMANAGE_T
+MODIFY ASSET_TYPE VARCHAR2(20 BYTE);

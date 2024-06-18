@@ -36,6 +36,7 @@
                             <img class="avatar border-gray" src="${contextPath}/resources/img/default_thumbnail.png" alt="기본 프로필" loading="lazy"/>
                         </c:otherwise>
                     </c:choose>
+                    
                               <h4 class="title">
                                 ${sessionScope.emp.empName}<br />
                                 <small>${sessionScope.emp.dept.deptName}</small><br>

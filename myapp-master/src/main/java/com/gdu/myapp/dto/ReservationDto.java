@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class ReservationDto {
-	private int reservationNumber;
-	private String empCode, assetCode, reason;
+	private int reservationNumber, assetCode;
+	private String empCode, reason;
 	private Timestamp startDatetime, endDatetime;
 	private AssetDto asset;
 	private EmpDto emp;

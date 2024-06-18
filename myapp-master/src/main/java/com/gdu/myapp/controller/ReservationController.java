@@ -55,8 +55,10 @@ public class ReservationController {
 	
 	@GetMapping("/reservationAsset.page")
 	public String reservationAsset(Model model) {
-		List<Map<String, Object>> assetList = reservationService.assetList();
-        model.addAttribute("assetList", assetList);
+		List<Map<String, Object>> carAssetList = reservationService.carAssetList();
+		List<Map<String, Object>> roomAssetList = reservationService.roomAssetList();
+        model.addAttribute("carAssetList", carAssetList);
+        model.addAttribute("roomAssetList", roomAssetList);
 		model.addAttribute("submenu", "reservationAsset.jsp");
 		return "contents/reservation/reservation";
 	}
@@ -78,7 +80,7 @@ public class ReservationController {
 	}
 	
 	  @GetMapping("/editAsset.page")
-	  public String editAsset(@RequestParam String assetCode, Model model) {
+	  public String editAsset(@RequestParam int assetCode, Model model) {
 	    model.addAttribute("asset", reservationService.getAsset(assetCode));
 	    model.addAttribute("submenu", "modifyGoods.jsp");
 		return "contents/reservation/reservation";
@@ -97,7 +99,7 @@ public class ReservationController {
 	
 	
 	@GetMapping("/removeAsset.page")
-	public String removeAsset(@RequestParam String assetCode, RedirectAttributes redirectAttributes) {
+	public String removeAsset(@RequestParam int assetCode, RedirectAttributes redirectAttributes) {
 		int removeAssetCount = reservationService.removeAsset(assetCode);
 		redirectAttributes.addFlashAttribute("removeAssetResult", removeAssetCount == 1 ? "자산이 삭제되었습니다." : "자산이 삭제되지 않았습니다.");
 		return "redirect:/reservation/management.page";

@@ -12,7 +12,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="header">
-                        근퇴 현황
+                        근태 현황
                     </div>
                     <div class="text-center">
                         <h4>

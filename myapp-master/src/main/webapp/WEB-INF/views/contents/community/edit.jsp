@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function() {
 							        <!-- sessionEmpCode와 authorEmpCode가 같거나 admin인 경우에만 삭제 버튼 표시 -->
 							        <form id="frm-delete" method="post" action="${contextPath}/community/deletePost.do">
 							            <input type="hidden" name="postNo" value="${post.postNo}">
-							            <button type="submit" id="btn-delete" class="btn btn-info btn-fill" style="margin-right: 5px;" onclick="backToList()">삭제</button>
+							            <button type="submit" id="btn-delete" class="btn btn-danger btn-fill" style="margin-right: 5px;" onclick="backToList()">삭제</button>
 							        </form>
 							    </c:when>
 							</c:choose>
@@ -206,11 +206,12 @@ const fnAddAttach = () => {
         if (resData.attachResult) {
           alert('첨부 파일이 추가되었습니다.');
           fnAttachList();
-          $('#files').val('');
-          $('#new-attach-list').html('');
+          document.getElementById('files').value = '';
+          document.getElementById('new-attach-list').innerHTML = '';
         } else {
           alert('첨부 파일이 추가되지 않았습니다.');
         }
+        $('#files').val('');
       }
     });
   });

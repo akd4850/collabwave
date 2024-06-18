@@ -6,6 +6,13 @@
 <c:set var="dt" value="<%=System.currentTimeMillis()%>"/>
 
 <link rel="stylesheet" href="${contextPath}/jstree/dist/themes/proton/style.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<style>
+.fa-xmark {
+  cursor: pointer;
+}
+</style>
 
 <jsp:include page="../../layout/header.jsp"/>
 <div class="main-content">
@@ -14,8 +21,9 @@
             <div class="col-md-3">
                 <div class="card">
                     <div class="header">
-                        조직도
-                    </div>
+                        조직도 
+						<i class="fa-solid fa-xmark" onclick="refreshPage()"></i>					
+					</div>
                     <div class="content table-responsive table-full-width">
                         <div id="jstree"></div>
                     </div>
@@ -29,7 +37,10 @@
                     <div class="content">
                         <div class="row">
                             <div class="col-md-12">
-                                <img class="avatar border-gray" src="${contextPath}/resources/img/avatar.jpg" style="width:100px;height:100px;" alt="..."/>
+                            <div>
+								<img class="avatar border-gray" id="profileImage" src="${contextPath}/resources/img/default_thumbnail.png" alt="기본 프로필" style="width: 150px; height: 150px;" />
+                            </div>
+                                <br><br>                            
                                 <div class="form-group">
                                     <label>프로필</label>
                                 </div>
@@ -119,6 +130,11 @@ window.addEventListener('DOMContentLoaded', function(){
     bIsOrganiChart = true;
 });
 
+// 페이지 새로고침 함수 정의
+function refreshPage() {
+  location.reload();
+}
+
 function getEmpDetail(empCode) {
     $.ajax({
         type: 'GET',
@@ -127,7 +143,13 @@ function getEmpDetail(empCode) {
         contentType: "application/json; charset=utf-8;",
         dataType: 'json',
         success: (resData) => {
-            console.log(resData);
+            console.log(resData);   
+            var profileFileName = resData.emp.profileFileName;
+            if (profileFileName) {
+                $('#profileImage').attr('src', fnGetContextPath() + profileFileName);
+            } else {
+                $('#profileImage').attr('src', fnGetContextPath() + '/resources/img/default_thumbnail.png');
+            }
             $('#empName').val(resData.emp.empName);
             $('#empCode').val(resData.emp.empCode);
             $('#deptName').val(resData.emp.dept.deptName);

@@ -5,6 +5,17 @@
 <c:set var="contextPath" value="<%=request.getContextPath()%>"/>
 <c:set var="dt" value="<%=System.currentTimeMillis()%>"/>
 
+<style>
+    .table th:nth-child(1),
+    .table td:nth-child(1) {
+        width: 10%;
+    }
+    .table th:nth-child(2),
+    .table td:nth-child(2) {
+        width: 60%;
+    }
+</style>
+
 <div class="main-content">
     <div class="container-fluid">
         <class class="row">
@@ -16,9 +27,15 @@
                     </div>
                     <div class="content">
                         <div class="author">
-                             <a href="#">
-                            <img class="avatar border-gray" src="${contextPath}${sessionScope.emp.profileFileName}" alt="..."/>
-
+                             <a href="/myPage/myInfo.page?empCode=${sessionScope.emp.empCode}">
+                    <c:choose>
+                        <c:when test="${not empty emp.profileFileName}">
+                            <img class="avatar border-gray" src="${contextPath}${sessionScope.emp.profileFileName}" alt="프로필 이미지" loading="lazy" style="background-size: cover;"/>
+                        </c:when>
+                        <c:otherwise>
+                            <img class="avatar border-gray" src="${contextPath}/resources/img/default_thumbnail.png" alt="기본 프로필" loading="lazy"/>
+                        </c:otherwise>
+                    </c:choose>
                               <h4 class="title">
                                 ${sessionScope.emp.empName}<br />
                                 <small>${sessionScope.emp.dept.deptName}</small><br>
@@ -26,39 +43,36 @@
                               </h4>
                             </a>
                         </div>
-                        <!--p class="description text-center"> "Lamborghini Mercy <br>
-                                            Your chick she so thirsty <br>
-                                            I'm in that two seat Lambo"
-                        </p-->
+
                     </div>
                 </div>
             </div>            
             
             <div class="col-md-6" style="height:400px;">
                 <div class="card card-user">
-                    <div class="header">
-                        근퇴 관리
+                    <div class="header" style="text-align: center;">
+                        근태 관리
                     </div>
                     <div class="contents">
                         <div>
-                            <h4 style="padding-left:10px" id="today"></h4>
+                            <h4 style="text-align: center;" id="today"></h4>
                         </div>
                         <table class="table table-hover table-striped">
-                            <tbody>
+                            <tbody >
                                 <tr>
-                                    <th>출근 시간</th>
-                                    <td id="gotowork"></td>
+                                    <th style="width: 43%; text-align: center;">출근 시간</th>
+                                    <td id="gotowork" ></td>
                                 </tr>
                                 <tr>
-                                    <th>퇴근 시간</th>
+                                    <th style="width: 43%; text-align: center;">퇴근 시간</th>
                                     <td id="offwork"></td>
                                 </tr>
                             </tbody>
                         </table>
                         <div class="text-center">
                             <hr>
-                            <input type="button" class="btn btn-info btn-fill" id="gotowork_btn" onclick="gotowork();" value="출근 하기" disabled/> 
-                            <input type="button" class="btn btn-info btn-fill" id="offwork_btn" onclick="offwork();" value="퇴근 하기" disabled/>
+                            <input type="button" class="btn btn-info btn-fill" id="gotowork_btn" onclick="gotowork();" value="출근" disabled/> &nbsp;
+                            <input type="button" class="btn btn-info btn-fill" id="offwork_btn" onclick="offwork();" value="퇴근" disabled/>
                             <br/>&nbsp;
                         </div>
                     </div>
@@ -73,16 +87,16 @@
                     <div class="content table-responsive table-full-width">
                         <table class="table table-hover table-striped">
                             <thead>
-                                <th>순번</th>
+                                <th style="text-align: center;">순번</th>
                                 <th>제목</th>
                                 <th>등록날짜</th>
                             </thead>
                             <tbody>
                                 <c:forEach items="${freeNewList}" var="post" varStatus="vs">
                                     <tr>
-                                        <td>${vs.index + 1}</td>
+                                        <td style="text-align: center;">${vs.index + 1}</td>
                                         <td><a href="${contextPath}/community/detail?postNo=${post.postNo}">${post.postTitle}</a></td>
-                                        <td>${post.postCreateDatetime}</td>
+                						<td class="postCreateDatetime">${post.postCreateDatetime}</td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
@@ -99,30 +113,16 @@
                     <div class="content table-responsive table-full-width">
                         <table class="table table-hover table-striped">
                             <thead>
-                                <th>순번</th>
+                                <th style="text-align: center;">순번</th>
                                 <th>제목</th>
                                 <th>등록날짜</th>
                             </thead>
                             <tbody>
-                                <!--
-                                <tr>
-                                    <td>연말 정산 공지</td>
-                                    <td>2023-12-26</td>
-                                </tr>
-                                <tr>
-                                    <td>프로젝트 크런치 공지</td>
-                                    <td>2023-11-20</td>
-                                </tr>
-                                <tr>
-                                    <td>탕비실 이용 유의사항</td>
-                                    <td>2023-10-30</td>
-                                </tr>
-                                -->
                                 <c:forEach items="${postNewList}" var="post" varStatus="vs">
                                     <tr>
-                                        <td>${vs.index + 1}</td>
+                                        <td style="text-align: center;">${vs.index + 1}</td>
                                         <td><a href="${contextPath}/community/detail?postNo=${post.postNo}">${post.postTitle}</a></td>
-                                        <td>${post.postCreateDatetime}</td>
+                						<td class="postCreateDatetime">${post.postCreateDatetime}</td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
@@ -205,4 +205,13 @@ function offwork() {
         }
     });
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    var dateElements = document.querySelectorAll('.postCreateDatetime');
+    dateElements.forEach(function(element) {
+        var originalDate = element.textContent.trim();
+        var formattedDate = moment(originalDate).format('YYYY-MM-DD HH:mm');
+        element.textContent = formattedDate;
+    });
+});
 </script>

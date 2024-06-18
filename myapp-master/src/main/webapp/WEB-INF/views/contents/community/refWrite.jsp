@@ -9,7 +9,12 @@
 .ck-editor__editable {
   min-height: 500px;
 }
-
+.button-container {
+    text-align: right;
+}
+.button-container .btn {
+    margin-left: 10px; 
+}
 </style>
 
 <div class="card">
@@ -64,8 +69,10 @@
                       <input type="hidden" name="empName" id="empName" value="${sessionScope.emp.empName}">
                       <input type="hidden" name="deptCode" id="deptCode" value="${emp.deptCode}">
                       <input type="hidden" name="postState" id="postState" value="1">
-                      <button type="submit" class="btn btn-info btn-fill" id="submit" onclick="confirmSubmit()">작성</button>
-                      <button onclick="history.back()" type="button" class="btn btn-info btn-fill" id="cancel">취소</button>
+                      <div class="button-container">
+	                      <button type="submit" class="btn btn-info btn-fill" id="submit" onclick="confirmSubmit()">작성</button>
+	                      <button onclick="history.back()" type="button" class="btn btn-danger btn-fill" id="cancel">취소</button>
+                      </div>
                     </td>
                 </tr>
             </tbody>
@@ -146,7 +153,6 @@ const fnAttachCheck = () => {
 
 
 // 호출
-insertCurrentDate();
 register();
 fnAttachCheck();
 

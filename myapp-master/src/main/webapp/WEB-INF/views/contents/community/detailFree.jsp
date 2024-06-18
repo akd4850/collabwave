@@ -4,6 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <c:set var="contextPath" value="<%=request.getContextPath()%>" />
 <c:set var="dt" value="<%=System.currentTimeMillis()%>" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 <script>
 //DOMContentLoaded 이벤트 핸들러 내에서 에디터 초기화
@@ -101,12 +102,17 @@ console.log(destinationUrl);
 }
 
 .comment-actions {
-    width: 150px; /* 원하는 너비 값으로 설정 */
+    width: 100px; /* 원하는 너비 값으로 설정 */
+    text-align: center;
 }
 
 #paging {
 	font-size: 18px;
 	text-align: center;
+}
+
+.custom-icon {
+    font-size: 24px;
 }
 
 </style>
@@ -121,7 +127,7 @@ console.log(destinationUrl);
 								</tr>
 								<tr>
 										<th>등록일</th>
-                		<td class="postCreateDatetime">${post.postCreateDatetime}</td>
+                						<td class="postCreateDatetime">${post.postCreateDatetime}</td>
 								</tr>
 								<tr>
 										<th>조회수</th>
@@ -151,7 +157,7 @@ console.log(destinationUrl);
 																value="FREE"> <input type="hidden"
 																id="contextPath" value="${contextPath}">
 														<button type="button" onclick="backToList()"
-																class="btn btn-info btn-fill">목록보기</button>
+																class="btn btn-secondary btn-fill">목록보기</button>
 												</div>
 										</td>
 								</tr>
@@ -253,8 +259,8 @@ function fnCommentList() {
                         if (sessionEmpCode === comment.emp.empCode) {
                             console.log("댓글 작성자 코드: " + comment.emp.empCode);
                             str += '<td class="comment-actions">';
-                            str += '<button type="button" class="btn btn-info btn-fill btn-edit-comment" data-comment-no="' + comment.cmmtNo + '">수정</button>';
-                            str += '<button type="button" class="btn btn-info btn-fill btn-remove-comment" data-comment-no="' + comment.cmmtNo + '">삭제</button>';
+                            str += '<i class="fa-solid fa-pen-to-square custom-icon btn-edit-comment" data-comment-no="' + comment.cmmtNo + '" style="cursor: pointer; margin-right: 10px;"></i>';
+                            str += '<i class="fa-solid fa-trash custom-icon btn-remove-comment" data-comment-no="' + comment.cmmtNo + '"style="cursor: pointer;"></i>';
                             str += '</td>';
                         } else {
                             str += '<td style="width: 100px;"></td>'; // 수정 및 삭제 버튼이 없는 경우에도 공간 확보

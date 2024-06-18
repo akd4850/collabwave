@@ -159,12 +159,11 @@
                         <div class="author">
                             <form>
                                 <c:choose>
-                                    <c:when test="${!emp.profileFileName}">
-                                        <img class="avatar border-gray" src="${emp.profileFileName}"  alt="프로필 이미지" loading="lazy" onclick="onClickUpload();"/>
-                                        <!-- 프로필 파일 값을 안 전달 받음 -->
+                                    <c:when test="${not empty emp.profileFileName}">
+                                        <img class="avatar border-gray" src="${contextPath}${sessionScope.emp.profileFileName}"   alt="프로필 이미지" loading="lazy" onclick="onClickUpload();"/>
                                     </c:when>
                                     <c:otherwise>
-                                        <img class="avatar border-gray" src="${contextPath}/resources/img/new_logo.png" alt="기본 프로필" loading="lazy" onclick="onClickUpload();"/>
+                                        <img class="avatar border-gray" src="${contextPath}/resources/img/default_thumbnail.png" alt="기본 프로필" loading="lazy" onclick="onClickUpload();"/>
                                     </c:otherwise>
                                 </c:choose> 
                                 <input type="hidden" name="empCode" id="hiddenEmpCode" value="${sessionScope.emp.empCode}">

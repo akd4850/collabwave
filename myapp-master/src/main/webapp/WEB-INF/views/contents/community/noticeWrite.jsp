@@ -9,7 +9,12 @@
 .ck-editor__editable {
   min-height: 500px;
 }
-
+.button-container {
+    text-align: right;
+}
+.button-container .btn {
+    margin-left: 10px; 
+}
 </style>
 
 <div class="card">
@@ -24,12 +29,12 @@
         <table class="table table-hover table-striped">
             <tbody>
                 <tr>
-                    <th style="width:100px">작성자</th>
-                    <td>${sessionScope.emp.empName}</td>
+                    <th>구분</th>
+                    <td>공지사항 글쓰기</td>
                 </tr>
                 <tr>
-                    <th>작성날짜</th>
-                    <td id="current-date"></td>
+                    <th style="width:100px">작성자</th>
+                    <td>${sessionScope.emp.empName}</td>
                 </tr>
                 <tr>
                     <th>제목</th>
@@ -64,8 +69,10 @@
                       <input type="hidden" name="empName" id="empName" value="${sessionScope.emp.empName}">
                       <input type="hidden" name="deptCode" id="deptCode" value="${deptCode}">
                       <input type="hidden" name="postState" id="postState" value="1">
-                      <button type="submit" class="btn btn-info btn-fill" id="submit">작성</button>
-                      <button onclick="history.back()" type="button" class="btn btn-info btn-fill" id="cancel">취소</button>
+                      <div class="button-container">
+	                      <button type="submit" class="btn btn-info btn-fill" id="submit" onclick="confirmSubmit()">작성</button>
+	                      <button onclick="history.back()" type="button" class="btn btn-danger btn-fill" id="cancel">취소</button>
+                      </div>
                     </td>
                 </tr>
             </tbody>
@@ -90,17 +97,6 @@ ClassicEditor
     console.error( error );
 } );
 
-// 현재 일시 구현
-function insertCurrentDate() {
-    var today = new Date();
-    var year = today.getFullYear();
-    var month = ('0' + (today.getMonth() + 1)).slice(-2); // 두 자리수로 만들기
-    var day = ('0' + today.getDate()).slice(-2); // 두 자리수로 만들기
-    var hours = ('0' + today.getHours()).slice(-2);
-    var minutes = ('0' + today.getMinutes()).slice(-2);
-    var formattedDate = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes;
-    document.getElementById('current-date').textContent = formattedDate;
-}
 
 // 제목 입력 필수
 function validateForm(evt) {
@@ -115,12 +111,20 @@ function validateForm(evt) {
 function register() {
 	
     document.getElementById('frm-post-register').addEventListener('submit', validateForm);
-    
-    // Update the value of postOpenYn checkbox based on its checked status
     document.getElementById('postOpenYn').addEventListener('change', function() {
         this.value = this.checked ? 'Y' : 'N';
     });
 }
+
+//등록 확인
+function confirmSubmit() {
+    const confirmSubmission = confirm('글을 작성하시겠습니까?');
+
+    if (confirmSubmission) {
+        document.getElementById('frm-post-register').submit();
+    }
+}
+
 
 //크기 제한 스크립트 + 첨부 목록 출력 스크립트
 const fnAttachCheck = () => {
@@ -152,8 +156,6 @@ const fnAttachCheck = () => {
 
 
 // 호출
-insertCurrentDate();
-register();
 fnAttachCheck();
 
 </script>

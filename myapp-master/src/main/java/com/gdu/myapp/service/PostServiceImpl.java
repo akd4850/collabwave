@@ -21,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -34,6 +33,7 @@ import com.gdu.myapp.dto.PostDto;
 import com.gdu.myapp.mapper.PostMapper;
 import com.gdu.myapp.utils.MyFileUtils;
 import com.gdu.myapp.utils.MyPageUtils;
+import com.gdu.myapp.utils.MySecurityUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -229,6 +229,7 @@ public class PostServiceImpl implements PostService {
   		HttpSession session = request.getSession();
   		EmpDto emp = (EmpDto) session.getAttribute("emp");      
   		String deptCode = emp.getDeptCode();
+  		System.out.println("=========deptCode" + deptCode);
 
       // 전체 게시글 수
       int total = postMapper.getPostCountDept(deptCode);
@@ -389,43 +390,27 @@ public class PostServiceImpl implements PostService {
       System.out.println("========Total comments: " + total);
 
       // 한 페이지에 표시할 댓글 개수
-      int display = 10;
+      int display = 5;
       
       // 페이징 처리
       myPageUtils.setPaging(total, display, page);
       System.out.println("========Begin: " + myPageUtils.getBegin() + ", End: " + myPageUtils.getEnd());
 
-      
-//      // 목록을 가져올 때 사용할 Map 생성
-//      Map<String, Object> paramMap = Map.of(
-//          "postNo", postNo,
-//          "begin", myPageUtils.getBegin(),
-//          "end", myPageUtils.getEnd()
-//      );
-//      
-//      System.out.println("=======Fetched comments: " + paramMap);
-//            
-//      // 결과 (목록, 페이징) 반환
-//      return Map.of(
-//          "commentList", postMapper.getCommentList(paramMap),
-//          "paging", myPageUtils.getAsyncPaging()
-//      );
-      
+
       // 목록을 가져올 때 사용할 Map 생성
-      Map<String, Object> paramMap = Map.of(
-          "postNo", postNo,
-          "begin", myPageUtils.getBegin(),
-          "end", myPageUtils.getEnd()
-      );
-            
+      Map<String, Object> paramMap = new HashMap<>();
+      paramMap.put("postNo", postNo);
+      paramMap.put("begin", myPageUtils.getBegin()); // SQL 쿼리에서 LIMIT의 시작 인덱스
+      paramMap.put("end", myPageUtils.getEnd()); // SQL 쿼리에서 LIMIT의 끝 인덱스
+
       // 결과 (목록, 페이징) 반환
       Map<String, Object> result = new HashMap<>();
       List<CommentDto> comments = postMapper.getCommentList(paramMap);
       System.out.println("=======Fetched comments: " + comments.size());
 
       result.put("commentList", comments);
-      result.put("paging", myPageUtils.getAsyncPaging());
-      
+      result.put("paging", myPageUtils.getAsyncPagingComment());
+
       return result;
   }
 
@@ -440,12 +425,11 @@ public class PostServiceImpl implements PostService {
   @Override
   public int registerComment(HttpServletRequest request) {
   	
-  	String cmmtContent = request.getParameter("cmmtContent");
+  	String cmmtContent = MySecurityUtils.getPreventXss(request.getParameter("cmmtContent"));
+  	int cmmtStatus = Integer.parseInt(request.getParameter("cmmtStatus"));
   	String empCode = request.getParameter("empCode");
   	String empName = request.getParameter("empName");
   	int postNo = Integer.parseInt(request.getParameter("postNo"));
-  	int cmmtGroup = Integer.parseInt(request.getParameter("cmmtGroup"));
-  	int cmmtStatus = Integer.parseInt(request.getParameter("cmmtStatus"));
   	
   	EmpDto emp = new EmpDto();
   	emp.setEmpCode(empCode);
@@ -455,32 +439,35 @@ public class PostServiceImpl implements PostService {
   	
   	CommentDto cmmt = CommentDto.builder()
   																.cmmtContent(cmmtContent)
-  																.cmmtGroup(cmmtGroup)
   																.cmmtStatus(cmmtStatus)
   																.emp(emp)
   																.empCode(empCode)
   																.empName(empName)
+  																.post(post)
   																.postNo(postNo)
   																.build();
   	
     return postMapper.insertComment(cmmt);
   }
   
-  // 댓글 수정
-  @Override
-  public int modifyComment(HttpServletRequest request) {
-  	
-    int cmmtNo = Integer.parseInt(request.getParameter("cmmtNo"));
-  	String cmmtContent = request.getParameter("cmmtContent");
-  	  	
-  	CommentDto cmmt = CommentDto.builder()
-        												.cmmtNo(cmmtNo)
-  															.cmmtContent(cmmtContent)
-  															.build();
-  	
-    return postMapper.modifyComment(cmmt);  	
-  }
-  
+	//댓글 수정
+	@Override
+	public int modifyComment(HttpServletRequest request) {
+		
+	   int cmmtNo = Integer.parseInt(request.getParameter("cmmtNo"));
+	   String cmmtContent = request.getParameter("cmmtContent");
+	   
+	   // 로그 추가
+	   System.out.println("Received modifyComment request: cmmtNo=" + cmmtNo + ", cmmtContent=" + cmmtContent);
+		
+	   CommentDto cmmt = CommentDto.builder()
+	                               .cmmtNo(cmmtNo)
+	                               .cmmtContent(cmmtContent)
+	                               .build();
+	
+	   return postMapper.modifyComment(cmmt);
+	}
+	
   // 댓글 삭제
   @Override
   public int removeComment(int cmmtNo) {
@@ -696,6 +683,25 @@ public class PostServiceImpl implements PostService {
         tempFile.delete();
       }
     }
+  }
+  
+  // 게시판 추가
+  @Override
+  public int registerNewBrd(HttpServletRequest request) {
+  	
+  	String brdCode = request.getParameter("brdCode");
+  	String brdName = request.getParameter("brdName");
+  	String brdUrl = request.getParameter("brdUrl");
+  	String cmmtAuthYn = request.getParameter("cmmtAuthYn");
+  	
+  	BoardDto board = BoardDto.builder()
+  													 .brdCode(brdCode)
+  													 .brdName(brdName)
+  													 .brdUrl(brdUrl)
+  													 .cmmtAuthYn(cmmtAuthYn)
+  													 .build();
+  	
+  	return postMapper.insertNewBrd(board);
   }
   
 }

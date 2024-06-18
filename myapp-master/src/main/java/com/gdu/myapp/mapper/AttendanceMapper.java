@@ -15,4 +15,5 @@ public interface AttendanceMapper {
 	AttendanceDto getAttendanceToday(String empCode);
 	int gotowork(String empCode);
 	int offwork(String empCode);
+	List<AttendanceDto> getAttendanceInfo(Map<String, Object> map);
 }

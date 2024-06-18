@@ -9,6 +9,7 @@
 .appr-table > tbody > tr > td { font-size: 15px; text-align: center; height:20px; }
 .td-img { min-width: 100px; }
 .appr-table { min-width: 120px; }
+.sign { width: 100px; height: 100px; }
 </style>
 
 <div class="card">
@@ -36,6 +37,7 @@
                         <c:if test="${edsm.edsmStatus == 'a0001'}">진행중</c:if>
                         <c:if test="${edsm.edsmStatus == 'a0002'}">반려</c:if>
                         <c:if test="${edsm.edsmStatus == 'a0003'}">완료</c:if>
+                        <c:if test="${edsm.edsmStatus == 'a0004'}">만료</c:if>
                     </td>
                 </tr>
             </tbody>
@@ -80,10 +82,10 @@ window.addEventListener('DOMContentLoaded', function(){
                 var orgHtml = td.eq(i).html();
                 td.eq(i).empty();
                 if(i == 0) {
-                    td.eq(i).append("<img src='" + fnGetContextPath() + "${edsm.emp.signFileName}'>" + orgHtml);
+                    td.eq(i).append("<img class='sign' src='" + fnGetContextPath() + "${edsm.emp.signFileName}'>" + orgHtml);
                 } else {
                     if(resData.apprList[i-1].apprStatus == 'p0003')
-                        td.eq(i).append("<img src='" + fnGetContextPath() + resData.apprList[i-1].emp.signFileName + "'>" + orgHtml);
+                        td.eq(i).append("<img class='sign' src='" + fnGetContextPath() + resData.apprList[i-1].emp.signFileName + "'>" + orgHtml);
                     else
                         td.eq(i).append(orgHtml);
                 }

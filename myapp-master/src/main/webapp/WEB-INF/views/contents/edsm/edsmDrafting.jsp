@@ -18,7 +18,6 @@
                 <th>만료일</th>
                 <th>제목</th>
                 <th>결재 양식</th>
-                <th>첨부</th>
                 <th>결재상태</th>
             </thead>
             <tbody>
@@ -41,9 +40,10 @@
                         <td>${draft.edsmStartDatetime}</td>
                         <td>${draft.edsmEndDatetime}</td>
                         <td>${draft.edsmExpireDatetime}</td>
-                        <td>${draft.edsmTitle}</td>
+                        <td>
+                            <a href="${contextPath}/edsm/edsmDetail.do?edsmNo=${draft.edsmNo}">${draft.edsmTitle}</a>
+                        </td>
                         <td>${draft.sample.sampleTitle}</td>
-                        <td></td>
                         <td>
                             <!--a0001 진행중 a0002 반려 a0003 완료-->
                             <c:if test="${draft.edsmStatus == 'a0001'}">
@@ -54,6 +54,9 @@
                             </c:if>
                             <c:if test="${draft.edsmStatus == 'a0003'}">
                                 <button class="btn btn-xs btn-fill" style="background-color:blue;border:none">완료</button>
+                            </c:if>
+                            <c:if test="${draft.edsmStatus == 'a0004'}">
+                                <button class="btn btn-xs btn-fill" style="background-color:orange;border:none">만료</button>
                             </c:if>
                         </td>
                     </tr>

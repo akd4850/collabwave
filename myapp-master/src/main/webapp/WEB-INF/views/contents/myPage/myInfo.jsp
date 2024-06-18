@@ -53,6 +53,13 @@
     display: none;
 }
 
+.col-md-4.address {
+    width: 100%
+}
+
+.form-group.zipcode {
+    width: 30%
+}
 
 
 </style>
@@ -126,8 +133,8 @@
                                         <input type="text" class="form-control" name="email" placeholder="이메일" value="${emp.email}">
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
+                                <div class="col-md-4 address">
+                                    <div class="form-group zipcode">
                                         <label>우편번호</label>
                                         <input type="text" class="form-control" name="zipCode" placeholder="우편번호" value="${emp.zipCode}">
                                     </div>
@@ -159,13 +166,14 @@
                         <div class="author">
                             <form>
                                 <c:choose>
-                                    <c:when test="${emp.profileFileName == null}">
-                                        <img class="avatar border-gray" src="${contextPath}/resources/img/new_logo.png" alt="기본 프로필" loading="lazy" onclick="onClickUpload();"/>
+                                    <c:when test="${not empty emp.profileFileName}">
+                                        <img class="avatar border-gray" src="${contextPath}${sessionScope.emp.profileFileName}"   alt="프로필 이미지" loading="lazy" onclick="onClickUpload();"/>
                                     </c:when>
                                     <c:otherwise>
-                                        <img class="avatar border-gray" src="${contextPath}${sessionScope.emp.profileFileName}"  alt="프로필 이미지" loading="lazy" onclick="onClickUpload();"/>
+                                        <img class="avatar border-gray" src="${contextPath}/resources/img/default_thumbnail.png" alt="기본 프로필" loading="lazy" onclick="onClickUpload();"/>
+
                                     </c:otherwise>
-                                </c:choose> 
+                                </c:choose>
                                 <input type="hidden" name="empCode" id="hiddenEmpCode" value="${sessionScope.emp.empCode}">
                                 <input type="file" id="files" class="upload-hidden" name="profileFileName" onchange="onFileUpload();">
                             </form>
@@ -213,7 +221,7 @@
                 <br>
 
             </form>
-        <button type="button" class="btn btn-info btn-fill" id="password_modal_close">닫기</button>
+        <button type="button" class="btn btn-danger btn-fill" id="password_modal_close">닫기</button>
     </div>
 
 </div>
@@ -224,7 +232,6 @@
 <script>
 
 /* 개인 정보 수정 */
-
 const fnModifyInfo = () => {
     $(document).on('click', '#btn_modify', (evt) => {
         $.ajax({

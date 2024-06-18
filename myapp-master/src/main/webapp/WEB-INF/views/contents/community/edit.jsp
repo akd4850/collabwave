@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 <form id="frm-post-modify"
       method="POST"
+      enctype="multipart/form-data"
       action="${contextPath}/community/modifyPost.do">
 
 <div class="card">
@@ -43,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 </tr>
                 <tr>
                     <th>작성일시</th>
-                    <td>${post.postCreateDatetime}</td>
+                		<td class="postCreateDatetime">${post.postCreateDatetime}</td>
                 </tr>
                 <tr>
                     <th>제목</th>
@@ -75,10 +76,15 @@ document.addEventListener("DOMContentLoaded", function() {
                                 <input type="hidden" id="brdCode" value="${brdCode}">
                                 <button type="submit" id="btn-modify" class="btn btn-info btn-fill" style="margin-right: 5px;">수정</button>
                             </form>
-                            <form id="frm-delete" method="post" action="${contextPath}/community/deletePost.do" onsubmit="goBackAndRefresh();">
-                                <input type="hidden" name="postNo" value="${post.postNo}">
-                                <button type="submit" id="btn-delete" class="btn btn-info btn-fill" style="margin-right: 5px;">삭제</button>
-                            </form>
+							<c:choose>
+							    <c:when test="${sessionEmpCode == authorEmpCode || sessionEmpCode == 'admin'}">
+							        <!-- sessionEmpCode와 authorEmpCode가 같거나 admin인 경우에만 삭제 버튼 표시 -->
+							        <form id="frm-delete" method="post" action="${contextPath}/community/deletePost.do">
+							            <input type="hidden" name="postNo" value="${post.postNo}">
+							            <button type="submit" id="btn-delete" class="btn btn-danger btn-fill" style="margin-right: 5px;" onclick="backToList()">삭제</button>
+							        </form>
+							    </c:when>
+							</c:choose>
                             <button type="button" id="btn-cancel" class="btn btn-info btn-fill">취소</button>
                         </div>
                     </td>
@@ -123,17 +129,12 @@ document.addEventListener("DOMContentLoaded", function() {
 <script src="${contextPath}/ckeditor5/script.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-	//자유게시판 첨부기능 숨기기
-	var brdCode = document.getElementById('brdCode');
-	console.log(typeof brdCode); // "object"
-	console.log(brdCode instanceof HTMLElement); // true
-	console.log(brdCode.tagName); // e.g., "INPUT"	console.log('========brdCode: ' + brdCode);
-	var brdCodeValue = brdCode.value;
-	console.log(brdCodeValue);
-
-	if (brdCode === 'FREE') {
-	    document.getElementByClassName('ifFree').style.display = 'none';
-	}
+    var dateElements = document.querySelectorAll('.postCreateDatetime');
+    dateElements.forEach(function(element) {
+        var originalDate = element.textContent.trim();
+        var formattedDate = moment(originalDate).format('YYYY-MM-DD HH:mm');
+        element.textContent = formattedDate;
+    });
 });
 
 // 중요공지여부수정
@@ -205,11 +206,12 @@ const fnAddAttach = () => {
         if (resData.attachResult) {
           alert('첨부 파일이 추가되었습니다.');
           fnAttachList();
-          $('#files').val('');
-          $('#new-attach-list').html('');
+          document.getElementById('files').value = '';
+          document.getElementById('new-attach-list').innerHTML = '';
         } else {
           alert('첨부 파일이 추가되지 않았습니다.');
         }
+        $('#files').val('');
       }
     });
   });
@@ -271,35 +273,19 @@ const fnAttachCheck = () => {
 }
 
 
+//목록화면으로 이동
 function backToList() {
-    var brdCode = document.getElementById('brdCode').value;
-    var destinationUrl = ''; // 목적지 URL 초기화
- 
-    switch (brdCode) { // brdCode 값에 따라 목적지 URL 설정
-        case 'NOTI':
-            destinationUrl = '${contextPath}/community/notice';
-            break;
-        case 'DEPT':
-            destinationUrl = '${contextPath}/community/dept';
-            break;
-        case 'FREE':
-            destinationUrl = '${contextPath}/community/free';
-            break;
-        case 'REFE':
-            destinationUrl = '${contextPath}/community/ref';
-            break;
-        default:
-            break;
+	
+    // 삭제 확인
+    var confirmDeletion = confirm('삭제하시겠습니까?');
+    if (!confirmDeletion) {
+        return; // 취소하면 함수 종료
     }
-
-    location.href = destinationUrl; // 목적지 URL로 이동
 }
 
 // 함수 호출
-modify();
 fnAttachList();
 fnRemoveAttach();
 fnAddAttach();
-
 
 </script>

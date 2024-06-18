@@ -6,7 +6,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -115,8 +114,7 @@ public class CommunityController {
 	    model.addAttribute("submenu", "detailFree.jsp");
 	    model.addAttribute("postNo", postNo);
 	    
-	    postService.getPost(//request, 
-	    										model, postNo);
+	    postService.getPost(model, postNo);
 	
 	    // 댓글 개수 가져오기
 	    int commentCount = postService.getCommentCount(postNo);
@@ -131,7 +129,7 @@ public class CommunityController {
 	    return "contents/community/community";
 	}
 	
-	//등록
+	// 게시글 등록
 	@PostMapping("/registerPost.do")
 	public String registerPost(MultipartHttpServletRequest multipartRequest,
 	                          @RequestParam("brdCode") String brdCode,
@@ -272,7 +270,7 @@ public class CommunityController {
 	}
 
 	// 댓글 삭제
-	@DeleteMapping(value = "/removeComment.do", produces = "application/json")
+	@PostMapping(value = "/detailFree/removeComment.do", produces = "application/json")
 	public ResponseEntity<Map<String, Object>> removeComment(@RequestParam(value="cmmtNo", required=false, defaultValue="0") int cmmtNo) {
 		return ResponseEntity.ok(Map.of("removeResult", postService.removeComment(cmmtNo) == 1 ? "댓글이 삭제되었습니다." : "댓글이 삭제되지 않았습니다."));	
 	}
@@ -309,6 +307,12 @@ public class CommunityController {
     return postService.downloadAll(request);
   }
   
-  
+  // 게시판 추가
+  @PostMapping("/registerNewBrd.do")
+  public String registerNewBrd (HttpServletRequest request, Model model, String brdUrl){
+  	postService.registerNewBrd(request);
+  	return "redirect:/community/notice";
+  }
 
+  
 }

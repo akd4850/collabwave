@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class AssetDto {
-	private String assetCode, assetName, assetType, assetSubname, subasset;
+	private int assetCode;
+	private String assetName, assetType, assetSubname, subasset;
 	private char useYn;
 }

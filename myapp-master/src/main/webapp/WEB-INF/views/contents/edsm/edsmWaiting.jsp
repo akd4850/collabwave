@@ -13,9 +13,9 @@
         <table class="table table-hover table-striped">
             <thead>
                 <th>기안일</th>
+                <th>만료일</th>
                 <th>결재 양식</th>
                 <th>제목</th>
-                <th>첨부</th>
                 <th>기안자</th>
             </thead>
             <tbody>
@@ -29,9 +29,9 @@
                 <c:forEach items="${waitList}" var="wait" varStatus="vs">
                     <tr>
                         <td>${wait.edsm.edsmStartDatetime}</td>
+                        <td>${wait.edsm.edsmExpireDatetime}</td>
                         <td>${wait.edsm.sample.sampleTitle}</td>
                         <td><a href="${contextPath}/edsm/edsmDetail.do?edsmNo=${wait.edsm.edsmNo}">${wait.edsm.edsmTitle}</a></td>
-                        <td></td>
                         <td>${wait.emp.empName}</td>
                     </tr>
                 </c:forEach>

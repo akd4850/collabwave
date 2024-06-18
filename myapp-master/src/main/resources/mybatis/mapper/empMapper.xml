@@ -34,16 +34,12 @@
 	
   <select id="getEmpByMap"
           parameterType="Map"
-          resultMap="EmpDtoMap">
-    SELECT  A.EMP_CODE, A.PASSWORD, A.EMP_NAME, A.PHONE,
-        A.MOBILE, A.EMAIL, A.ZIP_CODE, A.ADDRESS, A.PROFILE_FILE_NAME,
-        A.DETAIL_ADDRESS, A.BIRTHDAY_DATE, A.JOIN_DATE,
-        A.SIGN_FILE_NAME, A.PASSWORD_MODIFY_DATETIME, A.STATUS_CODE, A.LEAVE_DATE,
-        B.DEPT_CODE, B.DEPT_NAME, C.POSITION_CODE, C.POSITION_NAME
-  FROM  EMP_T A, DEPT_T B, POSITION_T C
- WHERE  A.EMP_CODE = #{empCode} AND PASSWORD = #{pw}
-   AND  A.DEPT_CODE = B.DEPT_CODE
-   AND  A.POSITION_CODE = C.POSITION_CODE
+          resultType="EmpDto">
+    SELECT EMP_CODE, DEPT_CODE, POSITION_CODE, PASSWORD, EMP_NAME, PHONE,
+    	   MOBILE, EMAIL, ZIP_CODE, ADDRESS, DETAIL_ADDRESS, BIRTHDAY_DATE, PROFILE_FILE_NAME,
+    	   JOIN_DATE, SIGN_FILE_NAME, PASSWORD_MODIFY_DATETIME, STATUS_CODE, LEAVE_DATE
+      FROM EMP_T
+     WHERE EMP_CODE = #{empCode} AND PASSWORD = #{pw}
   </select>
   
   <select id="getEmpCount"
@@ -56,18 +52,34 @@
   <select id="getEmpList"
   	      parameterType="Map"
   	      resultMap="EmpDtoMap">
-  	SELECT E.EMP_CODE,
-           E.EMP_NAME,
-           D.DEPT_NAME,
-           P.POSITION_NAME,
-           E.MOBILE,
-           E.EMAIL,
-           E.STATUS_CODE,
-      FROM EMP_T E
-           LEFT JOIN DEPT_T D ON E.DEPT_CODE = D.DEPT_CODE
-           INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
-     WHERE STATUS_CODE IN ('s01', 's02')
-     ORDER BY EMP_CODE ASC
+  	SELECT EMP_CODE, EMP_NAME, DEPT_NAME, POSITION_NAME, MOBILE, EMAIL, STATUS_CODE, PROFILE_FILE_NAME
+      FROM (SELECT ROW_NUMBER() OVER(ORDER BY EMP_CODE ASC) AS RN, E.EMP_CODE, E.EMP_NAME, D.DEPT_NAME, P.POSITION_NAME, E.MOBILE, E.EMAIL, E.STATUS_CODE, E.PROFILE_FILE_NAME
+              FROM EMP_T E
+                   LEFT JOIN DEPT_T D ON E.DEPT_CODE = D.DEPT_CODE
+                   INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
+             WHERE STATUS_CODE IN ('s01', 's02'))
+     WHERE RN BETWEEN #{begin} AND #{end}
+  </select>
+  
+  <select id="getSearchList"
+  	      resultType="EmpDto">
+  	SELECT EMP_CODE, EMP_NAME, DEPT_NAME, POSITION_NAME, MOBILE, EMAIL, STATUS_CODE
+      FROM(SELECT ROW_NUMBER() OVER(ORDER BY E.EMP_CODE DESC) AS RN, E.EMP_CODE, E.EMP_NAME, D.DEPT_NAME, P.POSITION_NAME, E.MOBILE, E.EMAIL, E.STATUS_CODE
+             FROM EMP_T E LEFT JOIN DEPT_T D
+               ON E.DEPT_CODE = D.DEPT_CODE
+            INNER JOIN POSITION_T P
+               ON E.POSITION_CODE = P.POSITION_CODE
+            WHERE STATUS_CODE IN ('s01', 's02')
+              AND E.EMP_NAME LIKE CONCAT(CONCAT('%', #{query}), '%'))
+    WHERE RN BETWEEN #{begin} AND #{end}
+  </select>
+  
+  <select id="getSearchCount"
+          parameterType="Map"
+          resultType="int">
+    SELECT COUNT(*)
+      FROM EMP_T        	
+	 WHERE EMP_NAME LIKE '%' || #{query} || '%'
   </select>
   
   <select id="getEmpDetail"
@@ -75,7 +87,8 @@
   		  resultMap="EmpDtoMap">
     SELECT E.EMP_CODE, E.EMP_NAME, E.PASSWORD, E.BIRTHDAY_DATE,
            E.JOIN_DATE, D.DEPT_NAME, P.POSITION_NAME, E.ZIP_CODE,
-           E.ADDRESS, E.DETAIL_ADDRESS, E.MOBILE, E.EMAIL
+           E.ADDRESS, E.DETAIL_ADDRESS, E.MOBILE, E.EMAIL, E.PROFILE_FILE_NAME
+           E.ADDRESS, E.DETAIL_ADDRESS,  E.PHONE, E.MOBILE, E.EMAIL, E.PROFILE_FILE_NAME
       FROM EMP_T E
            LEFT JOIN DEPT_T  D ON E.DEPT_CODE = D.DEPT_CODE
            INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
@@ -112,15 +125,16 @@
       )
   </insert>
   
-  <update id="updateEmployee"
-          parameterType="EmpDto">
+  <update id="updateEmp">
 	UPDATE EMP_T
 	   SET EMP_NAME = #{empName},
-	       EMP_CODE = #{empCode},
 	       POSITION_CODE = #{positionCode},
+	       POSITION_NAME = #{positionName},
+	       PHONE = #{phone},
 	       MOBILE = #{mobile},
 	       EMAIL = #{email},
 	       BIRTHDAY_DATE = #{birthdayDate},
+	       JOIN_DATE = #{joinDate},
 	       ZIP_CODE = #{zipCode},
 	       ADDRESS = #{address},
 		   DETAIL_ADDRESS = #{detailAddress}
@@ -160,7 +174,8 @@
 	 WHERE EMP_CODE= #{empCode}
   </update>
 
-  <update id="updateProfile">
+  <update id="updateProfile"
+  				parameterType="Map">
 	UPDATE EMP_T
 	   SET PROFILE_FILE_NAME = #{profileFileName}
 	 WHERE EMP_CODE = #{empCode}
@@ -169,19 +184,29 @@
   <select id="getEmpLeaveList"
   	      parameterType="Map"
   	      resultMap="EmpDtoMap">
-  	SELECT EMP_T.EMP_CODE,
-  		   EMP_T.EMP_NAME,
-       	   DEPT_T.DEPT_NAME,
-       	   POSITION_T.POSITION_NAME,
-           EMP_T.MOBILE,
-           EMP_T.STATUS_CODE,
-           EMP_T.LEAVE_DATE
-      FROM EMP_T
-           INNER JOIN DEPT_T ON EMP_T.DEPT_CODE = DEPT_T.DEPT_CODE
-           INNER JOIN POSITION_T ON EMP_T.POSITION_CODE = POSITION_T.POSITION_CODE
-    WHERE STATUS_CODE = 's03'
-    ORDER BY LEAVE_DATE DESC
+  	SELECT EMP_CODE, EMP_NAME, DEPT_NAME, POSITION_NAME, MOBILE, STATUS_CODE, JOIN_DATE, LEAVE_DATE
+      FROM (SELECT ROW_NUMBER() OVER(ORDER BY E.LEAVE_DATE DESC) AS RN, E.EMP_CODE, E.EMP_NAME, 
+                   D.DEPT_NAME, P.POSITION_NAME, E.MOBILE, E.STATUS_CODE, E.JOIN_DATE, E.LEAVE_DATE
+              FROM EMP_T E
+             INNER JOIN DEPT_T D ON E.DEPT_CODE = D.DEPT_CODE
+             INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
+             WHERE STATUS_CODE = 's03')
+     WHERE RN BETWEEN #{begin} AND #{end}
   </select>
   
-
+  <select id="getEmpLeaveCount"
+  	      resultType="int">
+    SELECT COUNT(*)
+      FROM EMP_T
+     WHERE STATUS_CODE ='s03'
+  </select>
+  
+  <update id="empDeptTransfer">
+	UPDATE EMP_T
+	   SET DEPT_CODE = #{deptCode}
+	 WHERE EMP_CODE = #{empCode}
+	   AND EMP_CODE NOT IN (SELECT DEPT_LEADER_EMP_CODE
+	                          FROM DEPT_T)	
+  </update>
+  
 </mapper>

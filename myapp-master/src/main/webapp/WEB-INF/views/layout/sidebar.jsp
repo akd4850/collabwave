@@ -9,17 +9,17 @@
     .sidebar-sub {
         padding-left: 50px;
     }
+    .collabwave {
+    	width: 250px;
+    	height: 70px;
+    }
 </style>
 
 <!--[sidebar]-->
 <div class="sidebar" data-color="blue" data-image="${contextPath}/resources/img/full-screen-image-3.jpg">
     <div class="logo">
-        <a href="#" class="simple-text logo-mini">
-            GD
-        </a>
-  
-        <a href="" class="simple-text logo-normal">
-            CollabWave
+        <a href="/main.page">
+        	<img id="collabwave" name="collabwave" class="collabwave" alt="collabwave" src="${contextPath}/resources/img/logo_remove.png">
         </a>
     </div>
   
@@ -30,16 +30,16 @@
             <div class="info">
                 <div class="photo">
                     <c:choose>
-                        <c:when test="${sessionScope.emp.profileFileName == null}">
-                            <img src="${contextPath}/resources/img/new_logo.png" alt="기본 프로필" loading="lazy"/>
+                        <c:when test="${not empty emp.profileFileName}">
+                            <img class="avatar border-gray" src="${contextPath}${sessionScope.emp.profileFileName}" alt="프로필 이미지" loading="lazy" style="background-size: cover;"/>
                         </c:when>
                         <c:otherwise>
-                            <img src="${contextPath}${sessionScope.emp.profileFileName}" alt="프로필 이미지" loading="lazy"/>
+                            <img class="avatar border-gray" src="${contextPath}/resources/img/default_thumbnail.png" alt="기본 프로필" loading="lazy"/>
                         </c:otherwise>
                     </c:choose>
                 </div>
   
-                <a data-toggle="collapse" href="#">
+                <a data-toggle="collapse" >
                     <span>
                         ${sessionScope.emp.empName}
                     </span>
@@ -54,9 +54,10 @@
                             </a>
                         </li>
                         <li class="sidebar-sub">
-                            <a href="/myPage/workLeave.page?empCode=${sessionScope.emp.empCode}">
+
+                            <a href="/attendance/workLeave.page">
                                 <span class="sidebar-mini"><!--MP--></span>
-                                <span class="sidebar-normal">근퇴 관리</span>
+                                <span class="sidebar-normal">근태 관리</span>
                             </a>
                         </li>
                     </ul>

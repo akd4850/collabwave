@@ -11,6 +11,7 @@ import com.gdu.myapp.dto.EmpDto;
 public interface EmpMapper {
   
 	int getEmpCount();
+	int getEmpLeaveCount();
 	EmpDto getEmpByMap(Map<String, Object> map);
 	List<EmpDto> getEmpList(Map<String, Object> map);
 	int registerSign(EmpDto empDto);
@@ -26,4 +27,5 @@ public interface EmpMapper {
 	List<EmpDto> getSearchList(Map<String, Object> map);
 	int getSearchCount(Map<String, Object> map);
 	int updatePassword(EmpDto emp);
+	int empDeptTransfer(EmpDto emp);
 }

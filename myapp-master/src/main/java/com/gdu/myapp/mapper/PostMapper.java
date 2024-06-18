@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.gdu.myapp.dto.AttachDto;
+import com.gdu.myapp.dto.BoardDto;
 import com.gdu.myapp.dto.CommentDto;
 import com.gdu.myapp.dto.PostDto;
 
@@ -45,5 +46,8 @@ public interface PostMapper {
   List<AttachDto> getAttachList(int postNo);
   AttachDto getAttachByNo(int attachNo);
   int deleteAttach(int attachNo);
+  
+  // 게시판 추가
+  int insertNewBrd(BoardDto board);
 
 }

@@ -1,3 +1,5 @@
+DROP SEQUENCE ASSETMANAGE_SEQ;
+
 DROP TABLE cmmt_t;
 DROP TABLE vacation_t;
 DROP TABLE vacation_manage_t;
@@ -15,6 +17,9 @@ DROP TABLE emp_t;
 DROP TABLE dept_t;
 DROP TABLE position_t;
 DROP TABLE attach_t;
+
+
+CREATE SEQUENCE ASSETMANAGE_SEQ NOCACHE;
 
 CREATE TABLE emp_t (
 	emp_code	varchar2(5)		NOT NULL,
@@ -49,10 +54,12 @@ CREATE TABLE dept_t (
 );
 
 CREATE TABLE attach_t (
-	attach_no	number		NOT NULL,
-	attach_org_name	varchar2(30)		NOT NULL,
-	attach_save_name	varchar2(30)		NOT NULL,
-	attach_datetime	date		NOT NULL
+    attach_no               number          NOT NULL,
+    attach_org_name         varchar2(50)    NOT NULL,
+    attach_save_name        varchar2(50)    NOT NULL,
+    attach_datetime         date            NOT NULL,
+    attach_upload_path      varchar2(30)    NOT NULL,
+    post_no                 number          NOT NULL
 );
 
 CREATE TABLE position_t (
@@ -134,37 +141,37 @@ CREATE TABLE scdl_t (
 );
 
 CREATE TABLE post_t (
-	post_no	 number		NOT NULL,
-	emp_code	varchar2(5)		NOT NULL,
-	brd_code	varchar2(5)		NOT NULL,
-	attach_no	number		NOT NULL,
-	post_title	varchar2(30)		NOT NULL,
-	post_content	clob		NOT NULL,
-	post_create_datetime	date		NOT NULL,
-	post_modify_datetime	date		NOT NULL,
-	post_state	number		NULL,
-	post_open_yn	char(1)	 DEFAULT  'N'  NULL,
-	post_open_datetime	date		NULL
-    post_hit  number  NULL
+    post_no                 number          NOT NULL,
+    emp_code                varchar2(5)     NOT NULL,
+    emp_name                varchar2(15)    NOT NULL,
+    brd_code                varchar2(5)     NOT NULL,
+    attach_no               number          NULL,
+    post_title              varchar2(30)    NOT NULL,
+    post_content            clob            NOT NULL,
+    post_create_datetime    date            NOT NULL,
+    post_modify_datetime    date            NOT NULL,
+    post_state              number          DEFAULT 1 NOT NULL,
+    post_open_yn            char(1)         DEFAULT 'N' NOT NULL,
+    post_open_datetime      date            DEFAULT NULL,
+    post_hit                number          DEFAULT 0 NOT NULL
 );
 
 CREATE TABLE cmmt_t (
-	cmmt_no	number		NOT NULL,
-	emp_code	varchar2(5)		NOT NULL,
-	post_no	number		NOT NULL,
-	cmmt_content	varchar2(200)		NOT NULL,
-	cmmt_group	number		NOT NULL,
-	cmmt_depth	number		NOT NULL,
-	cmmt_create_datetime	date		NOT NULL,
-	cmmt_modify_datetime	date		NOT NULL,
-	cmmt_status	varchar2(5)		NOT NULL
+    cmmt_no                 number          NOT NULL,
+    emp_code                varchar2(5)     NOT NULL,
+    emp_name                varchar2(15)    NOT NULL,
+    post_no                 number          NOT NULL,
+    cmmt_content            varchar2(200)   NOT NULL,
+    cmmt_create_datetime    date            NOT NULL,
+    cmmt_modify_datetime    date            NOT NULL,
+    cmmt_status             number          DEFAULT '1' NOT NULL
 );
 
 CREATE TABLE brd_t (
-	brd_code	varchar2(5)		NOT NULL,
-	dept_code	varchar2(5)		NOT NULL,
-	brd_name	varchar2(20)		NOT NULL,
-	cmmt_auth_yn	char(1)	DEFAULT 'N'	NULL
+    brd_code            varchar2(5)     NOT NULL,
+    brd_name            varchar2(20)    NOT NULL,
+    brd_url             varchar2(10)    NOT NULL,
+    cmmt_auth_yn        char(1)         DEFAULT 'N' NOT NULL
 );
 
 CREATE TABLE assetreservation_t (
@@ -177,8 +184,8 @@ CREATE TABLE assetreservation_t (
 );
 
 CREATE TABLE assetmanage_t (
-	asset_code	varchar2(5)		NOT NULL,
-	asset_name	varchar2(20)		NOT NULL,
+	asset_code	NUMBER		NOT NULL,
+	asset_name	varchar2(100)		NOT NULL,
 	asset_type	varchar2(5)		NOT NULL,
 	use_yn	char(1)	DEFAULT 'N'	NULL,
 	asset_subname	varchar2(30)		NULL,
@@ -416,3 +423,16 @@ ALTER TABLE assetreservation_t ADD CONSTRAINT FK_assetmanage_t_TO_assetreservati
 REFERENCES assetmanage_t (
 	asset_code
 );
+
+
+ALTER TABLE cmmt_t
+DROP CONSTRAINT FK_post_t_TO_cmmt_t_1;
+
+ALTER TABLE cmmt_t
+ADD CONSTRAINT FK_post_t_TO_cmmt_t_1
+FOREIGN KEY (post_no)
+REFERENCES post_t (post_no)
+ON DELETE CASCADE;
+
+ALTER TABLE ASSETMANAGE_T
+MODIFY ASSET_TYPE VARCHAR2(20 BYTE);

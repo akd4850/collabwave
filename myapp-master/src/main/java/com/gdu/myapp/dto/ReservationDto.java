@@ -1,6 +1,6 @@
 package com.gdu.myapp.dto;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,9 +12,10 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class ReservationDto {
-	private int reservationNumber;
-	private String empCode, assetCode, reason;
-	private Date startDatetime, endDatetime;
+	private int reservationNumber, assetCode;
+	private String empCode, reason;
+	private Timestamp startDatetime, endDatetime;
 	private AssetDto asset;
 	private EmpDto emp;
+	private String startTime, endTime;
 }

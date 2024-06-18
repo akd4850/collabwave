@@ -13,18 +13,18 @@
         <table class="table table-hover table-striped">
             <thead>
                 <th>기안일</th>
+                <th>만료일</th>
                 <th>결재 양식</th>
                 <th>제목</th>
-                <th>첨부</th>
                 <th>기안자</th>
             </thead>
             <tbody>
                 <c:forEach items="${expectList}" var="expect" varStatus="vs">
                     <tr>
                         <td>${expect.edsm.edsmStartDatetime}</td>
+                        <td>${expect.edsm.edsmExpireDatetime}</td>
                         <td>${expect.edsm.sample.sampleTitle}</td>
                         <td>${expect.edsm.edsmTitle}</td>
-                        <td></td>
                         <td>${expect.emp.empName}</td>
                     </tr>
                 </c:forEach>

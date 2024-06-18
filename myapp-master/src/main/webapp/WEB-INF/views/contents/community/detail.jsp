@@ -15,7 +15,7 @@
                 </tr>
                 <tr>
                     <th>등록일</th>
-                    <td>${post.postCreateDatetime}</td>
+                		<td class="postCreateDatetime">${post.postCreateDatetime}</td>
                 </tr>
                 <tr>
                     <th>조회수</th>
@@ -56,12 +56,13 @@
 				    <td colspan="2">
 				        <div style="display: flex; justify-content: flex-end;">
 					        <input type="hidden" id="postNo" value="${post.postNo}">
-								<c:choose>
-								    <c:when test="${sessionEmpCode == authorEmpCode}">
-								        <button onclick="editPost()" id="btn-edit" name="btn-edit" class="btn btn-info btn-fill" style="margin-right: 5px;">편집</button>
-								    </c:when>							    
-								</c:choose>
-							<input type="hidden" name="brdCode" id="brdCode" value="${post.brd.brdCode}">		
+<c:choose>
+    <c:when test="${sessionEmpCode == authorEmpCode || sessionEmpCode == 'admin'}">
+        <!-- sessionEmpCode와 authorEmpCode가 같을 때(admin이 아닌 경우) 또는 admin일 때 -->
+        <button onclick="editPost()" id="btn-edit" name="btn-edit" class="btn btn-info btn-fill" style="margin-right: 5px;">편집</button>
+    </c:when>
+</c:choose>
+							<input type="hidden" name="brdCode" id="brdCode1" value="${post.brd.brdCode}">		
 							<input type="hidden" id="contextPath" value="${contextPath}">
 							<button type="button" onclick="backToList()" class="btn btn-info btn-fill">목록보기</button>				        
 						</div>
@@ -77,6 +78,15 @@
 <script src="${contextPath}/ckeditor5/ckeditor.js"></script>
 <script src="${contextPath}/ckeditor5/script.js"></script>
 <script>
+document.addEventListener("DOMContentLoaded", function() {
+    var dateElements = document.querySelectorAll('.postCreateDatetime');
+    dateElements.forEach(function(element) {
+        var originalDate = element.textContent.trim();
+        var formattedDate = moment(originalDate).format('YYYY-MM-DD HH:mm');
+        element.textContent = formattedDate;
+    });
+});
+
 
 ClassicEditor
 .create(document.querySelector("#editor"), {
@@ -93,13 +103,15 @@ ClassicEditor
 
 // 편집 버튼 숨기기
 document.addEventListener("DOMContentLoaded", function() {
-    var sessionEmpCode = "${sessionScope.emp.empCode}"; // 세션에서 가져온 empCode
-    var authorEmpCode = "${post.emp.empCode}"; // 작성자의 empCode
+    var sessionEmpCode = "${sessionScope.emp.empCode}";
+    var authorEmpCode = "${post.emp.empCode}";
 
-    // 세션의 empCode와 작성자의 empCode를 비교하여 버튼을 숨기기
-    if (sessionEmpCode != authorEmpCode) {
+    // 작성자가 아닌 경우 편집 버튼 숨기기
+    if (sessionEmpCode !== authorEmpCode && sessionEmpCode !== 'admin') {
         var editButton = document.getElementById("btn-edit");
+        if (editButton) {
             editButton.style.display = "none";
+        }
     }
 });
 
@@ -111,26 +123,28 @@ function editPost() {
 
 //목록화면으로 이동
 function backToList() {
-    var destinationUrl = ''; // 목적지 URL 초기화
-    var brdCode = document.getElementById('brdCode').value;
-    var contextPath = document.getElementById('contextPath').value;
-    switch (brdCode) { // brdCode 값에 따라 목적지 URL 설정
-        case 'NOTI':
-            destinationUrl = contextPath + '/community/notice';
-            break;
-        case 'DEPT':
-            destinationUrl = contextPath + '/community/dept';
-            break;
-        case 'FREE':
-            destinationUrl = contextPath + '/community/free';
-            break;
-        case 'REFE':
-            destinationUrl = contextPath + '/community/ref';
-            break;
-        default:
-            break;
-    }
-    location.href = destinationUrl; // 목적지 URL로 이동
+var brdCode = document.getElementById('brdCode1').value;
+console.log("brdCode:",brdCode);
+var destinationUrl = ''; // 목적지 URL 초기화
+
+switch (brdCode) { // brdCode 값에 따라 목적지 URL 설정
+    case 'NOTI':
+        destinationUrl = '${contextPath}/community/notice';
+        break;
+    case 'DEPT':
+        destinationUrl = '${contextPath}/community/dept';
+        break;
+    case 'FREE':
+        destinationUrl = '${contextPath}/community/free';
+        break;
+    case 'REFE':
+        destinationUrl = '${contextPath}/community/ref';
+        break;
+    default:
+        return;
+}
+location.href = destinationUrl; // 목적지 URL로 이동
+console.log(destinationUrl);
 }
 
 const fnDownload = () => {

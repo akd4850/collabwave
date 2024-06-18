@@ -6,6 +6,9 @@
 <c:set var="dt" value="<%=System.currentTimeMillis()%>"/>
 
     <div class="card">
+        <div class="header">
+            자산 추가
+        </div>
         <div class="content">
         <form id="frm-addAsset"
               method="POST"
@@ -13,7 +16,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>구분</label>
+                        <label>자산타입</label>
                         <select id="asset-type" class="form-control" name="assetType">
                             <option value="">선택</option>
                             <option value="사무실">사무실</option>
@@ -21,16 +24,11 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>자산코드</label>
-                        <input type="text" class="form-control" placeholder="자산코드" name="assetCode" value="">
-                    </div>
-                </div>
+                
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>자산명</label>
-                        <input type="text" class="form-control" placeholder="자산명" name="assetName" value="">
+                        <input type="text" class="form-control" placeholder="자산명" name="assetName" value="" maxlength="5">
                     </div>
                 </div>
             </div>
@@ -61,11 +59,10 @@
     $(document).ready(function() {
         $('#asset-type').change(function() {
             var selectedValue = $(this).val();
-            $('.conditional-input').addClass('hidden');
-            if (selectedValue === 'car') {
-                $('#car-fields').removeClass('hidden');
-            } else if (selectedValue === 'room') {
+            if (selectedValue === '사무실') {
                 $('#room-fields').removeClass('hidden');
+            } else if (selectedValue === '차량') {
+                $('#room-fields').addClass('hidden');
             }
         });
     });
@@ -78,15 +75,14 @@
 
         
         // 선택된 구분에 따라 assetSubname 설정
-        if (assetType === 'car') {
+        if (assetType === '차량') {
             assetSubnameInput.placeholder = '차량 번호';
             labelElement.innerText = '차량 번호';
-        } else if (assetType === 'room') {
+        } else if (assetType === '사무실') {
             assetSubnameInput.placeholder = '위치';
             labelElement.innerText = '위치';
         }
 
     });
 
-    
 </script>

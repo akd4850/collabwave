@@ -12,9 +12,7 @@
         padding: 10px; /* 패딩 조정 */
     }
     
-  .postTitleCell {
-    padding-left: 10px; /* Adjust the spacing as needed */
-  }
+
 </style>
 
 <div class="card">
@@ -41,18 +39,21 @@
 	                <tr>
 	                    <td class="postTitleCell"><a href="/community/detailFree?postNo=${post.postNo}">${post.postTitle}</a></td>
 	                    <td>${post.emp.empName}</td>
-	                    <td>${post.postCreateDatetime}</td>
+                		<td class="postCreateDatetime">${post.postCreateDatetime}</td>
 	                    <td>${post.postHit}</td>
 	                </tr>
                 </c:forEach>
                 
+                <% String searchQuery = request.getParameter("query"); %>
 				<form action="${contextPath}/community/free/search" method="get">
 				    <tr>
 				        <td colspan="4">
 				            <div style="display: flex; justify-content: flex-end; align-items: center;">
-				                <input type="text" id="search" name="query" class="form-control search-input" placeholder="검색어를 입력해주세요" style="width: 400px; margin-right: 10px;">
+				                <input type="text" id="search" name="query" class="form-control search-input" placeholder="검색어를 입력해주세요" 
+				                value="<%= searchQuery != null ? searchQuery : "" %>" 
+				                style="width: 400px; margin-right: 10px;">
 				                <input type="hidden" name="brdCode" id="brdCode" value="FREE">
-				                <button type="submit" class="btn btn-info btn-fill" id="btn-search">검색</button>
+				                <button type="submit" class="btn btn-outline-secondary" id="btn-search">검색</button>
 				            </div>
 				        </td>
 				    </tr>
@@ -65,3 +66,15 @@
 	<div>${paging}</div>
 
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var dateElements = document.querySelectorAll('.postCreateDatetime');
+    dateElements.forEach(function(element) {
+        var originalDate = element.textContent.trim();
+        var formattedDate = moment(originalDate).format('YYYY-MM-DD HH:mm');
+        element.textContent = formattedDate;
+    });
+});
+
+</script>

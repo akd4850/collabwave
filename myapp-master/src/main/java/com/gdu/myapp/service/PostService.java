@@ -15,7 +15,6 @@ public interface PostService {
 	
 	// 게시글ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	void getPost(Model model, int postNo);
-	//void getPost(HttpServletRequest request, Model model, int postNo);
   void getNoticeList(HttpServletRequest request, Model model);
   void getFreeList(HttpServletRequest request, Model model);
   void getDeptList(HttpServletRequest request, Model model);
@@ -44,5 +43,8 @@ public interface PostService {
   ResponseEntity<Resource> downloadAll(HttpServletRequest request);
   
   void removeTempFiles();
+  
+  // 게시판 추가
+  int registerNewBrd(HttpServletRequest request);
   
 }

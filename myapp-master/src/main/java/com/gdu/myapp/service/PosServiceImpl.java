@@ -30,9 +30,7 @@ public class PosServiceImpl implements PosService {
   public void loadPosList(HttpServletRequest request, Model model) {
     
     int total = posMapper.getPosCount();
-    
     int display = 10;
-    
     Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
     int page = Integer.parseInt(opt.orElse("1"));
     
@@ -45,8 +43,45 @@ public class PosServiceImpl implements PosService {
     
     model.addAttribute("beginNo", total - (page - 1) * display);
     model.addAttribute("posList", posList);
-    model.addAttribute("paging", myPageUtils.getPaging(request.getContextPath() + "contents/admin/pos/list.do", null, display));
+    model.addAttribute("paging", myPageUtils.getPagingNewVersion(request.getContextPath() + "/admin/pos/list.do", null, display));
 
+  }
+  
+  @Override
+  public int registerPosition(HttpServletRequest request) {
+    
+    String posCode = request.getParameter("posCode");
+    String posName = request.getParameter("posName");
+    
+    PosDto pos = PosDto.builder()
+                   .posCode(posCode)
+                   .posName(posName)
+                 .build();
+    
+    int insertCount = posMapper.insertPosition(pos);
+    
+    return insertCount;
+  }
+  
+  @Override
+  public int modifyPosition(HttpServletRequest request) {
+    
+    String modifyPosCode = request.getParameter("modifyPosCode");
+    String modifyPosName = request.getParameter("modifyPosName");
+    String modifyUseYn = request.getParameter("modifyUseYn");
+    
+    PosDto pos = PosDto.builder()
+                    .posCode(modifyPosCode)
+                    .posName(modifyPosName)
+                    .useYn(modifyUseYn)
+                  .build();
+    
+    return posMapper.updatePosition(pos);
+  }
+  
+  @Override
+  public PosDto getSelectedPosInfo(String posName) {
+    return posMapper.getSelectedPositon(posName);
   }
 
 }

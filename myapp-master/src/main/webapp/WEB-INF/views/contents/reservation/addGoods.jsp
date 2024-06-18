@@ -19,21 +19,16 @@
                         <label>자산타입</label>
                         <select id="asset-type" class="form-control" name="assetType">
                             <option value="">선택</option>
-                            <option value="room">사무실</option>
-                            <option value="car">차량</option>
+                            <option value="사무실">사무실</option>
+                            <option value="차량">차량</option>
                         </select>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>자산코드</label>
-                        <input type="text" class="form-control" placeholder="자산코드" name="assetCode" value="">
-                    </div>
-                </div>
+                
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>자산명</label>
-                        <input type="text" class="form-control" placeholder="자산명" name="assetName" value="">
+                        <input type="text" class="form-control" placeholder="자산명" name="assetName" value="" maxlength="5">
                     </div>
                 </div>
             </div>
@@ -64,9 +59,9 @@
     $(document).ready(function() {
         $('#asset-type').change(function() {
             var selectedValue = $(this).val();
-            if (selectedValue === 'room') {
+            if (selectedValue === '사무실') {
                 $('#room-fields').removeClass('hidden');
-            } else if (selectedValue === 'car') {
+            } else if (selectedValue === '차량') {
                 $('#room-fields').addClass('hidden');
             }
         });
@@ -80,15 +75,14 @@
 
         
         // 선택된 구분에 따라 assetSubname 설정
-        if (assetType === 'car') {
+        if (assetType === '차량') {
             assetSubnameInput.placeholder = '차량 번호';
             labelElement.innerText = '차량 번호';
-        } else if (assetType === 'room') {
+        } else if (assetType === '사무실') {
             assetSubnameInput.placeholder = '위치';
             labelElement.innerText = '위치';
         }
 
     });
 
-    
 </script>

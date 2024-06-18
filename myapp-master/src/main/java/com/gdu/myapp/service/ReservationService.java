@@ -13,10 +13,11 @@ public interface ReservationService {
 	int addAsset(HttpServletRequest request);
 	ResponseEntity<Map<String, Object>> getAssetList(HttpServletRequest request);
 	int addReservation(HttpServletRequest requset);
-	AssetDto getAsset(String assetCode);
+	AssetDto getAsset(int assetCode);
 	int modifyAsset(HttpServletRequest request);
-	int removeAsset(String assetCode);
-	List<Map<String, Object>>assetList();
+	int removeAsset(int assetCode);
+	List<Map<String, Object>>carAssetList();
+	List<Map<String, Object>>roomAssetList();
 	ResponseEntity<Map<String, Object>> reservationList(HttpServletRequest request);
 	ResponseEntity<Map<String, Object>> myReservationList(HttpServletRequest request);
 	int removeReservation(int reservationNumber);

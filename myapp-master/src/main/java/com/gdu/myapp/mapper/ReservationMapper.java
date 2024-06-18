@@ -18,11 +18,12 @@ public interface ReservationMapper {
 	List<AssetDto> reservationList(Map<String, Object> map);
 	List<AssetDto> myReservationList(Map<String, Object> map);
 	int addReservation(ReservationDto reser);
-	AssetDto getAsset(String assetCode);
+	AssetDto getAsset(int assetCode);
 	int modifyAsset(AssetDto asset);
-	int removeAsset(String assetCode);
+	int removeAsset(int assetCode);
 	int removeReservation(int reservationNumber);
-	List<Map<String, Object>> assetList();
+	List<Map<String, Object>> carAssetList();
+	List<Map<String, Object>> roomAssetList();
 	
 
 }

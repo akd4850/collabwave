@@ -12,9 +12,7 @@
         padding: 10px; /* 패딩 조정 */
     }
     
-  .postTitleCell {
-    padding-left: 10px; /* Adjust the spacing as needed */
-  }
+
 </style>
 
 <div class="card">

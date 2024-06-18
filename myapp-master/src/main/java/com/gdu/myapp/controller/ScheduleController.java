@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 @Controller
 public class ScheduleController {
 
-    private final ScdlService scdlService;
+    private final ScdlService scdlService; 
 
     // 일정 페이지 보여주기 
     @GetMapping("/mySchedule.page")  
@@ -50,13 +50,12 @@ public class ScheduleController {
         	
             JSONObject jsonObject = new JSONObject();    
             
+            jsonObject.put("scdlNo", scdl.getScdlNo());
             jsonObject.put("title", scdl.getScdlTitle());
             jsonObject.put("start", scdl.getStartDatetime());
             jsonObject.put("end", scdl.getEndDatetime());
-            jsonObject.put("color", scdl.getScdlColor()); 
-            
-            jsonObject.put("scdlNo", scdl.getScdlNo());
             jsonObject.put("contents", scdl.getScdlContents());
+            jsonObject.put("color", scdl.getScdlColor()); 
             
             // 추가로 불러올 항목 JSON 형식으로  
             // jsonObject.put("allDay", scdl.getScdlAllday()); 

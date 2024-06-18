@@ -1,0 +1,46 @@
+diff a/myapp-master/src/main/java/com/gdu/myapp/controller/ScheduleController.java b/myapp-master/src/main/java/com/gdu/myapp/controller/ScheduleController.java	(rejected hunks)
+@@ -47,35 +47,32 @@
+         JSONArray jsonArray = new JSONArray();
+         
+         for (ScdlDto scdl : scheduleList) {
+-            JSONObject jsonObject = new JSONObject();            
+-            jsonObject.put("scdlNo", scdl.getScdlNo());
++        	
++            JSONObject jsonObject = new JSONObject();    
++            
+             jsonObject.put("title", scdl.getScdlTitle());
+             jsonObject.put("start", scdl.getStartDatetime());
+             jsonObject.put("end", scdl.getEndDatetime());
++            jsonObject.put("color", scdl.getScdlColor()); 
++            
++            jsonObject.put("scdlNo", scdl.getScdlNo());
+             jsonObject.put("contents", scdl.getScdlContents());
+             
+-            // Optional additional properties
++            // 추가로 불러올 항목 JSON 형식으로  
+             // jsonObject.put("allDay", scdl.getScdlAllday()); 
+-            // jsonObject.put("color", scdl.getScdlColor()); 
+             
+             jsonArray.put(jsonObject); 
+         }
+         
+         return ResponseEntity.ok(jsonArray.toString());
+     }
+-    // 일정 등록하기 
+-    @GetMapping("/registerSchedule.page")
+-    public String registerSchedule(Model model) { 
+-        model.addAttribute("submenu", "registerSchedule.jsp");
+-        return "contents/schedule/registerSchedule";
+-    }
+-    // 일정 등록하기 POST INSERT
++    // INSERT 일정 등록하기 
+     @PostMapping("/register.do") 
+     public String register(HttpServletRequest request, RedirectAttributes redirectAttributes) { 
+         redirectAttributes.addFlashAttribute("insertCount", scdlService.registerScheduler(request));
+         return "redirect:/schedule/mySchedule.page"; 
+     }
+-    // 일정 수정하기 UPDATE
++    // UPDATE 일정 수정하기 
+     @PostMapping("/update.do") 
+     @ResponseBody
+     public ResponseEntity<String> editSchedule(@RequestBody ScdlDto scdl) {

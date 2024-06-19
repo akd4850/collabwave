@@ -12,7 +12,8 @@
     </div>
     <div class="content table-responsive table-full-width">
 
-        <button type="button" class="btn btn-info btn-fill" data-toggle="modal" data-target="#posRegisterModal">등록</button>
+        <button type="button" class="btn btn-info btn-fill" style="margin-left:10px"
+         data-toggle="modal" data-target="#posRegisterModal">등록</button>
         
         <table class="table table-hover table-striped">
             

@@ -33,7 +33,6 @@
             <li><b>직급</b></li>
                 <ul class="list-unstyled subtab2">
                     <li><a href="/admin/pos/management.page">직급관리</a></li>
-                    <li><a href="">직급등록</a></li>
                 </ul>
             <li><b>퇴사자관리</b></li>
                 <ul class="list-unstyled subtab2">

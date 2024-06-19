@@ -44,7 +44,12 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>부서레벨</label>
-                        <input type="text" id="deptLevel" name="deptLevel" class="form-control" placeholder="부서레벨">
+                        <select type="select" class="form-control" placeholder="부서레벨" name="deptLevel">
+                            <option selected disabled>-- 부서레벨을 선택하세요 --</option>
+                            <option value="0">Level.0</option>
+                            <option value="1">Level.1</option>
+                            <option value="2">Level.2</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -95,7 +100,7 @@
                 </div>
             </div>
             
-            <div style="text-align: right">
+            <div style="margin-left:850px">
             <button type="submit" class="btn btn-info btn-fill">등록</button>
             <button type="button" class="btn btn-danger btn-fill">취소</button>
             </div>

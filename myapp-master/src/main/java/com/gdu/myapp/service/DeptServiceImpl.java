@@ -82,7 +82,7 @@ public class DeptServiceImpl implements DeptService {
 	  String deptCreatedate = request.getParameter("deptCreatedate");
 	  String useYn = request.getParameter("useYn");
 	  
-	  DeptDto abc = DeptDto.builder()
+	  DeptDto dept = DeptDto.builder()
 	                    .deptCode(deptCode)
 	                    .deptName(deptName)
 	                    .deptLeaderEmpCode(deptLeaderEmpCode)
@@ -93,7 +93,7 @@ public class DeptServiceImpl implements DeptService {
 	                    .useYn(useYn)
 	                  .build();
 	  
-	  int insertCount = deptMapper.insertDept(abc);
+	  int insertCount = deptMapper.insertDept(dept);
 	  
 	  try {
 	    

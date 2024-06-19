@@ -97,7 +97,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>직급코드</label>
-                        <input type="text" class="form-control" placeholder="직급코드" id="modal-posCode" name="modifyPosCode">
+                        <input type="text" class="form-control" placeholder="직급코드" id="modal-posCode" name="modifyPosCode" readonly>
                     </div>
                     <div class="form-group">
                         <label>직급명</label>
@@ -131,11 +131,13 @@
 
             //응답
             resData: 'json',
-            success: function(resData) {
-                $('#modal-posCode').val(resData.posCode);
-                $('#modal-posName').val(resData.posName);
-                $('#modal-useYn').val(resData.useYn);
-                console.log(resData.posName);
+            success: (resData) => {
+                console.log("resData=======>")
+                console.log(resData)
+                let json = JSON.parse(resData)
+                $('#modal-posCode').val(json.posCode);
+                $('#modal-posName').val(json.posName);
+                $('#modal-useYn').val(json.useYn);
             }
         })
     }

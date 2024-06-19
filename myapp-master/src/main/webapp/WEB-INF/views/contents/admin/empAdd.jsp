@@ -126,7 +126,7 @@
                 </div>
             </div>
             
-            <div style="text-align:right">
+            <div style="margin-left:850px">
             <button type="submit" class="btn btn-info btn-fill">등록</button>
             <button type="button" id="btn-cancel" class="btn btn-danger btn-fill">취소</button>
             </div>

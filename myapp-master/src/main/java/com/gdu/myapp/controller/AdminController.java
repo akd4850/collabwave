@@ -191,7 +191,7 @@ public class AdminController {
 	@GetMapping("/pos/modalPosInfo.do")
 	public String modalPosInfo(@RequestParam String posName, Model model) {
 	  model.addAttribute("selectedPos", posService.getSelectedPosInfo(posName));
-	  return "contents/admin/admin";
+	  return "contents/admin/modalPosInfo";
 	}
 	
 	@PostMapping("/pos/modify.do")

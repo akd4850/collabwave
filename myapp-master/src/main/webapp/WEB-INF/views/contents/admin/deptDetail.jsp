@@ -27,7 +27,7 @@
             <form id="frm-deptInfo-modify"
                   method="POST"
                   action="${contextPath}/admin/dept/modify.do">
-                <div class="row">
+                <div class="row" style="margin-left:10px">
                     <div class="col-md-3">
                         <div class="form-group">
                           <label>부서코드</label>
@@ -52,7 +52,7 @@
                     </div>
                 </div>
         
-                <div class="row">
+                <div class="row" style="margin-left:10px">
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>부서레벨</label>
@@ -87,7 +87,7 @@
                     </div>
                 </div>
         
-                <div class="row">
+                <div class="row" style="margin-left:10px">
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>생성일</label>
@@ -104,7 +104,7 @@
                         </div>
                     </div>
                 </div>
-                <div style="text-align:right">
+                <div style="margin-left:760px">
                 <button type="submit" id="btn-update" class="btn btn-info btn-fill">수정</button>
                 <button type="button" id="btn-cancel" class="btn btn-danger btn-fill">취소</button>
                 </div>
@@ -176,7 +176,7 @@
                             <tr>
                                 <th>
                                     <input class="form-check" type="radio" name="transferDeptCode" value="${dnl.deptCode}">
-                                    <label class="btn" for="flexCheck">${dnl.deptName}</label>
+                                    <label class="btn btn-dark btn-fill" for="flexCheck">${dnl.deptName}</label>
                                 </th>
                             </tr>
                         </c:forEach>

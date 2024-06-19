@@ -26,7 +26,7 @@
                     <tr>
                         <td><a href="/edsm/edsmDetailForm.do?code=${sample.sampleDotCode}">${sample.sampleDotCode}</a></td>
                         <td>${sample.sampleTitle}</td>
-                        <td>${sample.createDatetime}</td>
+                        <td class="edsmDatetime">${sample.createDatetime}</td>
                     </tr>
                 </c:forEach>
             </tbody>
@@ -34,3 +34,14 @@
         ${paging}
     </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var dateElements = document.querySelectorAll('.edsmDatetime');
+    dateElements.forEach(function(element) {
+        var originalDate = element.textContent.trim();
+        var formattedDate = moment(originalDate).format('YYYY-MM-DD');
+        element.textContent = formattedDate;
+    });
+});
+</script>

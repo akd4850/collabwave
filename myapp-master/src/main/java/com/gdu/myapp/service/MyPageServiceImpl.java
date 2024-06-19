@@ -52,6 +52,7 @@ public class MyPageServiceImpl implements MyPageService {
 			.build();					
 		
 		int result = empMapper.updateInfo(emp);
+		System.out.println(result);
 		
 		return result;
 	}

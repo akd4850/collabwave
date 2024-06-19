@@ -24,9 +24,9 @@
                 <c:forEach items="${documentList}" var="document" varStatus="vs">
                     <tr>
                         <td>${document.edsm.edsmNo}</td>
-                        <td>${document.edsm.edsmStartDatetime}</td>
-                        <td>${document.edsm.edsmEndDatetime}</td>
-                        <td>${document.edsm.edsmExpireDatetime}</td>
+                        <td class="edsmDatetime">${document.edsm.edsmStartDatetime}</td>
+                        <td class="edsmDatetime">${document.edsm.edsmEndDatetime}</td>
+                        <td class="edsmDatetime">${document.edsm.edsmExpireDatetime}</td>
                         <td>
                             <a href="${contextPath}/edsm/edsmDetail.do?edsmNo=${document.edsm.edsmNo}">${document.edsm.edsmTitle}</a>
                         </td>
@@ -53,3 +53,13 @@
         ${paging}
     </div>
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var dateElements = document.querySelectorAll('.edsmDatetime');
+    dateElements.forEach(function(element) {
+        var originalDate = element.textContent.trim();
+        var formattedDate = moment(originalDate).format('YYYY-MM-DD HH:mm');
+        element.textContent = formattedDate;
+    });
+});
+</script>

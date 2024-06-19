@@ -21,9 +21,9 @@
             <tbody>
                 <c:forEach items="${expectList}" var="expect" varStatus="vs">
                     <tr>
-                        <td>${expect.edsm.edsmStartDatetime}</td>
-                        <td>${expect.edsm.edsmExpireDatetime}</td>
-                        <td>${expect.edsm.sample.sampleTitle}</td>
+                        <td class="edsmDatetime">${expect.edsm.edsmStartDatetime}</td>
+                        <td class="edsmDatetime">${expect.edsm.edsmExpireDatetime}</td>
+                        <td class="edsmDatetime">${expect.edsm.sample.sampleTitle}</td>
                         <td>${expect.edsm.edsmTitle}</td>
                         <td>${expect.emp.empName}</td>
                     </tr>
@@ -33,3 +33,13 @@
         ${paging}
     </div>
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var dateElements = document.querySelectorAll('.edsmDatetime');
+    dateElements.forEach(function(element) {
+        var originalDate = element.textContent.trim();
+        var formattedDate = moment(originalDate).format('YYYY-MM-DD HH:mm');
+        element.textContent = formattedDate;
+    });
+});
+</script>

@@ -37,9 +37,9 @@
                 <c:forEach items="${draftList}" var="draft" varStatus="vs">
                     <tr>
                         <td>${draft.edsmNo}</td>
-                        <td>${draft.edsmStartDatetime}</td>
-                        <td>${draft.edsmEndDatetime}</td>
-                        <td>${draft.edsmExpireDatetime}</td>
+                        <td class="edsmDatetime">${draft.edsmStartDatetime}</td>
+                        <td class="edsmDatetime">${draft.edsmEndDatetime}</td>
+                        <td class="edsmDatetime">${draft.edsmExpireDatetime}</td>
                         <td>
                             <a href="${contextPath}/edsm/edsmDetail.do?edsmNo=${draft.edsmNo}">${draft.edsmTitle}</a>
                         </td>
@@ -66,3 +66,13 @@
         ${paging}
     </div>
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var dateElements = document.querySelectorAll('.edsmDatetime');
+    dateElements.forEach(function(element) {
+        var originalDate = element.textContent.trim();
+        var formattedDate = moment(originalDate).format('YYYY-MM-DD HH:mm');
+        element.textContent = formattedDate;
+    });
+});
+</script>

@@ -144,14 +144,17 @@ const cancelReservation = (reservationNumber) => {
         data: { reservationNumber: reservationNumber },
         success: (resData) => {
             alert('예약이 취소되었습니다.');
+            const dateInput = formatDate(document.getElementById('date-input-start').value);
             $('.myReservation-list').empty();
-            fnMyReservationList(date);
+            fnMyReservationList(dateInput);
         },
         error: (jqXHR) => {
             alert(jqXHR.statusText + '(' + jqXHR.status + ')');
         }
     });
 }
+
+
 
 const fnPaging = (p) => {
         page = p;

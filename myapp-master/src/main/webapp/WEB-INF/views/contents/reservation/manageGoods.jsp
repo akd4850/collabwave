@@ -29,8 +29,8 @@
             <thead>
                 <tr>
                     <th style="padding-left: 25px;">종류</th>
-                    <th>상세</th>
                     <th>이름</th>
+                    <th>상세</th>
                     <th>기자재</th>
                 </tr>
             </thead>
@@ -57,8 +57,8 @@
                 $.each(resData.assetList, (i, asset) => {
                     let str = '<tr>';
                     str += '<td style="padding-left: 25px;">' + asset.assetType + '</td>';
-                    str += '<td>' + asset.assetSubname + '</td>';
                     str += '<td>' + asset.assetName + '</td>';
+                    str += '<td>' + asset.assetSubname + '</td>';
                     str += '<td>' + (asset.subasset ? asset.subasset : '') + '</td>';
                     str += '<td class="btn-edit-remove"><div><button type="button" class="btn btn-info btn-fill edit-button" data-code="' + asset.assetCode + '">수정</button>';
                     str += '<button type="button" class="btn btn-danger btn-fill delete-button" data-code="' + asset.assetCode + '">삭제</button></td></div>';

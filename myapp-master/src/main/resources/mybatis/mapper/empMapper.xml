@@ -180,6 +180,13 @@
 	 WHERE EMP_CODE = #{empCode}
   </update>
   
+  <update id="updatePassword"
+			parameterType="EmpDto">
+		UPDATE EMP_T
+		   SET PASSWORD = #{password}
+		 WHERE EMP_CODE = #{empCode}
+	</update>
+  
   <select id="getEmpLeaveList"
   	      parameterType="Map"
   	      resultMap="EmpDtoMap">
@@ -192,6 +199,7 @@
              WHERE STATUS_CODE = 's03')
      WHERE RN BETWEEN #{begin} AND #{end}
   </select>
+  
   
   <select id="getEmpLeaveCount"
   	      resultType="int">

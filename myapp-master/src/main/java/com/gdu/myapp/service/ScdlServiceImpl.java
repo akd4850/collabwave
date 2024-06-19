@@ -10,6 +10,7 @@ import com.gdu.myapp.mapper.ScdlMapper;
 import com.gdu.myapp.utils.MySecurityUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -21,6 +22,13 @@ public class ScdlServiceImpl implements ScdlService {
     // SELECT 일정 목록 가져오기 
     @Override
     public List<ScdlDto> getScheduleList(HttpServletRequest request) {
+    	
+    	HttpSession session = request.getSession();
+  		EmpDto emp = (EmpDto) session.getAttribute("emp");
+  		String empCode = emp.getEmpCode();
+    	
+  		System.out.println("현재 Session 은 " + empCode); 
+  		
         return scdlMapper.getAllSchedules();
     }
     // INSERT 일정 등록하기 
@@ -34,9 +42,9 @@ public class ScdlServiceImpl implements ScdlService {
         String startTime = request.getParameter("startTime");
         String endDate = request.getParameter("endDate");
         String endTime = request.getParameter("endTime");
-        String scdlColor = request.getParameter("scdlColor");
         String scdlOpenYn = request.getParameter("scdlOpenYn") != null ? "Y" : "N";
         String scdlPublicYn = request.getParameter("scdlPublicYn");
+        String scdlColor = request.getParameter("scdlColor");
 
         // Handle null or empty startTime and endTime
         startTime = (startTime == null || startTime.isEmpty()) ? "" : startTime;
@@ -56,7 +64,6 @@ public class ScdlServiceImpl implements ScdlService {
 
         ScdlDto scdl = ScdlDto.builder()
                               .scdlTitle(MySecurityUtils.getPreventXss(scdlTitle))
-                              // .scdlPlace(MySecurityUtils.getPreventXss(scdlPlace))
                               .scdlContents(MySecurityUtils.getPreventXss(scdlContents))
                               .scdlOpenYn(scdlOpenYn)
                               .scdlPublicYn(scdlPublicYn)

@@ -167,6 +167,20 @@
           }
       }
   }
+  /* 시간 설정 */
+  document.addEventListener('DOMContentLoaded', function() {
+    // Set default date and asset visibility on page load
+    setDefaultDate();
+    updateAssetVisibility();
+
+    // Add event listeners to time inputs
+    const timeInputs = document.querySelectorAll('input[type="time"]');
+    timeInputs.forEach(function(input) {
+        input.addEventListener('click', function() {
+            this.showPicker(); // Ensure the time picker shows up on click
+        });
+    });
+});
 
   /* 타임스탬프 구하기 */
   function combineDateTime() {

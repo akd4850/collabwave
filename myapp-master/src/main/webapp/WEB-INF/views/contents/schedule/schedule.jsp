@@ -273,7 +273,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var startTime = document.getElementById('editStartTime').value;
         var endDate = document.getElementById('editEndDate').value;
         var endTime = document.getElementById('editEndTime').value;
-
+        
         var start = startDate + (startTime ? 'T' + startTime : ''); 
         var end = endDate + (endTime ? 'T' + endTime : ''); 
         

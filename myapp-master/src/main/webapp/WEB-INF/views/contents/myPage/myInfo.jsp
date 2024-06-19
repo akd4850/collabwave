@@ -81,6 +81,14 @@ h2{
     cursor: pointer;
 }
 
+.profileclick{
+    color: silver;
+}
+
+.signup-alert{
+    color: red;
+}
+
 </style>
 
 <div class="main-content">
@@ -204,7 +212,7 @@ h2{
                                 <input type="hidden" name="empCode" id="hiddenEmpCode" value="${sessionScope.emp.empCode}">
                                 <input type="file" id="files" class="upload-hidden" name="profileFileName" onchange="onFileUpload();">
                             </form>
-                                <h6>프로필 사진을 클릭해 변경하세요</h6>
+                               <small class="profileclick">프로필 사진을 클릭해 변경하세요</small>
                                 <h4 class="title">${emp.empName}<br/>
                                     <small>${emp.position.positionName}</small>
                                 </h4>
@@ -380,75 +388,79 @@ const onFileUpload = () => {
 
 /* 비밀번호 변경 */
 
-/* 비밀번호 검증 */
-let passwordCheck = false;
-let passwordConfirm = false;
+document.addEventListener("DOMContentLoaded", function () {
+    let passwordCheck = false;
+    let passwordConfirm = false;
 
     const fnCheckPassword = () => {
-            // 비밀번호 8~15자, 영문/숫자/특수문자 중 2개 이상 포함
-            let inpPw = document.getElementById('pw');
+        let inpPw = document.getElementById('pw');
+        let passwordResult = checkPassword(inpPw.value);
+        let msgPw = document.getElementById('msg-pw');
+        passwordCheck = passwordResult.result;
+        msgPw.innerHTML = passwordResult.msg;
+        msgPw.style.color = passwordCheck ? 'green' : 'red';
+    }
 
-            let passwordResult = checkPassword(inpPw.value);
-
-            let msgPw = document.getElementById('msg-pw');
-            passwordCheck = passwordResult.result;
-            msgPw.innerHTML = passwordResult.msg;
-        }
-    
     const checkPassword = (passwordValue) => {
-    // 비밀번호 8~15자, 영문/숫자/특수문자 중 2개 이상 포함
-    let validCount = /[A-Za-z]/.test(passwordValue)     // 영문 포함되어 있으면 true (JavaScript 에서 true 는 숫자 1 같다.)
-                   + /[0-9]/.test(passwordValue)        // 숫자 포함되어 있으면 true
-                   + /[^A-Za-z0-9]/.test(passwordValue) // 영문/숫자가 아니면 true
+        let validCount = /[A-Za-z]/.test(passwordValue)     // 영문 포함 여부
+            + /[0-9]/.test(passwordValue)        // 숫자 포함 여부
+            + /[^A-Za-z0-9]/.test(passwordValue) // 특수문자 포함 여부
 
-    let passwordLength = passwordValue.length;
-    let passwordCheck = passwordLength >= 8
-                      && passwordLength <= 15
-                      && validCount >= 2;
+        let passwordLength = passwordValue.length;
+        let passwordCheck = passwordLength >= 8
+            && passwordLength <= 15
+            && validCount >= 2;
 
-    if(passwordCheck) return { result : true, msg : '사용 가능한 비밀번호입니다.'};
-    else return { result : false, msg : '비밀번호 8~15자, 영문/숫자/특수문자 중 2개 이상 포함' };
-  }
+        if (passwordCheck) return { result: true, msg: '사용 가능한 비밀번호입니다.' };
+        else return { result: false, msg: '비밀번호 8~15자, 영문/숫자/특수문자 중 2개 이상 포함' };
+    }
 
-    /* 비밀번호 확인 동일 여부 */   
     const fnConfirmPassword = () => {
-            let inpPw = document.getElementById('pw');
-            let inpPw2 = document.getElementById('pw2');
-
-            let confirm = confirmPassword(inpPw.value, inpPw2.value);
-            passwordConfirm = confirm.result;
-
-            let msgPw = document.getElementById('msg-pw2');
-            msgPw.innerHTML = confirm.msg;
+        let inpPw = document.getElementById('pw');
+        let inpPw2 = document.getElementById('pw2');
+        let confirm = confirmPassword(inpPw.value, inpPw2.value);
+        passwordConfirm = confirm.result;
+        let msgPw2 = document.getElementById('msg-pw2');
+        msgPw2.innerHTML = confirm.msg;
     }
 
     const confirmPassword = (value1, value2) => {
-    let passwordConfirm = (value1 !== '')
-                         && (value1 === value2);
+        let passwordConfirm = (value1 !== '') && (value1 === value2);
+        if (passwordConfirm) return { result: true, msg: '' };
+        else return { result: false, msg: '비밀번호 입력을 확인하세요.' };
+    }
 
-    if(passwordConfirm) return { result : true, msg : '' };
-    else return { result : false, msg : '비밀번호 입력을 확인하세요.' };
-}
+    // 이벤트 리스너 추가
+    document.getElementById('pw').addEventListener('input', fnCheckPassword);
+    document.getElementById('pw2').addEventListener('input', fnConfirmPassword);
 
+    /* 폼 제출 이벤트 핸들러 */
+    const form = document.getElementById('frm-changepw');
+    form.addEventListener('submit', function (event) {
+        // 비밀번호 검증 및 확인 검증
+        fnCheckPassword();
+        fnConfirmPassword();
 
+        // 검증 통과 여부 확인
+        if (!passwordCheck || !passwordConfirm) {
+            event.preventDefault(); // 폼 제출 막기
+            alert("비밀번호를 다시 확인해주세요.");
+        }
+    });
 
+    /* 모달창 */
+    const modal = document.querySelector('#password_modal');
+    const modalOpen = document.querySelector('#password_modal_open');
+    const modalClose = document.querySelector('#password_modal_close');
 
+    modalOpen.addEventListener('click', function () {
+        modal.style.display = 'block';
+    });
 
-fnCheckPassword();
-fnConfirmPassword();
-
-/* 모달창 */
-
-const modal = document.querySelector('#password_modal');
-const modalOpen = document.querySelector('#password_modal_open');
-const modalClose = document.querySelector('#password_modal_close');
-
-/* 패스워드 */
-modalOpen.addEventListener('click',function(){
-    modal.style.display = 'block';
+    modalClose.addEventListener('click', function () {
+        modal.style.display = 'none';
+    });
 });
-modalClose.addEventListener('click',function(){
-    modal.style.display = 'none';
-});
+
 
 </script>

@@ -33,15 +33,36 @@
     	</association>
 	</resultMap>
 	
-  <select id="getEmpByMap"
-          parameterType="Map"
-          resultType="EmpDto">
-    SELECT EMP_CODE, DEPT_CODE, POSITION_CODE, PASSWORD, EMP_NAME, PHONE, PROFILE_FILE_NAME,
-    	   MOBILE, EMAIL, ZIP_CODE, ADDRESS, DETAIL_ADDRESS, BIRTHDAY_DATE, 
-    	   JOIN_DATE, SIGN_FILE_NAME, PASSWORD_MODIFY_DATETIME, STATUS_CODE, LEAVE_DATE
-      FROM EMP_T
-     WHERE EMP_CODE = #{empCode} AND PASSWORD = #{pw}
-  </select>
+ <select id="getEmpByMap"
+        parameterType="Map"
+        resultType="EmpDto">
+    SELECT
+        E.EMP_CODE AS EMP_CODE,
+        E.DEPT_CODE AS DEPT_CODE,
+        E.POSITION_CODE AS POSITION_CODE,
+        E.PASSWORD AS PASSWORD,
+        E.EMP_NAME AS EMP_NAME,
+        E.PHONE AS PHONE,
+        E.MOBILE AS MOBILE,
+        E.EMAIL AS EMAIL,
+        E.ZIP_CODE AS ZIP_CODE,
+        E.ADDRESS AS ADDRESS,
+        E.DETAIL_ADDRESS AS DETAIL_ADDRESS,
+        E.BIRTHDAY_DATE AS BIRTHDAY_DATE,
+        E.PROFILE_FILE_NAME AS PROFILE_FILE_NAME,
+        E.JOIN_DATE AS JOIN_DATE,
+        E.SIGN_FILE_NAME AS SIGN_FILE_NAME,
+        E.PASSWORD_MODIFY_DATETIME AS PASSWORD_MODIFY_DATETIME,
+        E.STATUS_CODE AS STATUS_CODE,
+        E.LEAVE_DATE AS LEAVE_DATE,
+        D.DEPT_NAME AS DEPT_NAME,
+        T.POSITION_NAME AS POSITION_NAME
+    FROM EMP_T E
+    JOIN DEPT_T D ON E.DEPT_CODE = D.DEPT_CODE
+    JOIN POSITION_T T ON E.POSITION_CODE = T.POSITION_CODE
+    WHERE E.EMP_CODE = #{empCode}
+      AND E.PASSWORD = #{pw}
+</select>
   
   <select id="getEmpCount"
   	      resultType="int">

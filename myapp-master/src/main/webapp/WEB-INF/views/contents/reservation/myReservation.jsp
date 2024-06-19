@@ -144,7 +144,8 @@ const cancelReservation = (reservationNumber) => {
         data: { reservationNumber: reservationNumber },
         success: (resData) => {
             alert('예약이 취소되었습니다.');
-            fnMyReservationList();
+            $('.myReservation-list').empty();
+            fnMyReservationList(date);
         },
         error: (jqXHR) => {
             alert(jqXHR.statusText + '(' + jqXHR.status + ')');

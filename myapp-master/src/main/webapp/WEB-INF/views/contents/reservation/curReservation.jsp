@@ -112,6 +112,7 @@
             },    
             dataType: 'json',
             success: (resData) => {
+                console.log(resData)
                 let paging = $('#paging');
                 $('.reservation-list').empty();
                 paging.empty();

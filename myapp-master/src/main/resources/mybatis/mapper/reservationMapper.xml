@@ -89,7 +89,7 @@
             FROM ASSETRESERVATION_T R INNER JOIN EMP_T E ON R.EMP_CODE = E.EMP_CODE
           	     INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
           	     INNER JOIN ASSETMANAGE_T A ON R.ASSET_CODE = A.ASSET_CODE
-           WHERE R.START_DATETIME = #{date})
+           WHERE to_char(R.START_DATETIME,'yyyy/mm/dd') = #{date})
    		   WHERE RN BETWEEN #{begin} AND #{end}
    		 	 	
 </select>
@@ -106,7 +106,7 @@
             FROM ASSETRESERVATION_T R INNER JOIN EMP_T E ON R.EMP_CODE = E.EMP_CODE
           	     INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
           	     INNER JOIN ASSETMANAGE_T A ON R.ASSET_CODE = A.ASSET_CODE
-           WHERE R.START_DATETIME = #{date}
+           WHERE to_char(R.START_DATETIME,'yyyy/mm/dd') = #{date}
            	 AND E.EMP_CODE = #{empCode})
    	 WHERE RN BETWEEN #{begin} AND #{end}
 </select>

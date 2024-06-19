@@ -28,8 +28,8 @@
                 </tr>-->
                 <c:forEach items="${waitList}" var="wait" varStatus="vs">
                     <tr>
-                        <td>${wait.edsm.edsmStartDatetime}</td>
-                        <td>${wait.edsm.edsmExpireDatetime}</td>
+                        <td class="edsmDatetime">${wait.edsm.edsmStartDatetime}</td>
+                        <td class="edsmDatetime">${wait.edsm.edsmExpireDatetime}</td>
                         <td>${wait.edsm.sample.sampleTitle}</td>
                         <td><a href="${contextPath}/edsm/edsmDetail.do?edsmNo=${wait.edsm.edsmNo}">${wait.edsm.edsmTitle}</a></td>
                         <td>${wait.emp.empName}</td>
@@ -40,3 +40,13 @@
         ${paging}
     </div>
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var dateElements = document.querySelectorAll('.edsmDatetime');
+    dateElements.forEach(function(element) {
+        var originalDate = element.textContent.trim();
+        var formattedDate = moment(originalDate).format('YYYY-MM-DD HH:mm');
+        element.textContent = formattedDate;
+    });
+});
+</script>

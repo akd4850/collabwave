@@ -147,12 +147,12 @@ console.log(destinationUrl);
 										<td colspan="2">
 												<div style="display: flex; justify-content: flex-end;">
 														<input type="hidden" id="postNo" value="${post.postNo}">
-<c:choose>
-    <c:when test="${sessionEmpCode == authorEmpCode || sessionEmpCode == 'admin'}">
-        <!-- sessionEmpCode와 authorEmpCode가 같을 때(admin이 아닌 경우) 또는 admin일 때 -->
-        <button onclick="editPost()" id="btn-edit" name="btn-edit" class="btn btn-info btn-fill" style="margin-right: 5px;">편집</button>
-    </c:when>
-</c:choose>
+														<c:choose>
+														    <c:when test="${sessionEmpCode == authorEmpCode || sessionEmpCode == 'admin'}">
+														        <!-- sessionEmpCode와 authorEmpCode가 같을 때(admin이 아닌 경우) 또는 admin일 때 -->
+														        <button onclick="editPost()" id="btn-edit" name="btn-edit" class="btn btn-info btn-fill" style="margin-right: 5px;">편집</button>
+														    </c:when>
+														</c:choose>
 														<input type="hidden" name="brdCode" id="brdCode1"
 																value="FREE"> <input type="hidden"
 																id="contextPath" value="${contextPath}">
@@ -263,7 +263,7 @@ function fnCommentList() {
                             str += '<i class="fa-solid fa-trash custom-icon btn-remove-comment" data-comment-no="' + comment.cmmtNo + '"style="cursor: pointer;"></i>';
                             str += '</td>';
                         } else {
-                            str += '<td style="width: 100px;"></td>'; // 수정 및 삭제 버튼이 없는 경우에도 공간 확보
+                            str += '<td style="width: 100px;"></td>'; 
                         }
                     }
                     str += '</tr>';

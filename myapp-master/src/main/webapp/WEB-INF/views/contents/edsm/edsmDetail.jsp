@@ -29,7 +29,7 @@
                 </tr>
                 <tr>
                     <th>기안일</th>
-                    <td>${edsm.edsmStartDatetime}</td>
+                    <td class="edsmDatetime">${edsm.edsmStartDatetime}</td>
                 </tr>
                 <tr>
                     <th>상태</th>
@@ -94,6 +94,15 @@ window.addEventListener('DOMContentLoaded', function(){
         error: (jqXHR) => {
             alert(jqXHR.statusText + '(' + jqXHR.status + ')');
         }
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    var dateElements = document.querySelectorAll('.edsmDatetime');
+    dateElements.forEach(function(element) {
+        var originalDate = element.textContent.trim();
+        var formattedDate = moment(originalDate).format('YYYY-MM-DD HH:mm');
+        element.textContent = formattedDate;
     });
 });
 </script>

@@ -107,9 +107,11 @@
         <label>제목:</label>
         <input type="text" id="editTitle"><br>
         <label>시작일:</label>
-        <input type="datetime-local" id="editStart"><br>
+        <input type="date" id="editStartDate">
+        <input type="time" id="editStartTime"><br>
         <label>종료일:</label>
-        <input type="datetime-local" id="editEnd"><br>
+        <input type="date" id="editEndDate">
+        <input type="time" id="editEndTime"><br>
         <label>내용:</label>
         <textarea id="editContents"></textarea><br>
         <button id="saveEditBtn">저장</button>
@@ -119,14 +121,17 @@
 <jsp:include page="../../layout/footer.jsp"/>
 
 <script>
-
 document.addEventListener('DOMContentLoaded', function() {
+	
     var calendarEl = document.getElementById('calendar');
     var eventPopup = document.getElementById('eventPopup');
     var closePopup = document.getElementById('closePopup');
     var deleteScheduleBtn = document.getElementById('deleteScheduleBtn');
+    
     var selectedEventId;
-
+    
+    var empCode = '${sessionScope.emp.empCode}'; // 로그인한 사용자의 세션, 사용자 코드 
+    
     closePopup.onclick = function() {
         eventPopup.style.display = 'none';
     }
@@ -149,49 +154,40 @@ document.addEventListener('DOMContentLoaded', function() {
             {
                 url: '${contextPath}/schedule/getScheduleList.do',
                 method: 'GET',
-                
                 failure: function() {
                     alert('일정을 가져오는데 실패했습니다.');
                 }
-                
             }
         ],
-        
         initialView: 'dayGridMonth',
-        
         headerToolbar: {
             left: 'prev next today',
             center: 'title',
             right: 'dayGridMonth timeGridWeek timeGridDay listWeek'
         },
-        
         nowIndicator: true,
         locale: 'ko',
-        
         eventClick: function(info) {
             if (!info.event.classNames.includes('no-click')) {
                 var start = moment(info.event.start);
-                var end = info.event.end ? moment(info.event.end) : null;
-
-                var startFormat = start.isValid() ? (start.format('YYYY-MM-DD HH:mm') === 'Invalid date' || start.format('HH:mm') === '00:00' ? 'YYYY년 MM월 DD일' : 'YYYY년 MM월 DD일 HH시mm분') : 'Invalid date';
-                var endFormat = end && end.isValid() ? (end.format('YYYY-MM-DD HH:mm') === 'Invalid date' || end.format('HH:mm') === '00:00' ? 'YYYY년 MM월 DD일' : 'YYYY년 MM월 DD일 HH시mm분') : 'Invalid date';
-
-                if (start.isValid() && end && end.isValid() && start.format('YYYY-MM-DD') !== end.format('YYYY-MM-DD')) {
-                    end.subtract(1, 'days');
-                }
+                var end = info.event.end ? moment(info.event.end) : start; // Ensure end date is valid
                 
+                var startDateText = start.format('YYYY-MM-DD');
+                var startTimeText = start.format('HH:mm') !== '00:00' ? start.format('HH:mm') : '';
+                
+                var endDateText = end.format('YYYY-MM-DD');
+                var endTimeText = end.format('HH:mm') !== '00:00' ? end.format('HH:mm') : '';
+
                 document.getElementById('popupScdlNo').innerText = info.event.extendedProps.scdlNo;
                 document.getElementById('popupTitle').innerText = info.event.title;
-                document.getElementById('popupStart').innerText = '일정시작 : ' + (start.isValid() ? start.format(startFormat) : 'Invalid date');
-                document.getElementById('popupEnd').innerText = '일정종료 : ' + (end && end.isValid() ? end.format(endFormat) : 'Invalid date');
+                document.getElementById('popupStart').innerText = '일정시작 : ' + startDateText + (startTimeText ? ' ' + startTimeText : '');
+                document.getElementById('popupEnd').innerText = '일정종료 : ' + endDateText + (endTimeText ? ' ' + endTimeText : '');
                 document.getElementById('popupContents').innerText = '내용 : ' + info.event.extendedProps.contents;
 
                 selectedEventId = info.event.extendedProps.scdlNo;
-                console.log("Selected Event ID: " + selectedEventId); // 디버그용 로그
                 eventPopup.style.display = 'block';
             }
         },
-        
         eventDidMount: function(info) {
             if (info.event.source.googleCalendarId) {
                 info.el.classList.add('no-click');
@@ -204,7 +200,6 @@ document.addEventListener('DOMContentLoaded', function() {
     deleteScheduleBtn.onclick = function() {
         if (confirm("일정을 삭제하겠습니까?")) {
             var scdlNo = encodeURIComponent(selectedEventId);
-            console.log("Deleting Schedule ID: " + scdlNo); // 디버그용 로그
 
             fetch('${contextPath}/schedule/delete.do', {
                 method: 'POST',
@@ -243,27 +238,45 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('editScdlNo').value = selectedEventId;
         document.getElementById('editTitle').value = document.getElementById('popupTitle').innerText;
         
-        // Format the date properly before assigning to input elements
         var startText = document.getElementById('popupStart').innerText.replace('일정시작 : ', '');
         var endText = document.getElementById('popupEnd').innerText.replace('일정종료 : ', '');
         
-        var startDate = moment(startText, 'YYYY년 MM월 DD일 HH시mm분').toDate();
-        var endDate = moment(endText, 'YYYY년 MM월 DD일 HH시mm분').toDate();
+        var startDateTime = moment(startText, 'YYYY-MM-DD HH:mm');
+        var endDateTime = moment(endText, 'YYYY-MM-DD HH:mm');
 
-        document.getElementById('editStart').value = startDate.toISOString().slice(0, -1);
-        document.getElementById('editEnd').value = endDate.toISOString().slice(0, -1);
-        
+        if (startDateTime.isValid()) {
+            document.getElementById('editStartDate').value = startDateTime.format('YYYY-MM-DD');
+            document.getElementById('editStartTime').value = startDateTime.format('HH:mm');
+        } else {
+            document.getElementById('editStartDate').value = moment(startText, 'YYYY-MM-DD').format('YYYY-MM-DD');
+            document.getElementById('editStartTime').value = '';
+        }
+
+        if (endDateTime.isValid()) {
+            document.getElementById('editEndDate').value = endDateTime.format('YYYY-MM-DD');
+            document.getElementById('editEndTime').value = endDateTime.format('HH:mm');
+        } else {
+            document.getElementById('editEndDate').value = moment(endText, 'YYYY-MM-DD').format('YYYY-MM-DD');
+            document.getElementById('editEndTime').value = '';
+        }
+
         document.getElementById('editContents').value = document.getElementById('popupContents').innerText.replace('내용 : ', '');
         
         editPopup.style.display = 'block';
     }
 
-    saveEditBtn.onclick = function() {
-    	
+    saveEditBtn.onclick = function() { // 수정 후 저장 버튼 클릭 시 
         var scdlNo = document.getElementById('editScdlNo').value;
         var title = document.getElementById('editTitle').value;
-        var start = document.getElementById('editStart').value;
-        var end = document.getElementById('editEnd').value;
+        
+        var startDate = document.getElementById('editStartDate').value;
+        var startTime = document.getElementById('editStartTime').value;
+        var endDate = document.getElementById('editEndDate').value;
+        var endTime = document.getElementById('editEndTime').value;
+        
+        var start = startDate + (startTime ? 'T' + startTime : ''); 
+        var end = endDate + (endTime ? 'T' + endTime : ''); 
+        
         var contents = document.getElementById('editContents').value;
 
         fetch('${contextPath}/schedule/update.do', {
@@ -272,31 +285,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-            
-            	scdlNo: scdlNo,
-            	
-              scdlTitle: title,
-              
-              startDatetime: start,
-              
-              endDatetime: end,
-              
-              scdlContents: contents
-            
+                scdlNo: scdlNo,
+                scdlTitle: title,
+                startDatetime: start,
+                endDatetime: end,
+                scdlContents: contents
             })
         })
-        
         .then(response => response.text())
-        
         .then(data => {
-        	
             if (data === 'success') {
                 alert('일정이 수정되었습니다.');
                 calendar.refetchEvents();
                 editPopup.style.display = 'none';
                 eventPopup.style.display = 'none';
             } else {
-            		console.log(scdlNo);
                 alert('일정 수정에 실패했습니다.');
             }
         })
@@ -306,6 +309,4 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
-
-
 </script>

@@ -5,6 +5,15 @@
 <c:set var="contextPath" value="<%=request.getContextPath()%>"/>
 <c:set var="dt" value="<%=System.currentTimeMillis()%>"/>
 
+<style>
+.btn-edit-remove{
+	width: 180px;
+}
+.btn.btn-info.btn-fill.edit-button{
+	margin-right: 10px;
+}
+</style>
+
 <div class="card">
     <div class="header">
         자산 관리
@@ -15,15 +24,14 @@
                 style="margin-left:10px"
                 onclick="location.href='/reservation/addGoods.page'"
                 value="자산 추가">
-        <table class="table table-hover table-striped">
+                <br>
+        <table class="table table-hover table-striped" style="margin-top: 10px;">
             <thead>
                 <tr>
-                    <th>타입</th>
+                    <th style="padding-left: 25px;">타입</th>
                     <th>상세</th>
                     <th>이름</th>
                     <th>보조</th>
-                    <th>수정</th>
-                    <th>삭제</th>
                 </tr>
             </thead>
             <tbody class="asset-list">
@@ -48,12 +56,12 @@
                 $('.asset-list').empty();
                 $.each(resData.assetList, (i, asset) => {
                     let str = '<tr>';
-                    str += '<td>' + asset.assetType + '</td>';
+                    str += '<td style="padding-left: 25px;">' + asset.assetType + '</td>';
                     str += '<td>' + asset.assetSubname + '</td>';
                     str += '<td>' + asset.assetName + '</td>';
                     str += '<td>' + (asset.subasset ? asset.subasset : '') + '</td>';
-                    str += '<td><button type="button" class="btn btn-info btn-fill edit-button" data-code="' + asset.assetCode + '">수정</button></td>';
-                    str += '<td><button type="button" class="btn btn-danger btn-fill delete-button" data-code="' + asset.assetCode + '">삭제</button></td>';
+                    str += '<td class="btn-edit-remove"><div><button type="button" class="btn btn-info btn-fill edit-button" data-code="' + asset.assetCode + '">수정</button>';
+                    str += '<button type="button" class="btn btn-danger btn-fill delete-button" data-code="' + asset.assetCode + '">삭제</button></td></div>';
                     str += '</tr>';
                     $('.asset-list').append(str);
                 });

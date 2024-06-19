@@ -6,11 +6,17 @@
 <c:set var="dt" value="<%=System.currentTimeMillis()%>"/>
 
 <style>
-    .search-input {
-        width: 140%; /* 원하는 너비로 조정 */
-        font-size: 16px; /* 글꼴 크기 조정 */
-        padding: 10px; /* 패딩 조정 */
-    }
+.search-input {
+    width: 140%; /* 원하는 너비로 조정 */
+    font-size: 16px; /* 글꼴 크기 조정 */
+    padding: 10px; /* 패딩 조정 */
+}
+.post-title-column {
+  	width: 60%; /* 원하는 너비로 설정 */
+}
+.postCreateDatetime {
+	width: 15%
+}
 </style>
 
 <div class="card">
@@ -39,7 +45,7 @@
 			            <td id="postOpenYnContainer_${vs.index}">
 			                <span id="postOpenYn_${vs.index}">${post.postOpenYn}</span>
 			            </td>
-			            <td><a href="/community/detail?postNo=${post.postNo}">${post.postTitle}</a></td>
+			            <td class="post-title-column"><a href="/community/detail?postNo=${post.postNo}">${post.postTitle}</a></td>
 			            <td>${post.emp.empName}</td>
                 		<td class="postCreateDatetime">${post.postCreateDatetime}</td>
 			            <td>${post.postHit}</td>
@@ -92,7 +98,9 @@ document.addEventListener('DOMContentLoaded', function() {
             spanElement.textContent = '중요';
             spanElement.style.color = 'red'; // Set text color to red
         } else {
-            container.removeChild(spanElement); // Remove the span element if 'Y' is not present
+            if (spanElement) {
+                spanElement.style.display = 'none'; // Hide the span element if 'Y' is not present
+            }
         }
     }
 });

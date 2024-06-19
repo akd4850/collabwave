@@ -39,8 +39,8 @@
                     
                               <h4 class="title">
                                 ${sessionScope.emp.empName}<br />
-                                <small>${sessionScope.emp.dept.deptName}</small><br>
-                                 <small>${sessionScope.emp.position.positionName}</small>
+                                <small>${sessionScope.emp.deptName}</small><br>
+                                 <small>${sessionScope.emp.positionName}</small>
                               </h4>
                             </a>
                         </div>

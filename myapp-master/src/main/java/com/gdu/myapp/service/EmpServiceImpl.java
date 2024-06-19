@@ -170,25 +170,31 @@ public class EmpServiceImpl implements EmpService {
     String empCode = request.getParameter("empCode");
     String empName = MySecurityUtils.getPreventXss(request.getParameter("empName"));
     String password = MySecurityUtils.getSha256(request.getParameter("password"));
+    String deptCode = request.getParameter("deptCode");
+    String positionCode = request.getParameter("positionCode");
+    String phone = request.getParameter("phone");
     String mobile = request.getParameter("mobile");
     String email = request.getParameter("email");
     String zipCode = request.getParameter("zipCode");
     String address = request.getParameter("address");
     String detailAddress = request.getParameter("detailAddress");
-    String positionCode = request.getParameter("positionCode");
     String birthdayDate = request.getParameter("birthdayDate");
+    String joinDate = request.getParameter("joinDate");
     
     EmpDto emp = EmpDto.builder()
                     .empCode(empCode)
                     .empName(empName)
                     .password(password)
+                    .deptCode(deptCode)
+                    .positionCode(positionCode)
+                    .phone(phone)
                     .mobile(mobile)
                     .email(email)
                     .zipCode(Integer.parseInt(zipCode))
                     .address(address)
                     .detailAddress(detailAddress)
-                    .positionCode(positionCode)
                     .birthdayDate(LocalDate.parse(birthdayDate))
+                    .joinDate(LocalDate.parse(joinDate))
                   .build();
     
     int insertCount = empMapper.insertEmployee(emp);
@@ -249,38 +255,61 @@ public class EmpServiceImpl implements EmpService {
   }
   
   @Override
-  public int modifyEmp(HttpServletRequest request) {
+  public void modifyEmp(HttpServletRequest request, HttpServletResponse response) {
     
     String modifyEmpCode = request.getParameter("modifyEmpCode");
-    String modifyEmpName = request.getParameter("modifyEmpName");
-    String modifyJoinDate = request.getParameter("modifyJoinDate");
+    String modifyEmpName = MySecurityUtils.getPreventXss(request.getParameter("modifyEmpName"));
     String modifyBirthdayDate = request.getParameter("modifyBirthdayDate");
+    String modifyDeptCode = request.getParameter("modifyDeptCode");
+    String modifyPositionCode = request.getParameter("modifyPositionCode");
+    String modifyJoinDate = request.getParameter("modifyJoinDate");
     String modifyPhone = request.getParameter("modifyPhone");
     String modifyMobile = request.getParameter("modifyMobile");
     String modifyEmail = request.getParameter("modifyEmail");
     String modifyZipCode = request.getParameter("modifyZipCode");
     String modifyAddress = request.getParameter("modifyAddress");
     String modifyDetailAddress = request.getParameter("modifyDetailAddress");
-    String modifyPositionCode = request.getParameter("modifyPositionCode");
 
     
     EmpDto emp = EmpDto.builder()
                     .empCode(modifyEmpCode)
                     .empName(modifyEmpName)
-                    .joinDate(LocalDate.parse(modifyJoinDate))
                     .birthdayDate(LocalDate.parse(modifyBirthdayDate))
+                    .deptCode(modifyDeptCode)
+                    .positionCode(modifyPositionCode)
+                    .joinDate(LocalDate.parse(modifyJoinDate))
                     .phone(modifyPhone)
                     .mobile(modifyMobile)
                     .email(modifyEmail)
                     .zipCode(Integer.parseInt(modifyZipCode))
                     .address(modifyAddress)
                     .detailAddress(modifyDetailAddress)
-                    .positionCode(modifyPositionCode)
                   .build();
     
     int modifyResult = empMapper.updateEmp(emp);
     
-    return modifyResult;
+    try {
+      
+      response.setContentType("text/html; charset=UTF-8");
+      PrintWriter out = response.getWriter();
+      out.println("<script>");
+      
+      if(modifyResult == 1) {
+        
+        out.println("alert('직원정보가 수정되었습니다.');");
+        out.println("location.href='" + request.getContextPath() + "/admin/emp/management.page';");
+        
+      } else {
+        out.println("alert('직원정보 수정이 실패했습니다.');");
+        out.println("history.back();");
+      }
+      out.println("</script>");
+      out.flush();
+      out.close();
+      
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     
   }
 
@@ -290,7 +319,7 @@ public class EmpServiceImpl implements EmpService {
 	}
 	
 	@Override
-	public int empDeptTransfer(HttpServletRequest request) {
+	public void empDeptTransfer(HttpServletRequest request, HttpServletResponse response) {
 	  
 	  String empCode = request.getParameter("transferEmpCode");
 	  String deptCode = request.getParameter("transferDeptCode");
@@ -300,8 +329,50 @@ public class EmpServiceImpl implements EmpService {
 	                  .deptCode(deptCode)
 	                .build();
 	  
-	  return empMapper.empDeptTransfer(emp);
+	  int transferResult = empMapper.empDeptTransfer(emp);
+	 
+	  try {
+      
+      response.setContentType("text/html; charset=UTF-8");
+      PrintWriter out = response.getWriter();
+      out.println("<script>");
+      
+      if(transferResult == 1) {
+        
+        out.println("alert('부서이동이 성공하였습니다.');");
+        out.println("location.href='" + request.getContextPath() + "/admin/dept/management.page';");
+        
+      } else {
+        out.println("alert('부서장은 부서이동이 불가능합니다. 부서장 위임 후 이동 가능합니다.');");
+        out.println("history.back();");
+      }
+      out.println("</script>");
+      out.flush();
+      out.close();
+      
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+	
+	@Override
+	public List<EmpDto> getWaitingPerson() {
+	  List<EmpDto> waitingPersons = empMapper.getWaitingPerson();
+	  return waitingPersons;
 	}
+	
+	@Override
+	public int deptLeaderAppointmnet(HttpServletRequest request) {
+	  String deptLeaderEmpCode = request.getParameter("deptLeaderEmpCode");
+	  String deptCode = request.getParameter("deptCode");
 	  
+	  EmpDto emp = EmpDto.builder()
+                    .empCode(deptLeaderEmpCode)
+                    .deptCode(deptCode)
+                  .build();
+	  
+	  return empMapper.deptLeaderAppointmnet(emp);
+	  
+	}
 	
 }

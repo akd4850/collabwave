@@ -26,4 +26,6 @@ public interface EmpMapper {
 	List<EmpDto> getSearchList(Map<String, Object> map);
 	int getSearchCount(Map<String, Object> map);
 	int empDeptTransfer(EmpDto emp);
+	List<EmpDto> getWaitingPerson();
+	int deptLeaderAppointmnet(EmpDto emp);
 }

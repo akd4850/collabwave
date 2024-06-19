@@ -83,5 +83,12 @@ public class PosServiceImpl implements PosService {
   public PosDto getSelectedPosInfo(String posName) {
     return posMapper.getSelectedPositon(posName);
   }
+  
+  @Override
+  public List<PosDto> getPosListForSelectbox() {
+    List<PosDto> posSelectList = posMapper.getPosListForSelectbox();
+    return posSelectList;
+  }
+  
 
 }

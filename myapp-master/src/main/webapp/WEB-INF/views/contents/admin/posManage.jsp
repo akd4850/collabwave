@@ -12,7 +12,11 @@
     </div>
     <div class="content table-responsive table-full-width">
 
-        <button type="button" class="btn btn-info btn-fill" data-toggle="modal" data-target="#posRegisterModal">등록</button>
+        <button type="button"
+                class="btn btn-info btn-fill"
+                style="margin-left:10px"
+                data-toggle="modal"
+                data-target="#posRegisterModal">등록</button>
         
         <table class="table table-hover table-striped">
             
@@ -28,7 +32,7 @@
                 <c:forEach items="${posList}" var="pos" varStatus="vs">
                     <tr>
                         <td>${pos.posCode}</td>
-                        <td><a data-toggle="modal" id="btn-modify-modal" href="#posModifyModal" onclick="fnSetModalValue();">${pos.posName}</td>
+                        <td><a data-toggle="modal" id="btn-modify-modal" onclick="fnSetModalValue();" href="#posModifyModal">${pos.posName}</td>
                         <td>${pos.users}</td>
                         <td>${pos.useYn}</td>
                     </tr>
@@ -93,7 +97,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>직급코드</label>
-                        <input type="text" class="form-control" placeholder="직급코드" id="modal-posCode" name="modifyPosCode" value="${selectedPos.posCode}">
+                        <input type="text" class="form-control" placeholder="직급코드" id="modal-posCode" name="modifyPosCode">
                     </div>
                     <div class="form-group">
                         <label>직급명</label>
@@ -118,19 +122,22 @@
 <script>
 
     const fnSetModalValue = () => {
-        var selectedPosName = event.target.textContent;
-        console.log(selectedPosName);
-        console.log('${selectedPos.posCode}');
+        var selectedPosName = event.target.textContent.trim();
         $.ajax({
+            //요청
             type: 'GET',
             url: '${contextPath}/admin/pos/modalPosInfo.do',
-            data: 'posName=' + selectedPosName,
-            success: (resData) => {
-                $("#modal-posCode").val("${selectedPos.posName}");
-                $('#modal-posName').val("${selectedPos.posName}");
-                $('#modal-useYn').val("${selectedPos.useYn}");
+            data: {posName: selectedPosName},
+
+            //응답
+            resData: 'json',
+            success: function(resData) {
+                $('#modal-posCode').val(resData.posCode);
+                $('#modal-posName').val(resData.posName);
+                $('#modal-useYn').val(resData.useYn);
+                console.log(resData.posName);
             }
         })
-    };
+    }
 
 </script>

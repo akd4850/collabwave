@@ -1,5 +1,7 @@
 package com.gdu.myapp.service;
 
+import java.util.List;
+
 import org.springframework.ui.Model;
 
 import com.gdu.myapp.dto.PosDto;
@@ -12,5 +14,6 @@ public interface PosService {
   int registerPosition(HttpServletRequest request);
   int modifyPosition(HttpServletRequest request);
   PosDto getSelectedPosInfo(String posName);
+  List<PosDto> getPosListForSelectbox();
   
 }

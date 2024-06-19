@@ -35,6 +35,8 @@ public class AdminController {
 		return "contents/admin/admin";
 	}
 	
+//-------------------------  직원 -------------------------
+	
 	@GetMapping("/emp/management.page")
   public String empManage(HttpServletRequest request, Model model) {
     model.addAttribute("submenu", "empManage.jsp");
@@ -59,6 +61,7 @@ public class AdminController {
 	@GetMapping("/emp/add.page")
 	public String addEmployee(Model model) {
 		model.addAttribute("submenu", "empAdd.jsp");
+		model.addAttribute("posSelectList", posService.getPosListForSelectbox());
 		return "contents/admin/admin";
 	}
 	
@@ -70,6 +73,8 @@ public class AdminController {
 	@GetMapping("/emp/detail.do")
 	public String detailEmp(@RequestParam String empCode, Model model) {
 	  model.addAttribute("emp", empService.getEmpDetail(empCode));
+	  model.addAttribute("deptSelectList", deptService.getDeptListForSelectbox());
+	  model.addAttribute("posSelectList", posService.getPosListForSelectbox());
 	  model.addAttribute("submenu", "empDetail.jsp");
 	  return "contents/admin/admin";
 	}
@@ -89,12 +94,8 @@ public class AdminController {
   }
 	
 	@PostMapping("/emp/modify.do")
-	public String modify(HttpServletRequest request, RedirectAttributes redirectAttributes) {
-	  empService.modifyEmp(request);
-	  int modifyCount = empService.modifyEmp(request);
-	  redirectAttributes.addAttribute("empCode", request.getParameter("empCode"))
-	                    .addFlashAttribute("modifyResult", modifyCount == 1 ? "직원정보가 수정되었습니다." : "직원정보 수정이 실패했습니다.");
-	  return "redirect:/admin/emp/management.page";
+	public void modifyEmp(HttpServletRequest request, HttpServletResponse response) {
+	  empService.modifyEmp(request, response);
 	}
 	
 	@PostMapping("/emp/delete.do")
@@ -104,10 +105,11 @@ public class AdminController {
 	}
 	
 	@PostMapping("/emp/deptTransfer.do")
-	public String deptTransfer(HttpServletRequest request) {
-	  empService.empDeptTransfer(request);
-	  return "redirect:/admin/dept/management.page";
+	public void deptTransfer(HttpServletRequest request, HttpServletResponse response) {
+	  empService.empDeptTransfer(request, response);
 	}
+	
+	// -------------------------  부서 -------------------------
 	
 	@GetMapping("/dept/management.page")
 	public String deptManage(HttpServletRequest request, Model model) {
@@ -128,6 +130,7 @@ public class AdminController {
     model.addAttribute("dept", deptService.getDeptDetail(deptCode));
     model.addAttribute("memberList", deptService.getDeptMember(deptCode));
     model.addAttribute("deptNameList", deptService.getDeptListForTransfer(deptCode));
+    model.addAttribute("deptSelectList", deptService.getDeptListForSelectbox());
     model.addAttribute("submenu", "deptDetail.jsp");
     return "contents/admin/admin";
 	}
@@ -135,21 +138,23 @@ public class AdminController {
 	@GetMapping("/dept/add.page")
 	public String addDept(Model model) {
 	  model.addAttribute("submenu", "deptAdd.jsp");
+	  model.addAttribute("deptSelectList", deptService.getDeptListForSelectbox());
+	  model.addAttribute("waitingPersons", empService.getWaitingPerson());
 	  return "contents/admin/admin";
 	}
 	
 	@PostMapping("/dept/add.do")
   public void registerDept(HttpServletRequest request, HttpServletResponse response) {
     deptService.registerDept(request, response);
+    empService.deptLeaderAppointmnet(request);
   }
 	
 	@PostMapping("/dept/modify.do")
-	public String modifyDeptInfo(@RequestParam String deptCode, HttpServletRequest request) {
-	  deptService.modifyDeptInfo(request);
-	  return "redirect:/admin/dept/detail.do?deptCode=" + deptCode;
+	public void modifyDeptInfo( HttpServletRequest request, HttpServletResponse response) {
+	  deptService.modifyDeptInfo(request, response);
 	}
 	
-	@PostMapping("/dept/appointLeader.do")
+	@PostMapping("/dept/appointLeader.do") 
 	public String modifyDeptLeader(HttpServletRequest request) {
 	  deptService.modifyDeptLeader(request);
 	  return "redirect:/admin/dept/management.page";
@@ -160,6 +165,8 @@ public class AdminController {
 
 	  return empService.getEmpDetailAjax(empCode);
 	}
+	
+	//-------------------------  직급 -------------------------
 	
 	@GetMapping("/pos/management.page")
 	public String posManage(HttpServletRequest request, Model model) {

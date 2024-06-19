@@ -62,5 +62,12 @@
 	 WHERE POSITION_CODE = #{posCode}
   </update>
   
+  <select id="getPosListForSelectbox"
+          resultMap="PosDtoMap">
+	SELECT POSITION_CODE, POSITION_NAME
+	  FROM POSITION_T
+	 ORDER BY POSITION_CODE
+  </select>
+  
 	
 </mapper>

@@ -14,4 +14,5 @@ public interface PosMapper {
 	int insertPosition(PosDto pos);
 	int updatePosition(PosDto pos);
 	PosDto getSelectedPositon(String posName);
+	List<PosDto> getPosListForSelectbox();
 }

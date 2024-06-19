@@ -22,7 +22,9 @@
         <ul class="list-unstyled subtab">
             <li><a href="/reservation/curReservation.page"><b>예약 현황</b></a></li>
             <li><a href="/reservation/myReservation.page?empCode=${sessionScope.emp.empCode}"><b>내 예약 현황</b></a></li>
+            <c:if test="${sessionScope.emp.deptCode == 'd1100'}">
                 <li><a href="/reservation/management.page"><b>자산 관리</b></a></li>
+            </c:if>   
         </ul>
     </div>
 </div>

@@ -20,5 +20,6 @@ public interface DeptService {
 	List<EmpDto> getDeptMember(String deptCode);
 	void modifyDeptLeader(HttpServletRequest request);
 	List<DeptDto> getDeptListForTransfer(String deptCode);
-	int modifyDeptInfo(HttpServletRequest request);
+	void modifyDeptInfo(HttpServletRequest request, HttpServletResponse response);
+	List<DeptDto> getDeptListForSelectbox();
 }

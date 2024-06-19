@@ -101,14 +101,16 @@
                     <i class="pe-7s-note2"></i>
                     <p>커뮤니티</p>
                 </a>
-            </li>            
+            </li>
 
+            <c:if test="${sessionScope.emp.deptCode == 'd1100'}">
             <li>
-                <a href="/admin/adminMain.page">
+                <a href="/admin/emp/management.page">
                     <i class="pe-7s-network"></i>
                     <p>조직관리</p>
                 </a>
             </li>
+            </c:if>
 
             <li>
                 <a href="/edsm/organizationChart.page">

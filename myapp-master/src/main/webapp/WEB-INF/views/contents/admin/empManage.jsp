@@ -21,7 +21,6 @@
             </td>
 
                 <div class="search-group">
-                    
                     <form method="GET"
                           action= "${contextPath}/admin/emp/search.do">
                         
@@ -29,7 +28,6 @@
                         <td><button type="submit" class="btn btn-info btn-fill">검색</button></td>
                         </tr>
                     </form>
-
                 </div>
             </tr>
             </table>
@@ -44,6 +42,7 @@
                     <th>직급</th>
                     <th>연락처</th>
                     <th>이메일</th>
+                    <th>입사일자</th>
                 </tr>
             </thead>
             <tbody>
@@ -55,6 +54,7 @@
                         <td>${emp.position.positionName}</td>
                         <td>${emp.mobile}</td>
                         <td>${emp.email}</td>
+                        <td>${emp.joinDate}</td>
                     </tr>
                 </c:forEach>
             </tbody>

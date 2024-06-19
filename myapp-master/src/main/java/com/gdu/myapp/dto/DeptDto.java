@@ -12,9 +12,8 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class DeptDto {
-	private String deptCode, deptName, deptLeaderEmpCode, deptLocation, deptUpstairCode, empCode;
+	private String deptCode, deptName, deptLeaderEmpCode, deptLocation, deptUpstairCode, empCode, useYn;
 	private int deptLevel;
 	private LocalDate deptCreatedate;
-	private char useYn;
 	private EmpDto emp;
 }

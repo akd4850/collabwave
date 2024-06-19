@@ -75,20 +75,22 @@ public class DeptServiceImpl implements DeptService {
 	  
 	  String deptCode = request.getParameter("deptCode");
 	  String deptName = MySecurityUtils.getPreventXss(request.getParameter("deptName"));
-	  String deptUpstairCode = request.getParameter("deptUpstairCode");
-	  String deptLocation = request.getParameter("deptLocation");
-	  String deptCreateDate = request.getParameter("deptCreateDate");
 	  String deptLeaderEmpCode = request.getParameter("deptLeaderEmpCode");
 	  String deptLevel = request.getParameter("deptLevel");
+	  String deptUpstairCode = request.getParameter("deptUpstairCode");
+	  String deptLocation = request.getParameter("deptLocation");
+	  String deptCreatedate = request.getParameter("deptCreatedate");
+	  String useYn = request.getParameter("useYn");
 	  
 	  DeptDto dept = DeptDto.builder()
 	                    .deptCode(deptCode)
 	                    .deptName(deptName)
-	                    .deptUpstairCode(deptUpstairCode)
-	                    .deptLocation(deptLocation)
-	                    .deptCreatedate(LocalDate.parse(deptCreateDate))
 	                    .deptLeaderEmpCode(deptLeaderEmpCode)
 	                    .deptLevel(Integer.parseInt(deptLevel))
+	                    .deptUpstairCode(deptUpstairCode)
+	                    .deptLocation(deptLocation)
+	                    .deptCreatedate(LocalDate.parse(deptCreatedate))
+	                    .useYn(useYn)
 	                  .build();
 	  
 	  int insertCount = deptMapper.insertDept(dept);
@@ -102,7 +104,7 @@ public class DeptServiceImpl implements DeptService {
 	    // 등록 성공
 	    if(insertCount == 1) {
 	      
-	      out.println("alert('부서가 등록되었습니다.');");
+	      out.println("alert('새로운 부서가 등록되었습니다.');");
 	      out.println("location.href='" + request.getContextPath() + "/admin/dept/management.page';");
 	      
 	      // 등록 실패
@@ -150,27 +152,58 @@ public class DeptServiceImpl implements DeptService {
 	}
 	
 	@Override
-	public int modifyDeptInfo(HttpServletRequest request) {
+	public void modifyDeptInfo(HttpServletRequest request, HttpServletResponse response) {
 	  
 	  String deptCode = request.getParameter("deptCode");
 	  String deptName = request.getParameter("deptName");
+    String deptLeaderEmpCode = request.getParameter("deptLeaderEmpCode");
 	  int deptLevel = Integer.parseInt(request.getParameter("deptLevel"));
-	  String deptLocation = request.getParameter("deptLocation");
-	  char useYn = (request.getParameter("useYn").equals("Y")) ? 'Y' : 'N';
 	  String deptUpstairCode = request.getParameter("deptUpstairCode");
+	  String deptLocation = request.getParameter("deptLocation");
+	  String deptCreatedate = request.getParameter("deptCreatedate");
+	  String useYn = request.getParameter("useYn");
 	  
 	  DeptDto dept = DeptDto.builder()
 	                    .deptCode(deptCode)
 	                    .deptName(deptName)
+	                    .deptLeaderEmpCode(deptLeaderEmpCode)
 	                    .deptLevel(deptLevel)
-	                    .deptLocation(deptLocation)
-	                    .useYn(useYn)
 	                    .deptUpstairCode(deptUpstairCode)
+	                    .deptLocation(deptLocation)
+	                    .deptCreatedate(LocalDate.parse(deptCreatedate))
+	                    .useYn(useYn)
 	                  .build();
 	  
-	  int modifyCount = deptMapper.updateDeptInfo(dept);
+	  int modifyResult = deptMapper.updateDeptInfo(dept);
 	  
-	  return modifyCount;
+	  try {
+      
+      response.setContentType("text/html; charset=UTF-8");
+      PrintWriter out = response.getWriter();
+      out.println("<script>");
+      
+      // 등록 성공
+      if(modifyResult == 1) {
+        out.println("alert('부서정보가 수정되었습니다.');");
+        out.println("location.href='" + request.getContextPath() + "/admin/dept/management.page';");
+        
+        // 등록 실패
+      } else {
+        out.println("alert('부서정보 수정이 실패했습니다.');");
+      }
+      out.println("</script>");
+      out.flush();
+      out.close();
+      
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+	}
+	
+	@Override
+	public List<DeptDto> getDeptListForSelectbox() {
+	  List<DeptDto> deptSelectList = deptMapper.getDeptListForSelectbox();
+	  return deptSelectList;
 	}
 	
 }

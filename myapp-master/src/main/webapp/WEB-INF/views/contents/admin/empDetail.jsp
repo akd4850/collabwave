@@ -28,40 +28,19 @@
             </div>
             
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label>사번</label>
                         <input type="text" class="form-control" name="modifyEmpCode" placeholder="사번" value="${emp.empCode}" readonly>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label>이름</label>
                         <input type="text" class="form-control" name="modifyEmpName" placeholder="이름" value="${emp.empName}">
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>직급</label>
-                        <input type="text" class="form-control" name="modifyPositionName" placeholder="직급" value="${emp.position.positionName}">
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>부서</label>
-                        <input type="text" class="form-control" name="modifyDeptName" placeholder="부서" value="${emp.dept.deptName}">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>입사일자</label>
-                        <input type="date" class="form-control" name="modifyJoinDate" placeholder="입사일자" value="${emp.joinDate}">
-                    </div>
-                </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label>생년월일</label>
                         <input type="date" class="form-control" name="modifyBirthdayDate" placeholder="생년월일" value="${emp.birthdayDate}">
@@ -70,50 +49,77 @@
             </div>
 
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
-                        <label>내선번호</label>
-                        <input type="text" class="form-control" name="modifyPhone" placeholder="내선번호" value="${emp.phone}">
+                        <label>부서</label>
+                        <select type="text" class="form-control" id="belongDept" name="modifyDeptCode">
+                            <c:forEach items="${deptSelectList}" var="dsl" varStatus="vs">
+                                <option value="${dsl.deptCode}">${dsl.deptName}</option>
+                            </c:forEach>
+                        </select>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
-                        <label>휴대전화</label>
-                        <input type="text" class="form-control" name="modifyMobile" placeholder="휴대전화" value="${emp.mobile}">
+                        <label>직급</label>
+                        <select type="text" class="form-control" id="belongPos" name="modifyPositionCode">
+                            <c:forEach items="${posSelectList}" var="psl" varStatus="vs">
+                                <option value="${psl.posCode}">${psl.posName}</option>
+                            </c:forEach>
+                        </select>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
-                        <label>이메일</label>
-                        <input type="email" class="form-control" name="modifyEmail" placeholder="이메일" value="${emp.email}">
+                        <label>입사일자</label>
+                        <input type="date" class="form-control" name="modifyJoinDate" placeholder="입사일자" value="${emp.joinDate}">
                     </div>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>내선번호</label>
+                        <input type="text" class="form-control" name="modifyPhone" placeholder="내선번호" value="${emp.phone}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>휴대전화</label>
+                        <input type="text" class="form-control" name="modifyMobile" placeholder="휴대전화" value="${emp.mobile}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>이메일</label>
+                        <input type="text" class="form-control" name="modifyEmail" placeholder="이메일" value="${emp.email}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label>우편번호</label>
                         <input type="number" class="form-control" name="modifyZipCode" placeholder="우편번호" value="${emp.zipCode}">
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label>주소</label>
-                        <input type="text" class="form-control" modify="modifyAddress" placeholder="주소" value="${emp.address}">
+                        <input type="text" class="form-control" name="modifyAddress" placeholder="주소" value="${emp.address}">
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label>상세주소</label>
-                        <input type="text" class="form-control" modify="modifyDetailAddress" placeholder="상세주소" value="${emp.detailAddress}">
+                        <input type="text" class="form-control" name="modifyDetailAddress" placeholder="상세주소" value="${emp.detailAddress}">
                     </div>
                 </div>
             </div>
 
-            <input type="hidden" name="modifyPositionCode" value="${emp.position.positionCode}">
-
-            <div style="text-align: right">
+            <div style="margin-left:780px">
             <button type="submit" id="btn-modify" class="btn btn-info btn-fill">수정</button>
             <button type="button" id="btn-remove" class="btn btn-info btn-fill">삭제</button>
             <button type="button" id="btn-cancel" class="btn btn-danger btn-fill">취소</button>
@@ -121,6 +127,12 @@
             <div class="clearfix"></div>
         </div>
     </form>
+</div>
+
+<div>
+    <c:forEach items="${posList}" var="pos" varStatus="vs"> 
+                    ${pos.positionName}
+                </c:forEach>
 </div>
 
 <script>
@@ -152,5 +164,8 @@
     }
 
     fnDeleteEmployee();
+
+    document.getElementById("belongDept").value="${emp.dept.deptCode}";
+    document.getElementById("belongPos").value="${emp.position.positionCode}";
 
 </script>

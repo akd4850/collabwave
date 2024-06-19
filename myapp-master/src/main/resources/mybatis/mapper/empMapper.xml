@@ -25,6 +25,7 @@
 	    <association property="dept" javaType="DeptDto">
 	    	<id property="deptCode" column="DEPT_CODE" />
 	    	<result property="deptName" column="DEPT_NAME" />
+	    	<result property="deptLeaderEmpCode" column="DEPT_LEADER_EMP_CODE" />
     	</association>
     	<association property="position" javaType="PositionDto">
 	    	<id property="positionCode" column="POSITION_CODE" />
@@ -52,17 +53,19 @@
   <select id="getEmpList"
   	      parameterType="Map"
   	      resultMap="EmpDtoMap">
-  	SELECT EMP_CODE, EMP_NAME, DEPT_NAME, POSITION_NAME, MOBILE, EMAIL, STATUS_CODE, PROFILE_FILE_NAME
-      FROM (SELECT ROW_NUMBER() OVER(ORDER BY EMP_CODE ASC) AS RN, E.EMP_CODE, E.EMP_NAME, D.DEPT_NAME, P.POSITION_NAME, E.MOBILE, E.EMAIL, E.STATUS_CODE, E.PROFILE_FILE_NAME
-              FROM EMP_T E
-                   LEFT JOIN DEPT_T D ON E.DEPT_CODE = D.DEPT_CODE
-                   INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
+  	SELECT EMP_CODE, EMP_NAME, DEPT_NAME, POSITION_NAME, MOBILE, EMAIL, STATUS_CODE, JOIN_DATE
+      FROM (SELECT ROW_NUMBER() OVER(ORDER BY EMP_CODE ASC) AS RN, E.EMP_CODE, E.EMP_NAME, D.DEPT_NAME, P.POSITION_NAME, E.MOBILE, E.EMAIL, E.STATUS_CODE, E.JOIN_DATE
+              FROM EMP_T E LEFT JOIN DEPT_T D
+                ON E.DEPT_CODE = D.DEPT_CODE
+             INNER JOIN POSITION_T P
+                ON E.POSITION_CODE = P.POSITION_CODE
              WHERE STATUS_CODE IN ('s01', 's02'))
      WHERE RN BETWEEN #{begin} AND #{end}
   </select>
   
   <select id="getSearchList"
-  	      resultType="EmpDto">
+  	      parameterType="Map"
+          resultMap="EmpDtoMap">
   	SELECT EMP_CODE, EMP_NAME, DEPT_NAME, POSITION_NAME, MOBILE, EMAIL, STATUS_CODE
       FROM(SELECT ROW_NUMBER() OVER(ORDER BY E.EMP_CODE DESC) AS RN, E.EMP_CODE, E.EMP_NAME, D.DEPT_NAME, P.POSITION_NAME, E.MOBILE, E.EMAIL, E.STATUS_CODE
              FROM EMP_T E LEFT JOIN DEPT_T D
@@ -85,9 +88,10 @@
   <select id="getEmpDetail"
   		  parameterType="Map"
   		  resultMap="EmpDtoMap">
-    SELECT E.EMP_CODE, E.EMP_NAME, E.PASSWORD, E.BIRTHDAY_DATE,
-           E.JOIN_DATE, D.DEPT_NAME, P.POSITION_NAME, E.ZIP_CODE,
-           E.ADDRESS, E.DETAIL_ADDRESS,  E.PHONE, E.MOBILE, E.EMAIL, E.PROFILE_FILE_NAME
+
+    SELECT E.EMP_CODE, E.EMP_NAME, E.PASSWORD, E.BIRTHDAY_DATE, E.JOIN_DATE, 
+           D.DEPT_CODE, D.DEPT_NAME, P.POSITION_CODE, P.POSITION_NAME, E.ZIP_CODE,
+           E.ADDRESS, E.DETAIL_ADDRESS, E.MOBILE, E.PHONE, E.EMAIL, E.PROFILE_FILE_NAME
       FROM EMP_T E
            LEFT JOIN DEPT_T  D ON E.DEPT_CODE = D.DEPT_CODE
            INNER JOIN POSITION_T P ON E.POSITION_CODE = P.POSITION_CODE
@@ -96,44 +100,33 @@
   
   <insert id="insertEmployee">
     INSERT INTO EMP_T (
-        EMP_CODE
-      , EMP_NAME
-      , PASSWORD
-      , MOBILE
-      , EMAIL
-      , ZIP_CODE
-      , ADDRESS
-      , DETAIL_ADDRESS
-      , POSITION_CODE
-      , BIRTHDAY_DATE
-      , JOIN_DATE
+        EMP_CODE, EMP_NAME, PASSWORD
+      , DEPT_CODE, POSITION_CODE
+      , PHONE, MOBILE, EMAIL
+      , ZIP_CODE, ADDRESS, DETAIL_ADDRESS
+      , BIRTHDAY_DATE, JOIN_DATE
       , STATUS_CODE
       ) VALUES (
-          #{empCode}
-        , #{empName}
-        , #{password}
-        , #{mobile}
-        , #{email}
-        , #{zipCode}
-        , #{address}
-        , #{detailAddress}
-        , #{positionCode}
-        , #{birthdayDate}
-        , CURRENT_DATE
+          #{empCode}, #{empName}, #{password}
+        , #{deptCode}, #{positionCode}
+        , #{phone}, #{mobile}, #{email}
+        , #{zipCode}, #{address}, #{detailAddress}
+        , #{birthdayDate}, #{joinDate}
         , 's01'
       )
   </insert>
   
-  <update id="updateEmp">
+  <update id="updateEmp"
+          parameterType="EmpDto">
 	UPDATE EMP_T
 	   SET EMP_NAME = #{empName},
+	       BIRTHDAY_DATE = #{birthdayDate},
+	       DEPT_CODE = #{deptCode},
 	       POSITION_CODE = #{positionCode},
-	       POSITION_NAME = #{positionName},
+	       JOIN_DATE = #{joinDate},
 	       PHONE = #{phone},
 	       MOBILE = #{mobile},
 	       EMAIL = #{email},
-	       BIRTHDAY_DATE = #{birthdayDate},
-	       JOIN_DATE = #{joinDate},
 	       ZIP_CODE = #{zipCode},
 	       ADDRESS = #{address},
 		   DETAIL_ADDRESS = #{detailAddress}
@@ -214,6 +207,21 @@
 	 WHERE EMP_CODE = #{empCode}
 	   AND EMP_CODE NOT IN (SELECT DEPT_LEADER_EMP_CODE
 	                          FROM DEPT_T)	
+  </update>
+  
+  <!-- 발령대기자 -->
+  <select id="getWaitingPerson">
+    SELECT EMP_CODE, EMP_NAME
+	  FROM EMP_T
+	 WHERE DEPT_CODE IS NULL
+     ORDER BY EMP_CODE
+  </select>
+  
+  <!-- 부서장 부서발령 -->
+  <update id="deptLeaderAppointmnet">
+	UPDATE EMP_T
+	   SET DEPT_CODE = #{deptCode}
+	 WHERE EMP_CODE = #{empCode}
   </update>
   
 </mapper>

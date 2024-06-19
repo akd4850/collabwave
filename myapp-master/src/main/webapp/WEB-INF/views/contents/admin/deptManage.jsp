@@ -23,7 +23,8 @@
                     <th>부서명</th>
                     <th>부서장</th>
                     <th>부서위치</th>
-                    <th>생성일</th>
+                    <th>사용여부</th>
+                    <th>생성일자</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,6 +34,7 @@
                         <td><a href="/admin/dept/detail.do?deptCode=${dept.deptCode}">${dept.deptName}</a></td>
                         <td>${dept.emp.empName}</td>
                         <td>${dept.deptLocation}</td>
+                        <td>${dept.useYn}</td>
                         <td>${dept.deptCreatedate}</td>
                     </tr>
                 </c:forEach>

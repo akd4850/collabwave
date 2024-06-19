@@ -83,40 +83,33 @@
      WHERE DEPT_CODE = #{deptCode}
   </select>
 	
-  <update id="updateDeptInfo">
+  <update id="updateDeptInfo"
+  		  parameterType="DeptDto">
     UPDATE DEPT_T
        SET DEPT_NAME = #{deptName},
+           DEPT_LEADER_EMP_CODE = #{deptLeaderEmpCode},
            DEPT_LEVEL = #{deptLevel},
+           DEPT_UPSTAIR_CODE = #{deptUpstairCode},
            DEPT_LOCATION = #{deptLocation},
-           USE_YN = #{useYn},
-           DEPT_UPSTAIR_CODE = #{deptUpstairCode}
+           DEPT_CREATEDATE = #{deptCreatedate},
+           USE_YN = #{useYn}
      WHERE DEPT_CODE= #{deptCode}
   </update>
 	
   <insert id="insertDept">
     INSERT INTO DEPT_T (
-        DEPT_CODE
-      , DEPT_NAME
-      , DEPT_LEVEL
-      , DEPT_LEADER_EMP_CODE
-      , DEPT_LOCATION
-      , DEPT_CREATEDATE
-      , USE_YN
-      , DEPT_UPSTAIR_CODE
+        DEPT_CODE, DEPT_NAME, DEPT_LEADER_EMP_CODE,
+        DEPT_LEVEL, DEPT_UPSTAIR_CODE, DEPT_LOCATION,
+        DEPT_CREATEDATE, USE_YN
       ) VALUES (
-          #{deptCode}
-        , #{deptName}
-        , #{deptLevel}
-        , #{deptLeaderEmpCode}
-        , #{deptLocation}
-        , #{deptCreateDate}
-        , 'Y'
-        , #{deptUpstairCode}
+          #{deptCode}, #{deptName}, #{deptLeaderEmpCode}
+        , #{deptLevel}, #{deptUpstairCode}, #{deptLocation}
+        , #{deptCreatedate}, #{useYn}
       )
   </insert>
   
    <select id="getDeptMember">
-	SELECT E.EMP_NAME, E.EMP_CODE
+	SELECT E.EMP_CODE, E.EMP_NAME
       FROM DEPT_T D RIGHT JOIN EMP_T E
         ON D.DEPT_CODE = E.DEPT_CODE
      WHERE E.DEPT_CODE = #{deptCode} 
@@ -134,6 +127,11 @@
 	SELECT DEPT_CODE, DEPT_NAME
 	  FROM DEPT_T
 	 WHERE DEPT_CODE NOT IN #{deptCode}
+  </select>
+  
+  <select id="getDeptListForSelectbox">
+	SELECT DEPT_CODE, DEPT_NAME
+	  FROM DEPT_T
   </select>
 	
 </mapper>

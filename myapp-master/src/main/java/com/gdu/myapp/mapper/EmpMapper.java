@@ -28,4 +28,6 @@ public interface EmpMapper {
 	int getSearchCount(Map<String, Object> map);
 	int updatePassword(EmpDto emp);
 	int empDeptTransfer(EmpDto emp);
+	List<EmpDto> getWaitingPerson();
+	int deptLeaderAppointmnet(EmpDto emp);
 }

@@ -204,6 +204,7 @@ h2{
                                 <input type="hidden" name="empCode" id="hiddenEmpCode" value="${sessionScope.emp.empCode}">
                                 <input type="file" id="files" class="upload-hidden" name="profileFileName" onchange="onFileUpload();">
                             </form>
+                                <h6>프로필 사진을 클릭해 변경하세요</h6>
                                 <h4 class="title">${emp.empName}<br/>
                                     <small>${emp.position.positionName}</small>
                                 </h4>

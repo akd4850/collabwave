@@ -28,10 +28,10 @@
         <table class="table table-hover table-striped" style="margin-top: 10px;">
             <thead>
                 <tr>
-                    <th style="padding-left: 25px;">타입</th>
+                    <th style="padding-left: 25px;">종류</th>
                     <th>상세</th>
                     <th>이름</th>
-                    <th>보조</th>
+                    <th>기자재</th>
                 </tr>
             </thead>
             <tbody class="asset-list">

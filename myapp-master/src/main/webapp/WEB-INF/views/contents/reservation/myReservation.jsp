@@ -34,7 +34,7 @@
     </div>
         <table class="table table-hover table-striped">
             <thead>
-                <th>예약 자산</th>
+                <th>종류</th>
                 <th>예약자</th>
                 <th>시작 시간</th>
                 <th>종료 시간</th>

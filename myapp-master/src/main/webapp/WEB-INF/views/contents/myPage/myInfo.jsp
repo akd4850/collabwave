@@ -9,8 +9,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <style>
-    h2{
-    text-align: center;
+h2{
+   text-align: center;
 }
 
 /*모달 팝업 영역 스타일링*/
@@ -35,7 +35,6 @@
     border-radius: 20px;
 }
 .modal .modal_popup .close_btn {
-    display: block;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -53,14 +52,34 @@
     display: none;
 }
 
-.col-md-4.address {
-    width: 100%
+.form-group.address {
+    width: 105%;
 }
 
-.form-group.zipcode {
-    width: 30%
+.form-control.zipcode{
+    width: 20%;
 }
-
+.uniform-input {
+    width: 95%;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 14px; 
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.col-md-4.address{
+	padding-left: 15px;
+}
+.address-box {
+	width: 95%;
+    border: 2px solid white;
+    border-radius: 4px; 
+    margin-bottom: 5px;
+    margin: 0 auto 5px;
+}
+#profile-image {
+    cursor: pointer;
+}
 
 </style>
 
@@ -70,87 +89,97 @@
             <!-- 개인 정보 -->
             <div class="col-md-8">
                 <div class="card">
-                    <div class="header">
-                        <h4 class="title">내 정보</h4>
+                    <div class="header" style="margin-left: 20px;">
+                        <h4 class="title" style="margin-top: 20px;">내 정보</h4>
                     </div>
                     <div class="content">
                         <form class="myInfoForm">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>이름</label>
-                                        <input type="text" class="form-control" name="empName" placeholder="이름" value="${emp.empName}" readonly>
+                            <div class="address-box">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>이름</label>
+                                            <input type="text" class="form-control uniform-input" name="empName" placeholder="이름" value="${emp.empName}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>사번</label>
+                                            <input type="text" class="form-control uniform-input" name="empCode" placeholder="사번" value="${emp.empCode}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group" >
+                                            <label>직급</label>
+                                            <input type="text" class="form-control uniform-input" name="positionName" placeholder="직급" value="${emp.position.positionName}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group" style="padding-left: 10px;">
+                                            <label>부서</label>
+                                            <input type="text" class="form-control uniform-input" name="deptName" placeholder="부서" value="${emp.dept.deptName}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>입사일자</label>
+                                            <input type="text" class="form-control uniform-input" name="joinDate" placeholder="입사일자" value="${emp.joinDate}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" style="padding: 0 6px">
+                                        <div class="form-group" >
+                                            <label>생년월일</label>
+                                            <input type="text" class="form-control uniform-input" name="birthdayDate" placeholder="생년월일" value="${emp.birthdayDate}" readonly>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>사번</label>
-                                        <input type="text" class="form-control" name="empCode"placeholder="사번" value="${emp.empCode}" readonly>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>직급</label>
-                                        <input type="text" class="form-control" name="positionName" placeholder="직급" value="${emp.position.positionName}" readonly>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>부서</label>
-                                        <input type="text" class="form-control" name="deptName" placeholder="부서" value="${emp.dept.deptName}" readonly>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>입사일자</label>
-                                        <input type="text" class="form-control" name="joinDate" placeholder="입사일자" value="${emp.joinDate}" readonly>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>생년월일</label>
-                                        <input type="text" class="form-control" name="birthdayDate" placeholder="생년월일" value="${emp.birthdayDate}" readonly>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>전화번호</label>
-                                        <input type="text" class="form-control" name="phone" placeholder="전화번호" value="${emp.phone}">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>전화번호</label>
+                                            <input type="text" class="form-control uniform-input" name="phone" placeholder="전화번호" value="${emp.phone}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>휴대전화</label>
+                                            <input type="text" class="form-control uniform-input" name="mobile" placeholder="휴대전화" value="${emp.mobile}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" style="padding: 0 6px">
+                                        <div class="form-group">
+                                            <label>이메일</label>
+                                            <input type="text" class="form-control uniform-input" name="email" placeholder="이메일" value="${emp.email}">
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>휴대전화</label>
-                                        <input type="text" class="form-control" name="mobile" placeholder="휴대전화" value="${emp.mobile}">
+                                        
+                                <hr>
+                                        
+                                <!-- Address Box -->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>우편번호</label>
+                                            <input type="text" class="form-control zipcode" name="zipCode" placeholder="우편번호" value="${emp.zipCode}">
+                                        </div>
+                                        <div class="form-group address">
+                                            <label>주소</label>
+                                            <input type="text" class="form-control uniform-input" name="address" placeholder="주소" value="${emp.address}">
+                                        </div>
+                                        <div class="form-group address">
+                                            <label>상세주소</label>
+                                            <input type="text" class="form-control uniform-input" name="detailAddress" placeholder="상세주소" value="${emp.detailAddress}">
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>이메일</label>
-                                        <input type="text" class="form-control" name="email" placeholder="이메일" value="${emp.email}">
-                                    </div>
-                                </div>
-                                <div class="col-md-4 address">
-                                    <div class="form-group zipcode">
-                                        <label>우편번호</label>
-                                        <input type="text" class="form-control" name="zipCode" placeholder="우편번호" value="${emp.zipCode}">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>주소</label>
-                                        <input type="text" class="form-control" name="address" placeholder="주소" value="${emp.address}">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>상세주소</label>
-                                        <input type="text" class="form-control" name="detailAddress" placeholder="상세주소" value="${emp.detailAddress}">
-                                    </div>
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-info btn-fill pull-right" id="btn_modify">수정</button>
-                            <div class="clearfix"></div>
+
+                            </div>                           	
                         </form>
+                            <div class="clearfix">
+                            <button type="button" class="btn btn-info btn-fill pull-right" id="btn_modify" style="margin-right: 25px;">수정</button>
+                            </div>
                     </div>
                 </div>
             </div>
@@ -158,20 +187,18 @@
             <!-- 프로필 변경 -->
             <div class="col-md-4">
                 <div class="card card-user">
-                    <div class="image">
-                        <img src="${contextPath}/resources/img/full-screen-image-3.jpg" alt="..."/>
-                    </div>
+					<div class="image">
+					    <img src="${contextPath}/resources/img/full-screen-image-3.jpg" alt="..."/>
+					</div>
                     <div class="content">
-                        
-                        <div class="author">
+                        <div class="author" >
                             <form>
                                 <c:choose>
                                     <c:when test="${not empty emp.profileFileName}">
-                                        <img class="avatar border-gray" src="${contextPath}${sessionScope.emp.profileFileName}"   alt="프로필 이미지" loading="lazy" onclick="onClickUpload();"/>
+                                        <img class="avatar border-gray" id="profile-image" src="${contextPath}${sessionScope.emp.profileFileName}" alt="프로필 이미지" loading="lazy" onclick="onClickUpload();"/>
                                     </c:when>
                                     <c:otherwise>
-                                        <img class="avatar border-gray" src="${contextPath}/resources/img/default_thumbnail.png" alt="기본 프로필" loading="lazy" onclick="onClickUpload();"/>
-
+                                        <img class="avatar border-gray" id="profile-image"  src="${contextPath}/resources/img/default_thumbnail.png" alt="기본 프로필" loading="lazy" onclick="onClickUpload();"/>
                                     </c:otherwise>
                                 </c:choose>
                                 <input type="hidden" name="empCode" id="hiddenEmpCode" value="${sessionScope.emp.empCode}">
@@ -206,24 +233,26 @@
 
                 <div class="password">
                     <label for="pw">비밀번호</label>
-                    <div id="msg-pw" class="signup-alert"></div>
                     <input type="password" class="form-control" name="password" id="pw" placeholder="8~15자 영문,숫자,특수문자 중 2개이상" style="width: 500px;" autocomplete="off"> 
+                    <div id="msg-pw" class="signup-alert"></div>
                 </div>
                 <br>
                 <div class="passwordRe">
                     <label for="pw2">비밀번호 확인</label>
-                    <div id="msg-pw2" class="signup-alert"></div>
                     <input type="password" class="form-control" name="password2" id="pw2" placeholder="8~15자 영문,숫자,특수문자 중 2개이상" style="width: 500px;" autocomplete="off">
+                    <div id="msg-pw2" class="signup-alert"></div>
                 </div>
                 <br>
-                <input type="hidden" name="empCode" value="${emp.empCode}">
-                <button type="submit" class="btn btn-info btn-fill" id="password_modify">변경하기</button>
-                <br>
 
+	            <div class="row justify-content-end">
+	                <div class="col-auto">
+	                    <input type="hidden" name="empCode" value="${emp.empCode}">
+	                    <button type="submit" class="btn btn-info btn-fill me-2" id="password_modify">변경하기</button>
+	                    <button type="button" class="btn btn-danger btn-fill" id="password_modal_close">닫기</button>
+	                </div>
+	            </div>
             </form>
-        <button type="button" class="btn btn-danger btn-fill" id="password_modal_close">닫기</button>
     </div>
-
 </div>
 
 
@@ -350,7 +379,7 @@ const onFileUpload = () => {
 
 /* 비밀번호 변경 */
 
-    /* 비밀번호 검증 */
+/* 비밀번호 검증 */
 let passwordCheck = false;
 let passwordConfirm = false;
 
@@ -420,8 +449,5 @@ modalOpen.addEventListener('click',function(){
 modalClose.addEventListener('click',function(){
     modal.style.display = 'none';
 });
-
-
-
 
 </script>

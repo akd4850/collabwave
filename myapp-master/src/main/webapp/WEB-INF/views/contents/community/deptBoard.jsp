@@ -16,7 +16,11 @@
   	width: 60%; /* 원하는 너비로 설정 */
 }
 .postCreateDatetime {
-	width: 10%
+	width: 15%
+}
+.header-container {
+    display: flex;
+    align-items: center; /* 세로축 정렬 */
 }
     
 </style>
@@ -96,25 +100,25 @@ document.addEventListener("DOMContentLoaded", function() {
     var deptName = "";
     switch(deptCode) {
         case "d1000":
-            deptName = "< 경영지원실 >";
+            deptName = "- 경영지원실 -";
             break;
         case "d1100":
-            deptName = "< 인사과 >";
+            deptName = "- 인사과 -";
             break;
         case "d1200":
-            deptName = "< 총무과 >";
+            deptName = "- 총무과 -";
             break;
         case "d1300":
-            deptName = "< 회계과 >";
+            deptName = "- 회계과 -";
             break;
         case "d2000":
-            deptName = "< 영업관리실 >";
+            deptName = "- 영업관리실 -";
             break;
         case "d2100":
-            deptName = "< 영업과 >";
+            deptName = "- 영업과 -";
             break;
         case "d2200":
-            deptName = "< 영업관리과 >";
+            deptName = "- 영업관리과 -";
             break;
         default:
         	return;

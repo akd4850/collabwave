@@ -6,13 +6,18 @@
 <c:set var="dt" value="<%=System.currentTimeMillis()%>"/>
 
 <style>
-    .search-input {
-        width: 140%; /* 원하는 너비로 조정 */
-        font-size: 16px; /* 글꼴 크기 조정 */
-        padding: 10px; /* 패딩 조정 */
-    }
-    
-
+.search-input {
+    width: 140%; /* 원하는 너비로 조정 */
+    font-size: 16px; /* 글꼴 크기 조정 */
+    padding: 10px; /* 패딩 조정 */
+}
+.post-title-column {
+  	width: 60%; /* 원하는 너비로 설정 */
+}
+.postCreateDatetime {
+	width: 15%
+}
+   
 </style>
 
 <div class="card">
@@ -28,7 +33,7 @@
         <table class="table table-hover table-striped">
             <thead>
                 <tr>
-                    <th>글 제목</th>
+                    <th style="padding-left: 20px;">글 제목</th>
                     <th>작성자</th>
                     <th>등록일</th>
                     <th>조회수</th>
@@ -37,7 +42,7 @@
             <tbody>
                 <c:forEach items="${postList}" var="post" varStatus="vs">
 	                <tr>
-	                    <td class="postTitleCell"><a href="/community/detailFree?postNo=${post.postNo}">${post.postTitle}</a></td>
+	                    <td class="post-title-column" style="padding-left: 20px;"><a href="/community/detailFree?postNo=${post.postNo}">${post.postTitle}</a></td>
 	                    <td>${post.emp.empName}</td>
                 		<td class="postCreateDatetime">${post.postCreateDatetime}</td>
 	                    <td>${post.postHit}</td>

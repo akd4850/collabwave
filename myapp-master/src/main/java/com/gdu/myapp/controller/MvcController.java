@@ -1,9 +1,6 @@
 package com.gdu.myapp.controller;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -17,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.LocaleResolver;
 
-import com.gdu.myapp.dto.EmpDto;
 import com.gdu.myapp.dto.PostDto;
 import com.gdu.myapp.service.EmpService;
 import com.gdu.myapp.service.PostService;

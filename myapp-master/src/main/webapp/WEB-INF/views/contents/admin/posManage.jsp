@@ -103,7 +103,11 @@
                     </div>
                     <div class="form-group">
                         <label>사용여부</label>
-                        <input type="text" class="form-control" placeholder="사용여부" id="modal-useYn" name="modifyUseYn">
+                        <select type="select" class="form-control" placeholder="사용여부" id="modal-useYn" name="modifyUseYn">
+                            <option disabled>-- 사용여부를 선택하세요 --</option>
+                            <option value="Y">사용</option>
+                            <option value="N">미사용</option>
+                        </select>
                     </div>
                 </div>
         
@@ -130,8 +134,6 @@
             //응답
             resData: 'json',
             success: (resData) => {
-                console.log("resData=======>")
-                console.log(resData)
                 let json = JSON.parse(resData)
                 $('#modal-posCode').val(json.posCode);
                 $('#modal-posName').val(json.posName);

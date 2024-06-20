@@ -70,7 +70,7 @@
       FROM DEPT_T
   </select>
     
-  <select id="getDeptDetail">
+  <select id="getDeptDetail" resultMap="DeptDtoMap">
     SELECT DEPT_CODE,
 		   DEPT_NAME,
 		   DEPT_LEVEL,

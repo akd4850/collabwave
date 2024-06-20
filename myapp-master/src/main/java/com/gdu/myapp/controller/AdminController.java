@@ -61,6 +61,7 @@ public class AdminController {
 	@GetMapping("/emp/add.page")
 	public String addEmployee(Model model) {
 		model.addAttribute("submenu", "empAdd.jsp");
+		model.addAttribute("deptSelectList", deptService.getDeptListForSelectbox());
 		model.addAttribute("posSelectList", posService.getPosListForSelectbox());
 		return "contents/admin/admin";
 	}

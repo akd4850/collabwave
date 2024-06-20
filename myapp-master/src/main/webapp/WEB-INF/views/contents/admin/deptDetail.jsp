@@ -44,6 +44,7 @@
                         <div class="form-group">
                             <label>부서장</label>
                             <select type="select" class="form-control" id="deptLeader" name="deptLeaderEmpCode">
+                                <option disabled>-- 발령 대기자 명단 --</option>
                                 <c:forEach items="${memberList}" var="ml" varStatus="vs">
                                     <option value="${ml.empCode}">${ml.empName}</option>
                                 </c:forEach>
@@ -56,13 +57,20 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>부서레벨</label>
-                            <input type="text" class="form-control" placeholder="부서레벨" id="deptLevel" name="deptLevel" value="${dept.deptLevel}">
+                            <!-- <input type="text" class="form-control" placeholder="부서레벨" id="deptLevel" name="deptLevel" value="${dept.deptLevel}"> -->
+                            <select type="select" class="form-control" placeholder="부서레벨" name="deptLevel" id="deptLevel">
+                                <option disabled>-- 부서레벨을 선택하세요 --</option>
+                                <option value="0">Level.0</option>
+                                <option value="1">Level.1</option>
+                                <option value="2">Level.2</option>
+                            </select>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>상위부서</label>
                             <select type="select" class="form-control" id="upstairDept" name="deptUpstairCode">
+                                <option disabled>-- 상위부서를 선택하세요 --</option>
                                 <c:forEach items="${deptSelectList}" var="dsl" varStatus="vs">
                                     <option value="${dsl.deptCode}">${dsl.deptName}</option>
                                 </c:forEach>
@@ -72,16 +80,17 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>부서위치</label>
-                            <select type="select" class="form-control" placeholder="부서위치" name="deptLocation" id="deptLocation">
+                            <select type="select" class="form-control" name="deptLocation" id="deptLocation">
+                                <option disabled>-- 부서위치를 선택하세요 --</option>
                                 <option value="1층 A구역">1층 A구역</option>
                                 <option value="1층 B구역">1층 B구역</option>
                                 <option value="1층 C구역">1층 C구역</option>
                                 <option value="2층 A구역">2층 A구역</option>
-                                <option value="2층 A구역">2층 B구역</option>
-                                <option value="2층 A구역">2층 C구역</option>
+                                <option value="2층 B구역">2층 B구역</option>
+                                <option value="2층 C구역">2층 C구역</option>
                                 <option value="3층 A구역">3층 A구역</option>
-                                <option value="3층 A구역">3층 B구역</option>
-                                <option value="3층 A구역">3층 C구역</option>
+                                <option value="3층 B구역">3층 B구역</option>
+                                <option value="3층 C구역">3층 C구역</option>
                             </select>
                         </div>
                     </div>
@@ -98,6 +107,7 @@
                         <div class="form-group">
                             <label>사용여부</label>
                             <select type="select" class="form-control" placeholder="사용여부" name="useYn" id="useYn">
+                                <option disabled>-- 사용여부를 선택하세요 --</option>
                                 <option value="Y">사용</option>
                                 <option value="N">미사용</option>
                             </select>
@@ -209,5 +219,6 @@
     document.getElementById("useYn").value="${dept.useYn}";
     document.getElementById("upstairDept").value="${dept.deptUpstairCode}";
     document.getElementById("deptLeader").value="${dept.deptLeaderEmpCode}";
+    document.getElementById("deptLevel").value="${dept.deptLevel}";
 
 </script>

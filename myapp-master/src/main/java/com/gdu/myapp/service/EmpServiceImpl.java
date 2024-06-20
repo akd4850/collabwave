@@ -134,60 +134,31 @@ public class EmpServiceImpl implements EmpService {
 	  
 	}
 	
-//  @Override
-//  public void loadEmpSearchList(HttpServletRequest request, Model model) {
-//    
-//    String query = request.getParameter("query");
-//    
-//    Map<String, Object> map = new HashMap<String, Object>();
-//    map.put("query", query);
-//    
-//    int total = empMapper.getSearchCount(map);
-//    int display = 10;
-//    Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
-//    int page = Integer.parseInt(opt.orElse("1"));
-//    
-//    myPageUtils.setPaging(total, display, page);
-//    
-//    map.put("begin", myPageUtils.getBegin());
-//    map.put("end", myPageUtils.getEnd());
-//    
-//    List<EmpDto> empList = empMapper.getSearchList(map);
-//    
-//    model.addAttribute("beginNo", total - (page - 1) * display);
-//    model.addAttribute("empList", empList);
-//    model.addAttribute("paging", myPageUtils.getPaging(request.getContextPath() + "/admin/emp/search.do"
-//                                                      , ""
-//                                                      , 10
-//                                                      , "query=" + query));
-//  }
-//	
-	@Override
-	public void loadEmpSearchList(HttpServletRequest request, Model model) {
+  @Override
+  public void loadEmpSearchList(HttpServletRequest request, Model model) {
+    
+    String query = request.getParameter("query");
+    
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("query", query);
+    
+    int total = empMapper.getSearchCount(map);
+    int display = 10;
+    Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
+    int page = Integer.parseInt(opt.orElse("1"));
+    
+    myPageUtils.setPaging(total, display, page);
+    
+    map.put("begin", myPageUtils.getBegin());
+    map.put("end", myPageUtils.getEnd());
+    
+    List<EmpDto> empList = empMapper.getSearchList(map);
+    
+    model.addAttribute("beginNo", total - (page - 1) * display);
+    model.addAttribute("empList", empList);
+    model.addAttribute("paging", myPageUtils.getPagingNewVersion(request.getContextPath() + "/admin/emp/search.do?query=" + query, null, display));
+  }
 
-		String query = request.getParameter("query");
-
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("query", query);
-
-		int total = empMapper.getSearchCount(map);
-		int display = 10;
-
-		Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
-		int page = Integer.parseInt(opt.orElse("1"));
-
-		myPageUtils.setPaging(total, display, page);
-
-		map.put("begin", myPageUtils.getBegin());
-		map.put("end", myPageUtils.getEnd());
-
-		List<EmpDto> empList = empMapper.getSearchList(map);
-
-		model.addAttribute("beginNo", total - (page - 1) * display);
-		model.addAttribute("empList", empList);
-		model.addAttribute("paging",
-				myPageUtils.getPaging(request.getContextPath() + "/admin/emp/search.do", "", 10, "query=" + query));
-	}
 
   public void registerEmp(HttpServletRequest request, HttpServletResponse response) {
     

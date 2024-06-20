@@ -101,7 +101,7 @@ h2{
                         <h4 class="title" style="margin-top: 20px;">내 정보</h4>
                     </div>
                     <div class="content">
-                        <form class="myInfoForm">
+                        <form class="myInfoForm" id="myInfoForm">
                             <div class="address-box">
                                 <div class="row">
                                     <div class="col-md-4">
@@ -275,7 +275,7 @@ const fnModifyInfo = () => {
         $.ajax({
             type: 'POST',
             url: '${contextPath}/myPage/modifyInfo.page',
-            data: $(evt.target).closest('.myInfoForm').serialize(), // form 데이터를 직렬화
+            data: $('#myInfoForm').serialize(), // form 데이터를 직렬화
             dataType: 'json',
             success: (resData) => {
                 if (resData.modifyInfoCount === 1) {
@@ -320,7 +320,7 @@ $(document).ready(function(){
 
             readImage($(this)[0]); 
         });
-    });
+ });
 
     function validFileType(filename) {
         const fileTypes = ["png", "jpg", "jpeg"];

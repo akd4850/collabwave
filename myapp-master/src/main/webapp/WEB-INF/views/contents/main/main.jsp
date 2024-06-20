@@ -96,7 +96,7 @@
                                 <c:forEach items="${freeNewList}" var="post" varStatus="vs">
                                     <tr>
                                         <td style="text-align: center;">${vs.index + 1}</td>
-                                        <td><a href="${contextPath}/community/detail?postNo=${post.postNo}">${post.postTitle}</a></td>
+                                        <td><a href="${contextPath}/community/detailFree?postNo=${post.postNo}">${post.postTitle}</a></td>
                 						<td class="postCreateDatetime">${post.postCreateDatetime}</td>
                                     </tr>
                                 </c:forEach>

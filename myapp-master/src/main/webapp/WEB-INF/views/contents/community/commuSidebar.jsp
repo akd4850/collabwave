@@ -29,7 +29,7 @@
     <div class="content">
         <ul class="list-unstyled subtab" id="community-list">
             <li><a href="/community/notice">공지사항</a></li>
-            <li><a href="/community/dept">부서별게시판</a></li>
+            <li><a href="/community/dept">부서게시판</a></li>
             <li><a href="/community/ref">자료실</a></li>
             <li><a href="/community/free">자유게시판</a></li>
         </ul>

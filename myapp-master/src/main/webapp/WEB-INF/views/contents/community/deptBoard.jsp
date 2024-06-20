@@ -27,7 +27,7 @@
 
 <div class="card">
 	<div class="header-container" >
-	    <div class="header">부서별 게시판</div>
+	    <div class="header">부서 게시판</div>
 	    <div class="header" id="deptCode" style=" font-size: 18px;" data-dept-code="${sessionScope.emp.deptCode}" ></div>
 	</div>   
     <div class="content table-responsive table-full-width">

@@ -31,7 +31,7 @@
             <tbody>
                 <tr>
                     <th>구분</th>
-                    <td>부서별게시판 글쓰기</td>
+                    <td>부서게시판 글쓰기</td>
                 </tr>
                 <tr>
                     <th style="width:100px">작성자</th>

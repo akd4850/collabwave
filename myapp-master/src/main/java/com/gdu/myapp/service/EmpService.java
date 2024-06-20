@@ -1,8 +1,8 @@
 package com.gdu.myapp.service;
 
+import java.util.List;
 import java.util.Map;
 
-import org.apache.catalina.filters.ExpiresFilter.XHttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 
@@ -25,11 +25,13 @@ public interface EmpService {
 //	int modifyEmp(HttpServletRequest request);
 	ResponseEntity<Map<String, Object>> getEmpDetailAjax(String empCode);
 	void loadEmpSearchList(HttpServletRequest request, Model model);
+	List<EmpDto> getWaitingPerson();
 	
 	// 등록,수정,삭제
 	void registerEmp(HttpServletRequest request, HttpServletResponse response);
-	int modifyEmp(HttpServletRequest request);
+	void modifyEmp(HttpServletRequest request, HttpServletResponse response);
 	int deleteEmp(String empCode);
-	int empDeptTransfer(HttpServletRequest request);
+	void empDeptTransfer(HttpServletRequest request, HttpServletResponse response);
+	int deptLeaderAppointmnet(HttpServletRequest request);
 
 }

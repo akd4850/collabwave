@@ -47,10 +47,10 @@
 		'Y')
   </insert>
   
-  <select id="getSelectedPositon">
-	SELECT POSITION_CODE,
-	       POSITION_NAME,
-	       USE_YN
+  <select id="getSelectedPositon" resultType="PosDto">
+	SELECT POSITION_CODE posCode,
+	       POSITION_NAME posName,
+	       USE_YN useYn
 	  FROM POSITION_T
 	 WHERE POSITION_NAME = #{positionName}
   </select>
@@ -61,6 +61,13 @@
 	       USE_YN = #{useYn}
 	 WHERE POSITION_CODE = #{posCode}
   </update>
+  
+  <select id="getPosListForSelectbox"
+          resultMap="PosDtoMap">
+	SELECT POSITION_CODE, POSITION_NAME
+	  FROM POSITION_T
+	 ORDER BY POSITION_CODE
+  </select>
   
 	
 </mapper>

@@ -27,63 +27,94 @@
             <form id="frm-deptInfo-modify"
                   method="POST"
                   action="${contextPath}/admin/dept/modify.do">
-                <div class="row">
-                    <div class="col-md-4">
+                <div class="row" style="margin-left:10px">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                          <label>부서코드</label>
+                          <input type="text" class="form-control" placeholder="부서코드" id="deptCode" name="deptCode" value="${dept.deptCode}" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>부서명</label>
                             <input type="text" class="form-control" placeholder="부서명" id="deptName" name="deptName" value="${dept.deptName}">
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
-                          <label>부서코드</label>
-                          <input type="text" class="form-control" placeholder="부서코드" id="deptCode" name="deptCode" value="${dept.deptCode}" readonly>
-                    </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label>부서레벨</label>
-                            <input type="text" class="form-control" placeholder="부서레벨" id="deptLevel" name="deptLevel" value="${dept.deptLevel}">
+                            <label>부서장</label>
+                            <select type="select" class="form-control" id="deptLeader" name="deptLeaderEmpCode">
+                                <option disabled>-- 발령 대기자 명단 --</option>
+                                <c:forEach items="${memberList}" var="ml" varStatus="vs">
+                                    <option value="${ml.empCode}">${ml.empName}</option>
+                                </c:forEach>
+                            </select>
                         </div>
                     </div>
                 </div>
         
-                <div class="row">
-                    <div class="col-md-4">
+                <div class="row" style="margin-left:10px">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>부서레벨</label>
+                            <!-- <input type="text" class="form-control" placeholder="부서레벨" id="deptLevel" name="deptLevel" value="${dept.deptLevel}"> -->
+                            <select type="select" class="form-control" placeholder="부서레벨" name="deptLevel" id="deptLevel">
+                                <option disabled>-- 부서레벨을 선택하세요 --</option>
+                                <option value="0">Level.0</option>
+                                <option value="1">Level.1</option>
+                                <option value="2">Level.2</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>상위부서</label>
-                            <input type="text" class="form-control" placeholder="상위부서" name="deptUpstairCode" value="${dept.deptUpstairCode}">
+                            <select type="select" class="form-control" id="upstairDept" name="deptUpstairCode">
+                                <option disabled>-- 상위부서를 선택하세요 --</option>
+                                <c:forEach items="${deptSelectList}" var="dsl" varStatus="vs">
+                                    <option value="${dsl.deptCode}">${dsl.deptName}</option>
+                                </c:forEach>
+                            </select>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>부서위치</label>
-                            <input type="text" class="form-control" placeholder="부서위치" name="deptLocation" value="${dept.deptLocation}">
+                            <select type="select" class="form-control" name="deptLocation" id="deptLocation">
+                                <option disabled>-- 부서위치를 선택하세요 --</option>
+                                <option value="1층 A구역">1층 A구역</option>
+                                <option value="1층 B구역">1층 B구역</option>
+                                <option value="1층 C구역">1층 C구역</option>
+                                <option value="2층 A구역">2층 A구역</option>
+                                <option value="2층 B구역">2층 B구역</option>
+                                <option value="2층 C구역">2층 C구역</option>
+                                <option value="3층 A구역">3층 A구역</option>
+                                <option value="3층 B구역">3층 B구역</option>
+                                <option value="3층 C구역">3층 C구역</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                </div>
+        
+                <div class="row" style="margin-left:10px">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>생성일</label>
                             <input type="text" class="form-control" placeholder="생성일" name="deptCreatedate" value="${dept.deptCreatedate}" readonly>
                         </div>
                     </div>
-                </div>
-        
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label>부서장 사원코드</label>
-                            <input type="text" class="form-control" placeholder="부서장 사원코드" name="deptLeaderEmpCode" value="${dept.deptLeaderEmpCode}" readonly>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>사용여부</label>
-                            <input type="text" class="form-control" placeholder="사용여부" name="useYn" value="${dept.useYn}">
+                            <select type="select" class="form-control" placeholder="사용여부" name="useYn" id="useYn">
+                                <option disabled>-- 사용여부를 선택하세요 --</option>
+                                <option value="Y">사용</option>
+                                <option value="N">미사용</option>
+                            </select>
                         </div>
                     </div>
                 </div>
-                <div style="text-align:right">
+                <div style="margin-left:760px">
                 <button type="submit" id="btn-update" class="btn btn-info btn-fill">수정</button>
                 <button type="button" id="btn-cancel" class="btn btn-danger btn-fill">취소</button>
                 </div>
@@ -153,7 +184,10 @@
                     <table style="border-collapse: separate; border-spacing: 10px 10px;">
                         <c:forEach items="${deptNameList}" var="dnl" varStatus="vs">
                             <tr>
-                                <th><button type="button" class="btn btn-secondary" name="transferDeptCode" value="{dnl.deptCode}">${dnl.deptName}</button></th>
+                                <th>
+                                    <input class="form-check" type="radio" name="transferDeptCode" value="${dnl.deptCode}">
+                                    <label class="btn btn-dark btn-fill" for="flexCheck">${dnl.deptName}</label>
+                                </th>
                             </tr>
                         </c:forEach>
                     </table>
@@ -180,5 +214,11 @@
     const setModalValue = () => {
         $("#transferEmpCode").val( $("input[name='modifyEmpCode']:checked").val() );
     }
+
+    document.getElementById("deptLocation").value="${dept.deptLocation}";
+    document.getElementById("useYn").value="${dept.useYn}";
+    document.getElementById("upstairDept").value="${dept.deptUpstairCode}";
+    document.getElementById("deptLeader").value="${dept.deptLeaderEmpCode}";
+    document.getElementById("deptLevel").value="${dept.deptLevel}";
 
 </script>

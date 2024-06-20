@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 <style>
-.fa-xmark {
+.fa-arrow-rotate-right {
   cursor: pointer;
 }
 </style>
@@ -22,7 +22,7 @@
                 <div class="card">
                     <div class="header">
                         조직도 
-						<i class="fa-solid fa-xmark" onclick="refreshPage()"></i>					
+						<i class="fa-solid fa-arrow-rotate-right" onclick="refreshPage()"></i>					
 					</div>
                     <div class="content table-responsive table-full-width">
                         <div id="jstree"></div>

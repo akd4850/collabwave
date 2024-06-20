@@ -34,7 +34,7 @@
     </div>
         <table class="table table-hover table-striped">
             <thead>
-                <th>예약 자산</th>
+                <th>종류</th>
                 <th>예약자</th>
                 <th>시작 시간</th>
                 <th>종료 시간</th>
@@ -144,14 +144,17 @@ const cancelReservation = (reservationNumber) => {
         data: { reservationNumber: reservationNumber },
         success: (resData) => {
             alert('예약이 취소되었습니다.');
+            const dateInput = formatDate(document.getElementById('date-input-start').value);
             $('.myReservation-list').empty();
-            fnMyReservationList(date);
+            fnMyReservationList(dateInput);
         },
         error: (jqXHR) => {
             alert(jqXHR.statusText + '(' + jqXHR.status + ')');
         }
     });
 }
+
+
 
 const fnPaging = (p) => {
         page = p;

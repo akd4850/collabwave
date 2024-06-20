@@ -23,7 +23,7 @@
                 </label>
                 <br>
                 <c:if test="${sessionScope.emp.signFileName != ''}">
-                    <img src="${contextPath}${sessionScope.emp.signFileName}" alt="">
+                    <img src="${contextPath}${sessionScope.emp.signFileName}" alt="" style="width: 200px;">
                 </c:if>
             </div>
             <div class="form-group">

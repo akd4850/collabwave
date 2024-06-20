@@ -49,9 +49,10 @@
                     <div class="form-group">
                         <label>부서</label>
                         <select type="select" class="form-control" id="belongDept" name="deptCode">
-                            <option value="" selected>가발령</option>
-                            <c:forEach items="${posSelectList}" var="psl" varStatus="vs">
-                                <option value="${psl.posCode}">${psl.posName}</option>
+                            <option selected disabled>-- 부서를 선택하세요 --</option>
+                            <option value="">가발령</option>
+                            <c:forEach items="${deptSelectList}" var="dsl" varStatus="vs">
+                                <option value="${dsl.deptCode}">${dsl.deptName}</option>
                             </c:forEach>
                         </select>
                     </div>
@@ -60,7 +61,7 @@
                     <div class="form-group">
                         <label>직급</label>
                         <select type="select" class="form-control" id="belongPos" name="positionCode">
-                            <option value="" selected disabled>-- 직급을 선택하세요 --</option>
+                            <option selected disabled>-- 직급을 선택하세요 --</option>
                             <c:forEach items="${posSelectList}" var="psl" varStatus="vs">
                                 <option value="${psl.posCode}">${psl.posName}</option>
                             </c:forEach>

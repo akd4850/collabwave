@@ -158,10 +158,7 @@ public class EmpServiceImpl implements EmpService {
     
     model.addAttribute("beginNo", total - (page - 1) * display);
     model.addAttribute("empList", empList);
-    model.addAttribute("paging", myPageUtils.getPaging(request.getContextPath() + "/admin/emp/search.do"
-                                                      , ""
-                                                      , 10
-                                                      , "query=" + query));
+    model.addAttribute("paging", myPageUtils.getPagingNewVersion(request.getContextPath() + "/admin/emp/search.do?query=" + query, null, display));
   }
 	
 	@Override

@@ -31,7 +31,7 @@
                     <div class="form-group">
                         <label>부서장</label>
                         <select type="select" class="form-control" id="deptLeader" name="deptLeaderEmpCode">
-                            <option selected disabled>-- 부서장을 선택하세요 --</option>
+                            <option selected disabled>-- 부서장을 임명하세요 --</option>
                             <c:forEach items="${waitingPersons}" var="wpl" varStatus="vs">
                                 <option value="${wpl.empCode}">${wpl.empName}</option>
                             </c:forEach>
